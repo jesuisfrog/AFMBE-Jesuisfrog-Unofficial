@@ -72,7 +72,8 @@
      font-weight: bold;
  }
 
- .afmbe-tags-flex-container {
+ .afmbe-tags-flex-container,
+ .afmbe-tags-flex-container-item {
      color: black;
      display: flex;
      flex-direction: row;
@@ -89,6 +90,14 @@
      border-radius: 5px;
      padding: 0 5px;
      max-width: 100%;
+ }
+
+ .afmbe-tags-flex-container-item div {
+    background-color: rgba(0, 0, 0, 0.705);
+    color: white;
+    border-radius: 5px;
+    padding: 0 5px;
+    max-width: 100%;
  }
 
  .afmbe h2 {
@@ -165,7 +174,8 @@
  ---------------------------------------------*/
 
  .chat-message h1,
- .chat-message h2 {
+ .chat-message h2,
+ .chat-message .rule-of-chat-text {
      font-family: "Jolly Roger"
  }
 

@@ -302,15 +302,17 @@ export class afmbeActorSheet extends ActorSheet {
                         if (selectedDrawback != undefined) {tags.push(`<div>${selectedDrawback.name}</div>`)}
 
                         if (roll.result == 10) {
-                            ruleOfDiv = `<div>Rule of 10! Roll again, subtract 5 from the result, and add that value (if greater than 0) to your total.</div>`
+                            ruleOfDiv = `<h2 class="rule-of-chat-text">Rule of 10!</h2>
+                                        <button type="button" data-roll="roll-again" class="rule-of-ten">Roll Again</button>`
                             totalResult = 10
                         }
                         if (roll.result == 1) {
-                            ruleOfDiv = `<div>Rule of 1! Roll again, subtract 5 from the result, and if the result is negative, subtract that from your total.</div>`
+                            ruleOfDiv = `<h2 class="rule-of-chat-text">Rule of 1!</h2>
+                                        <button type="button" data-roll="roll-again" class="rule-of-one">Roll Again</button>`
                             totalResult = 0
                         }
 
-                        let chatContent = `<div>
+                        let chatContent = `<form>
                                                 <h2>${attributeLabel} Roll [${this.actor.data.data[attributeLabel.toLowerCase()].value}]</h2>
 
                                                 <table class="afmbe-chat-roll-table">
@@ -323,15 +325,17 @@ export class afmbeActorSheet extends ActorSheet {
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td>[[${roll.result}]]</td>
-                                                            <td>${rollMod}</td>
-                                                            <td>[[${totalResult}]]</td>
+                                                            <td data-roll="dice-result">[[${roll.result}]]</td>
+                                                            <td data-roll="modifier">${rollMod}</td>
+                                                            <td data-roll="dice-total">${totalResult}</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
 
-                                                ${ruleOfDiv}
-                                            </div>`
+                                                <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%;">
+                                                    ${ruleOfDiv}
+                                                </div>
+                                            </form>`
 
                         ChatMessage.create({
                             type: CONST.CHAT_MESSAGE_TYPES.ROLL,
@@ -360,6 +364,8 @@ export class afmbeActorSheet extends ActorSheet {
         let roll = new Roll(weapon.data.data.damage)
         roll.roll({async: false})
 
+        let tags = [`<div>Damage Roll</div>`]
+
         // Create Chat Content
         let chatContent = `<div>
                                 <h2>${weapon.name}</h2>
@@ -384,6 +390,7 @@ export class afmbeActorSheet extends ActorSheet {
             type: CONST.CHAT_MESSAGE_TYPES.ROLL,
             user: game.user.id,
             speaker: ChatMessage.getSpeaker(),
+            flavor: `<div class="afmbe-tags-flex-container-item">${tags.join('')}</div>`,
             content: chatContent,
             roll: roll
           })
@@ -396,6 +403,8 @@ export class afmbeActorSheet extends ActorSheet {
 
         let roll = new Roll(equippedItem.data.data.armor_value)
         roll.roll({async: false})
+
+        let tags = [`<div>Armor Roll</div>`]
 
         // Create Chat Content
         let chatContent = `<div>
@@ -421,6 +430,7 @@ export class afmbeActorSheet extends ActorSheet {
             type: CONST.CHAT_MESSAGE_TYPES.ROLL,
             user: game.user.id,
             speaker: ChatMessage.getSpeaker(),
+            flavor: `<div class="afmbe-tags-flex-container-item">${tags.join('')}</div>`,
             content: chatContent,
             roll: roll
           })

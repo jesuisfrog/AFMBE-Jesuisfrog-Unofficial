@@ -159,6 +159,18 @@ export class afmbeCreatureSheet extends ActorSheet {
             let option = `<option value="${skill.id}">${skill.name} ${skill.data.data.level}</option>`
             skillOptions.push(option)
         }
+
+        let qualityOptions = []
+        for (let quality of this.actor.items.filter(item => item.type === 'quality')) {
+            let option = `<option value="${quality.id}">${quality.name} ${quality.data.data.cost}</option>`
+            qualityOptions.push(option)
+        }
+
+        let drawbackOptions = []
+        for (let drawback of this.actor.items.filter(item => item.type === 'drawback')) {
+            let option = `<option value="${drawback.id}">${drawback.name} ${drawback.data.data.cost}</option>`
+            drawbackOptions.push(option)
+        }
         
         let d = new Dialog({
             title: 'Attribute Roll',
@@ -201,6 +213,24 @@ export class afmbeCreatureSheet extends ActorSheet {
                                             </select>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td class="table-bold-text">Qualities</td>
+                                        <td class="table-center-align">
+                                            <select id="qualitySelect" name="qualities">
+                                                <option value="None">None</option>
+                                                ${qualityOptions.join('')}
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-bold-text">Drawbacks</td>
+                                        <td class="table-center-align">
+                                            <select id="drawbackSelect" name="drawbacks">
+                                                <option value="None">None</option>
+                                                ${drawbackOptions.join('')}
+                                            </select>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                     </div>`,
@@ -216,13 +246,17 @@ export class afmbeCreatureSheet extends ActorSheet {
                         let attributeTestSelect = html[0].querySelector('#attributeTestSelect').value
                         let userInputModifier = Number(html[0].querySelector('#inputModifier').value)
                         let selectedSkill = this.actor.getEmbeddedDocument("Item", html[0].querySelector('#skillSelect').value)
+                        let selectedQuality = this.actor.getEmbeddedDocument("Item", html[0].querySelector('#qualitySelect').value)
+                        let selectedDrawback = this.actor.getEmbeddedDocument("Item", html[0].querySelector('#drawbackSelect').value)
 
                         // Set values for options
                         let attributeValue = attributeTestSelect === 'Simple' ? this.actor.data.data[attributeLabel.toLowerCase()].value * 2 : this.actor.data.data[attributeLabel.toLowerCase()].value
                         let skillValue = selectedSkill != undefined ? selectedSkill.data.data.level : 0
+                        let qualityValue = selectedQuality != undefined ? selectedQuality.data.data.cost : 0
+                        let drawbackValue = selectedDrawback != undefined ? selectedDrawback.data.data.cost : 0
 
                         // Calculate total modifier to roll
-                        let rollMod = (attributeValue + skillValue + userInputModifier)
+                        let rollMod = (attributeValue + skillValue + qualityValue + userInputModifier) - drawbackValue
 
                         // Roll Dice
                         let roll = new Roll('1d10')
@@ -236,17 +270,21 @@ export class afmbeCreatureSheet extends ActorSheet {
                         let ruleOfDiv = ``
                         if (userInputModifier != 0) {tags.push(`<div>User Modifier: ${userInputModifier}</div>`)}
                         if (selectedSkill != undefined) {tags.push(`<div>${selectedSkill.name}</div>`)}
+                        if (selectedQuality != undefined) {tags.push(`<div>${selectedQuality.name}</div>`)}
+                        if (selectedDrawback != undefined) {tags.push(`<div>${selectedDrawback.name}</div>`)}
 
                         if (roll.result == 10) {
-                            ruleOfDiv = `<div>Rule of 10! Roll again, subtract 5 from the result, and add that value (if greater than 0) to your total.</div>`
+                            ruleOfDiv = `<h2 class="rule-of-chat-text">Rule of 10!</h2>
+                                        <button type="button" data-roll="roll-again" class="rule-of-ten">Roll Again</button>`
                             totalResult = 10
                         }
                         if (roll.result == 1) {
-                            ruleOfDiv = `<div>Rule of 1! Roll again, subtract 5 from the result, and if the result is negative, subtract that from your total.</div>`
+                            ruleOfDiv = `<h2 class="rule-of-chat-text">Rule of 1!</h2>
+                                        <button type="button" data-roll="roll-again" class="rule-of-one">Roll Again</button>`
                             totalResult = 0
                         }
 
-                        let chatContent = `<div>
+                        let chatContent = `<form>
                                                 <h2>${attributeLabel} Roll [${this.actor.data.data[attributeLabel.toLowerCase()].value}]</h2>
 
                                                 <table class="afmbe-chat-roll-table">
@@ -259,15 +297,17 @@ export class afmbeCreatureSheet extends ActorSheet {
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td>[[${roll.result}]]</td>
-                                                            <td>${rollMod}</td>
-                                                            <td>[[${totalResult}]]</td>
+                                                            <td data-roll="dice-result">[[${roll.result}]]</td>
+                                                            <td data-roll="modifier">${rollMod}</td>
+                                                            <td data-roll="dice-total">${totalResult}</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
 
-                                                ${ruleOfDiv}
-                                            </div>`
+                                                <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%;">
+                                                    ${ruleOfDiv}
+                                                </div>
+                                            </form>`
 
                         ChatMessage.create({
                             type: CONST.CHAT_MESSAGE_TYPES.ROLL,
