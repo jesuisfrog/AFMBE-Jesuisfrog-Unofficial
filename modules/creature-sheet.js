@@ -41,10 +41,7 @@ export class afmbeCreatureSheet extends ActorSheet {
       const item = [];
       const equippedItem = [];
       const weapon = [];
-      const power = [];
-      const quality = [];
       const skill = [];
-      const drawback = [];
       const aspect = [];
 
       // Iterate through items and assign to containers
@@ -59,20 +56,8 @@ export class afmbeCreatureSheet extends ActorSheet {
                 weapon.push(i)
                 break
 
-            case "power": 
-                power.push(i)
-                break
-
-            case "quality": 
-                quality.push(i)
-                break
-
             case "skill": 
                 skill.push(i)
-                break
-
-            case "drawback": 
-                drawback.push(i)
                 break
 
             case "aspect":
@@ -82,7 +67,7 @@ export class afmbeCreatureSheet extends ActorSheet {
       }
 
       // Alphabetically sort all items
-      const itemCats = [item, equippedItem, weapon, power, quality, skill, drawback, aspect]
+      const itemCats = [item, equippedItem, weapon, skill, aspect]
       for (let category of itemCats) {
           if (category.length > 1) {
               category.sort((a,b) => {
@@ -98,10 +83,7 @@ export class afmbeCreatureSheet extends ActorSheet {
       actorData.item = item
       actorData.equippedItem = equippedItem
       actorData.weapon = weapon
-      actorData.power = power
-      actorData.quality = quality
       actorData.skill = skill
-      actorData.drawback = drawback
       actorData.aspect = aspect
   }
 
@@ -117,6 +99,7 @@ export class afmbeCreatureSheet extends ActorSheet {
         html.find('.attribute-roll').click(this._onAttributeRoll.bind(this))
         html.find('.damage-roll').click(this._onDamageRoll.bind(this))
         html.find('.toggleEquipped').click(this._onToggleEquipped.bind(this))
+        html.find('.armor-button-cell button').click(this._onArmorRoll.bind(this))
         
         // Update/Open Inventory Item
         html.find('.create-item').click(this._createItem.bind(this))
@@ -176,18 +159,6 @@ export class afmbeCreatureSheet extends ActorSheet {
             let option = `<option value="${skill.id}">${skill.name} ${skill.data.data.level}</option>`
             skillOptions.push(option)
         }
-
-        let qualityOptions = []
-        for (let quality of this.actor.items.filter(item => item.type === 'quality')) {
-            let option = `<option value="${quality.id}">${quality.name} ${quality.data.data.cost}</option>`
-            qualityOptions.push(option)
-        }
-
-        let drawbackOptions = []
-        for (let drawback of this.actor.items.filter(item => item.type === 'drawback')) {
-            let option = `<option value="${drawback.id}">${drawback.name} ${drawback.data.data.cost}</option>`
-            drawbackOptions.push(option)
-        }
         
         let d = new Dialog({
             title: 'Attribute Roll',
@@ -230,24 +201,6 @@ export class afmbeCreatureSheet extends ActorSheet {
                                             </select>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td class="table-bold-text">Qualities</td>
-                                        <td class="table-center-align">
-                                            <select id="qualitySelect" name="qualities">
-                                                <option value="None">None</option>
-                                                ${qualityOptions.join('')}
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="table-bold-text">Drawbacks</td>
-                                        <td class="table-center-align">
-                                            <select id="drawbackSelect" name="drawbacks">
-                                                <option value="None">None</option>
-                                                ${drawbackOptions.join('')}
-                                            </select>
-                                        </td>
-                                    </tr>
                                 </tbody>
                             </table>
                     </div>`,
@@ -263,17 +216,13 @@ export class afmbeCreatureSheet extends ActorSheet {
                         let attributeTestSelect = html[0].querySelector('#attributeTestSelect').value
                         let userInputModifier = Number(html[0].querySelector('#inputModifier').value)
                         let selectedSkill = this.actor.getEmbeddedDocument("Item", html[0].querySelector('#skillSelect').value)
-                        let selectedQuality = this.actor.getEmbeddedDocument("Item", html[0].querySelector('#qualitySelect').value)
-                        let selectedDrawback = this.actor.getEmbeddedDocument("Item", html[0].querySelector('#drawbackSelect').value)
 
                         // Set values for options
                         let attributeValue = attributeTestSelect === 'Simple' ? this.actor.data.data[attributeLabel.toLowerCase()].value * 2 : this.actor.data.data[attributeLabel.toLowerCase()].value
                         let skillValue = selectedSkill != undefined ? selectedSkill.data.data.level : 0
-                        let qualityValue = selectedQuality != undefined ? selectedQuality.data.data.cost : 0
-                        let drawbackValue = selectedDrawback != undefined ? selectedDrawback.data.data.cost : 0
 
                         // Calculate total modifier to roll
-                        let rollMod = (attributeValue + skillValue + qualityValue + userInputModifier) - drawbackValue
+                        let rollMod = (attributeValue + skillValue + userInputModifier)
 
                         // Roll Dice
                         let roll = new Roll('1d10')
@@ -287,8 +236,6 @@ export class afmbeCreatureSheet extends ActorSheet {
                         let ruleOfDiv = ``
                         if (userInputModifier != 0) {tags.push(`<div>User Modifier: ${userInputModifier}</div>`)}
                         if (selectedSkill != undefined) {tags.push(`<div>${selectedSkill.name}</div>`)}
-                        if (selectedQuality != undefined) {tags.push(`<div>${selectedQuality.name}</div>`)}
-                        if (selectedDrawback != undefined) {tags.push(`<div>${selectedDrawback.name}</div>`)}
 
                         if (roll.result == 10) {
                             ruleOfDiv = `<div>Rule of 10! Roll again, subtract 5 from the result, and add that value (if greater than 0) to your total.</div>`
@@ -364,6 +311,43 @@ export class afmbeCreatureSheet extends ActorSheet {
                                         <tr>
                                             <td>[[${roll.result}]]</td>
                                             <td>${weapon.data.data.damage}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>`
+
+        ChatMessage.create({
+            type: CONST.CHAT_MESSAGE_TYPES.ROLL,
+            user: game.user.id,
+            speaker: ChatMessage.getSpeaker(),
+            content: chatContent,
+            roll: roll
+          })
+    }
+
+    _onArmorRoll(event) {
+        event.preventDefault()
+        let element = event.currentTarget
+        let equippedItem = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
+
+        let roll = new Roll(equippedItem.data.data.armor_value)
+        roll.roll({async: false})
+
+        // Create Chat Content
+        let chatContent = `<div>
+                                <h2>${equippedItem.name}</h2>
+
+                                <table class="afmbe-chat-roll-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Result</th>
+                                            <th>Detail</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>[[${roll.result}]]</td>
+                                            <td>${equippedItem.data.data.armor_value}</td>
                                         </tr>
                                     </tbody>
                                 </table>

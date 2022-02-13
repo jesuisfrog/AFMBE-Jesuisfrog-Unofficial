@@ -448,6 +448,12 @@
      background:rgba(197, 186, 186, 0.493);
  }
 
+ .afmbe .armor-button-cell button {
+     max-width: 60px;
+     height: 18px;
+     line-height: 10px;
+ }
+
 /* ------------------------------------------- 
         Item Sheets
  ---------------------------------------------*/

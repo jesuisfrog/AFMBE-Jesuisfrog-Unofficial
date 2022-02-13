@@ -111,6 +111,7 @@ export class afmbeActorSheet extends ActorSheet {
         html.find('.attribute-roll').click(this._onAttributeRoll.bind(this))
         html.find('.damage-roll').click(this._onDamageRoll.bind(this))
         html.find('.toggleEquipped').click(this._onToggleEquipped.bind(this))
+        html.find('.armor-button-cell button').click(this._onArmorRoll.bind(this))
         
         // Update/Open Inventory Item
         html.find('.create-item').click(this._createItem.bind(this))
@@ -374,6 +375,43 @@ export class afmbeActorSheet extends ActorSheet {
                                         <tr>
                                             <td>[[${roll.result}]]</td>
                                             <td>${weapon.data.data.damage}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>`
+
+        ChatMessage.create({
+            type: CONST.CHAT_MESSAGE_TYPES.ROLL,
+            user: game.user.id,
+            speaker: ChatMessage.getSpeaker(),
+            content: chatContent,
+            roll: roll
+          })
+    }
+
+    _onArmorRoll(event) {
+        event.preventDefault()
+        let element = event.currentTarget
+        let equippedItem = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
+
+        let roll = new Roll(equippedItem.data.data.armor_value)
+        roll.roll({async: false})
+
+        // Create Chat Content
+        let chatContent = `<div>
+                                <h2>${equippedItem.name}</h2>
+
+                                <table class="afmbe-chat-roll-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Result</th>
+                                            <th>Detail</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>[[${roll.result}]]</td>
+                                            <td>${equippedItem.data.data.armor_value}</td>
                                         </tr>
                                     </tbody>
                                 </table>

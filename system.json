@@ -1,7 +1,7 @@
 {
     "name": "afmbe",
     "title": "All Flesh Must Be Eaten",
-    "description": "A home-made system for playing AFMBE by Eden Studios",
+    "description": "A digital system for playing AFMBE (All Flesh Must Be Eaten) by Eden Studios",
     "version": 1.0,
     "minimumCoreVersion": "0.8.9",
     "compatibleCoreVersion": "9",
