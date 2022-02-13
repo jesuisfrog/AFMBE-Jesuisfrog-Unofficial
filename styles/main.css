@@ -495,15 +495,5 @@
      justify-content: center;
      gap: 10px;
      padding: 0 0 10px 0;
- }
-
- .afmbe .item-resource-container input {
      text-align: center;
-     width: 50px;
- }
-
- .afmbe .item-resource {
-     display: flex;
-     flex-direction: column;
-    align-items: center;
  }

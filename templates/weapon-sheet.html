@@ -11,29 +11,27 @@
     <section>
         <div class="description-container">
             <div class="item-resource-container">
-                <div class="item-resource">
-                    <div>Range</div>
-                    <input type="text" name="data.range" value="{{data.range}}">
-                </div>
-                <div class="item-resource">
-                    <div>Damage</div>
-                    <input type="text" name="data.damage" value="{{data.damage}}">
-                </div>
-                <div class="item-resource">
-                    <div>Capacity</div>
-                    <div>
-                        <input type="number" name="data.capacity.value" value="{{data.capacity.value}}">
-                        <input type="number" name="data.capacity.max" value="{{data.capacity.max}}">
-                    </div>
-                </div>
-                <div class="item-resource">
-                    <div>EV</div>
-                    <input type="number" name="data.encumbrance" value="{{data.encumbrance}}">
-                </div>
-                <div class="item-resource">
-                    <div>Cost</div>
-                    <input type="number" name="data.cost" value="{{data.cost}}">
-                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Range</th>
+                            <th>Damage</th>
+                            <th colspan="2">Capacity</th>
+                            <th>EV</th>
+                            <th>Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="text" name="data.range" value="{{data.range}}"></td>
+                            <td><input type="text" name="data.damage" value="{{data.damage}}"></td>
+                            <td><input type="number" name="data.capacity.value" value="{{data.capacity.value}}"></td>
+                            <td><input type="number" name="data.capacity.max" value="{{data.capacity.max}}"></td>
+                            <td><input type="number" name="data.encumbrance" value="{{data.encumbrance}}"></td>
+                            <td><input type="number" name="data.cost" value="{{data.cost}}"></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <h2 class="item-desc">Description</h2>
             {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}

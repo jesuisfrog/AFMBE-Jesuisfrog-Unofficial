@@ -11,26 +11,26 @@
     <section>
         <div class="description-container">
             <div class="item-resource-container">
-                <div class="item-resource">
-                    <div>Equipped</div>
-                    <input type="checkbox" name="data.equipped" {{checked data.equipped}}>
-                </div>
-                <div class="item-resource">
-                    <div>Qty</div>
-                    <input type="text" name="data.qty" value="{{data.qty}}">
-                </div>
-                <div class="item-resource">
-                    <div>Armor Value</div>
-                    <input type="text" name="data.armor_value" value="{{data.armor_value}}">
-                </div>
-                <div class="item-resource">
-                    <div>EV</div>
-                    <input type="number" name="data.encumbrance" value="{{data.encumbrance}}">
-                </div>
-                <div class="item-resource">
-                    <div>Cost</div>
-                    <input type="number" name="data.cost" value="{{data.cost}}">
-                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Equipped</th>
+                            <th>Qty</th>
+                            <th>Armor Value</th>
+                            <th>EV</th>
+                            <th>Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="checkbox" name="data.equipped" {{checked data.equipped}}></td>
+                            <td><input type="text" name="data.qty" value="{{data.qty}}"></td>
+                            <td><input type="text" name="data.armor_value" value="{{data.armor_value}}"></td>
+                            <td><input type="number" name="data.encumbrance" value="{{data.encumbrance}}"></td>
+                            <td><input type="number" name="data.cost" value="{{data.cost}}"></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <h2 class="item-desc">Description</h2>
             {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}

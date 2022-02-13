@@ -11,26 +11,26 @@
     <section>
         <div class="description-container">
             <div class="item-resource-container">
-                <div class="item-resource">
-                    <div>Points</div>
-                    <input type="number" name="data.cost" value="{{data.cost}}">
-                </div>
-                <div class="item-resource">
-                    <div>HP+</div>
-                    <input type="number" name="data.resource_bonus.hp" value="{{data.resource_bonus.hp}}">
-                </div>
-                <div class="item-resource">
-                    <div>Endurance+</div>
-                    <input type="number" name="data.resource_bonus.endurance_points" value="{{data.resource_bonus.endurance_points}}">
-                </div>
-                <div class="item-resource">
-                    <div>Speed+</div>
-                    <input type="number" name="data.resource_bonus.speed" value="{{data.resource_bonus.speed}}">
-                </div>
-                <div class="item-resource">
-                    <div>Essence+</div>
-                    <input type="number" name="data.resource_bonus.essence" value="{{data.resource_bonus.essence}}">
-                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Points</th>
+                            <th>HP+</th>
+                            <th>Endurance+</th>
+                            <th>Speed+</th>
+                            <th>Essence+</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="number" name="data.cost" value="{{data.cost}}"></td>
+                            <td><input type="number" name="data.resource_bonus.hp" value="{{data.resource_bonus.hp}}"></td>
+                            <td><input type="number" name="data.resource_bonus.endurance_points" value="{{data.resource_bonus.endurance_points}}"></td>
+                            <td><input type="number" name="data.resource_bonus.speed" value="{{data.resource_bonus.speed}}"></td>
+                            <td><input type="number" name="data.resource_bonus.essence" value="{{data.resource_bonus.essence}}"></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <h2 class="item-desc">Description</h2>
             {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
