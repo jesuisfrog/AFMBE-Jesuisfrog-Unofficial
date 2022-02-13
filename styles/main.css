@@ -184,6 +184,10 @@
      font-weight: bold;
  }
 
+ .chat-message button {
+     cursor: pointer;
+ }
+
 
   /* ------------------------------------------- 
         TinyMCE Editor
@@ -376,10 +380,12 @@
 
  .afmbe .resource .attribute input {
      width: 75%;
+     height: 20px;
  }
 
  .afmbe .resource .secondaryAttribute input {
     width: 50px;
+    height: 20px;
  }
 
  .afmbe .resource button {
