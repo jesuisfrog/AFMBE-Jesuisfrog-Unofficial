@@ -455,6 +455,35 @@ export class afmbeActorSheet extends ActorSheet {
     _createStatusTags() {
         let tagContainer = this.form.querySelector('.tags-flex-container')
         let encTag = document.createElement('div')
+        let enduranceTag = document.createElement('div')
+        let essenceTag = document.createElement('div')
+        let injuryTag = document.createElement('div')
+
+        // Create Essence Tag and & Append
+        if (this.actor.data.data.essence.value <= 1) {
+            essenceTag.innerHTML = `<div>Hopless</div>`
+            essenceTag.classList.add('tag')
+            tagContainer.append(essenceTag)
+        }
+        else if (this.actor.data.data.essence.value <= (this.actor.data.data.essence.max / 2)) {
+            essenceTag.innerHTML = `<div>Forlorn</div>`
+            essenceTag.classList.add('tag')
+            tagContainer.append(essenceTag)
+        }
+
+        // Create Endurance Tag and & Append
+        if (this.actor.data.data.endurance_points.value <= 5) {
+            enduranceTag.innerHTML = `<div>Exhausted</div>`
+            enduranceTag.classList.add('tag')
+            tagContainer.append(enduranceTag)
+        }
+
+        // Create Injury Tag and & Append
+        if (this.actor.data.data.hp.value <= 5) {
+            injuryTag.innerHTML = `<div>Severely Injured</div>`
+            injuryTag.classList.add('tag')
+            tagContainer.append(injuryTag)
+        }
 
         // Create Encumbrance Tags & Append
         switch (this.actor.data.data.encumbrance.level) {
