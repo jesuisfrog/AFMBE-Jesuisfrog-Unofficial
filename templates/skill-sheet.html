@@ -1,0 +1,23 @@
+<form class="{{cssClass}}" autocomplete="off">
+
+    {{!-- Sheet Header --}}
+    <div class="item-sheet-header">
+        <h1 class="item-header-container">
+            <img class="item-img" src="{{item.img}}" data-edit="img">
+            <input type="text" name="name" value="{{item.name}}" placeholder="Name">
+        </h1>
+    </div>
+
+    <section>
+        <div class="description-container">
+            <div class="item-resource-container">
+                <div class="item-resource">
+                    <div>Level</div>
+                    <input type="number" name="data.level" value="{{data.level}}">
+                </div>
+            </div>
+            <h2 class="item-desc">Description</h2>
+            {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
+        </div>
+    </section>
+</form>

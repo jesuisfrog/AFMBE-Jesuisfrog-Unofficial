@@ -1,0 +1,360 @@
+<form class="{{cssClass}}" autocomplete="off">
+
+    {{!-- Sheet Header --}}
+    <div class="sheet-flex-container">
+        <div class="sheet-sidebar">
+            <div class="header-container">
+                <img id="sheet-logo" src="systems/afmbe/images/AFMBElogo.gif">
+                <div class="polaroid-container">
+                    <img class="polaroid" src="systems/afmbe/images/polaroid.png">
+                    <img class="profile-img" data-edit="img" src="{{actor.img}}">
+                    <div class="sheet-nav-container">
+                        <nav class="sheet-nav sheet-tabs tabs" data-group="primary">
+                            <a class="item" data-tab="core">Core</a>
+                            <a class="item" data-tab="equipment">Equipment</a>
+                        </nav>
+                        <select id="characterTypeSelect" name="data.characterType" data-type="String">
+                            {{#select actor.data.characterType}}
+                                {{#each actor.data.characterTypes as |characterTypes key|}}
+                                    <option value="{{key}}">{{characterTypes}}</option>
+                                {{/each}}
+                            {{/select}}
+                        </select>
+                    </div>
+                    <div class="profile-tags-container">
+                        <div class="tags-flex-container"></div>
+                    </div>
+                    <div class="xp-container">
+                        <div class="xp-flex-container">
+                            <h2>XP</h2>
+                            <input type="number" name="data.xp" value="{{data.xp}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="header-info-container">
+                    <div class="info-container">
+                        <h1>
+                            <input class="charname" type="text" name="name" value="{{actor.name}}" placeholder="Name">
+                        </h1>
+                        <div class="attribute-container">
+                            <h2 id="attributes-header">
+                                <div>Primary Attributes</div>
+                            </h2>
+                            <div class="resource-container">
+                                <div class="resource">
+                                    <button class="attribute-roll" type="button" data-attribute-name="Strength">Strength</button>
+                                    <div class="resource-values attribute">
+                                        <input type="number" name="data.strength.value" value="{{data.strength.value}}">
+                                    </div>
+                                </div>
+                                <div class="resource">
+                                    <button class="attribute-roll" type="button" data-attribute-name="Dexterity">Dexterity</button>
+                                    <div class="resource-values attribute">
+                                        <input type="number" name="data.dexterity.value" value="{{data.dexterity.value}}">
+                                    </div>
+                                </div>
+                                <div class="resource">
+                                    <button class="attribute-roll" type="button" data-attribute-name="Constitution">Constitution</button>
+                                    <div class="resource-values attribute">
+                                        <input type="number" name="data.constitution.value" value="{{data.constitution.value}}">
+                                    </div>
+                                </div>
+                                <div class="resource">
+                                    <button class="attribute-roll" type="button" data-attribute-name="Intelligence">Intelligence</button>
+                                    <div class="resource-values attribute">
+                                        <input type="number" name="data.intelligence.value" value="{{data.intelligence.value}}">
+                                    </div>
+                                </div>
+                                <div class="resource">
+                                    <button class="attribute-roll" type="button" data-attribute-name="Perception">Perception</button>
+                                    <div class="resource-values attribute">
+                                        <input type="number" name="data.perception.value" value="{{data.perception.value}}">
+                                    </div>
+                                </div>
+                                <div class="resource">
+                                    <button class="attribute-roll" type="button" data-attribute-name="Willpower">Willpower</button>
+                                    <div class="resource-values attribute">
+                                        <input type="number" name="data.willpower.value" value="{{data.willpower.value}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="attribute-container">
+                            <h2>Secondary Attributes</h2>
+                            <div class="resource-container">
+                                <div class="resource">
+                                    <div>Life Points</div>
+                                    <div class="resource-values secondaryAttribute">
+                                        <input type="number" name="data.hp.value" value="{{data.hp.value}}">
+                                        / 
+                                        <div>{{data.hp.max}}</div>
+                                    </div>
+                                </div>
+                                <div class="resource">
+                                    <div>Endurance Points</div>
+                                    <div class="resource-values secondaryAttribute">
+                                        <input type="number" name="data.endurance_points.value" value="{{data.endurance_points.value}}">
+                                        / 
+                                        <div>{{data.endurance_points.max}}</div>
+                                    </div>
+                                </div>
+                                <div class="resource">
+                                    <div>Speed</div>
+                                    <div class="resource-values secondaryAttribute">
+                                        <div>{{data.speed.value}} mph</div>
+                                        <div>[{{data.speed.halfValue}} m/sec]</div>
+                                    </div>
+                                </div>
+                                <div class="resource">
+                                    <div>Essence Pool</div>
+                                    <div class="resource-values secondaryAttribute">
+                                        <input type="number" name="data.essence.value" value="{{data.essence.value}}">
+                                        / 
+                                        <div>{{data.essence.max}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section class="sheet-body">
+
+            {{!-- Core Tab --}}
+            <div class="tab core" data-group="primary" data-tab="core">
+                <div class="bio-container">
+                    <h2>Description</h2>
+                    {{editor content=data.biography target="data.biography" button=true owner=owner editable=editable}}
+                </div>
+                <div class="skill-item-container">
+                    <div class="qualities-container">
+                        <h2 id="quality-header" class="header-with-button">
+                            <button type="button" class="create-item" data-create="quality">+</button> 
+                            <span>Qualities</span>
+                        </h2>
+                        <table class="item-table">
+                            <thead>
+                                <tr>
+                                    <th class="table-left-align">Name</th>
+                                    <th>Points</th>
+                                    <th><a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each actor.data.quality as |item id|}}
+                                    <tr class="item" data-item-id="{{item._id}}">
+                                        <td class="item-name">{{item.name}}</td>
+                                        <td class="table-center-align">{{item.data.cost}}</td>
+                                        <td class="table-center-align"><a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a></td>
+                                    </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="drawbacks-container">
+                        <h2 id="drawback-header" class="header-with-button">
+                            <button type="button" class="create-item" data-create="drawback">+</button> 
+                            <span>Drawbacks</span>
+                        </h2>
+                        <table class="item-table">
+                            <thead>
+                                <tr>
+                                    <th class="table-left-align">Name</th>
+                                    <th>Points</th>
+                                    <th><a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each actor.data.drawback as |item id|}}
+                                    <tr class="item" data-item-id="{{item._id}}">
+                                        <td class="item-name">{{item.name}}</td>
+                                        <td class="table-center-align">{{item.data.cost}}</td>
+                                        <td class="table-center-align"><a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a></td>
+                                    </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="skill-item-container">
+                    <div class="skills-container">
+                        <h2 id="skill-header" class="header-with-button">
+                            <button type="button" class="create-item" data-create="skill">+</button> 
+                            <span>Skills</span>
+                        </h2>
+                        <table class="item-table">
+                            <thead>
+                                <tr>
+                                    <th class="table-left-align">Name</th>
+                                    <th>Level</th>
+                                    <th><a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each actor.data.skill as |item id|}}
+                                    <tr class="item" data-item-id="{{item._id}}">
+                                        <td class="item-name">{{item.name}}</td>
+                                        <td class="table-center-align">{{item.data.level}}</td>
+                                        <td class="table-center-align"><a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a></td>
+                                    </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="powers-container">
+                        <h2 id="power-header" class="header-with-button">
+                            <button type="button" class="create-item" data-create="power">+</button> 
+                            <span>Powers</span>
+                        </h2>
+                        <table class="item-table">
+                            <thead>
+                                <tr>
+                                    <th class="table-left-align">Name</th>
+                                    <th>Level</th>
+                                    <th><a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each actor.data.power as |item id|}}
+                                    <tr class="item" data-item-id="{{item._id}}">
+                                        <td class="item-name">{{item.name}}</td>
+                                        <td class="table-center-align">{{item.data.level}}</td>
+                                        <td class="table-center-align"><a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a></td>
+                                    </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            {{!-- Equipment Tab --}}
+            <div class="tab equipment" data-group="primary" data-tab="equipment">
+                <div class="equipment-header">
+                    <div class="encumbrance-resource">
+                        <h2>Lifting Capacity</h2>
+                        <div>{{data.encumbrance.lifting_capacity}} lbs</div>
+                    </div>
+                    <div class="encumbrance-resource">
+                        <h2>Current Weight</h2>
+                        <div>{{data.encumbrance.value}} lbs</div>
+                    </div>
+                    <div class="encumbrance-resource">
+                        <h2>Max Carry Limit</h2>
+                        <div>{{data.encumbrance.max}} lbs</div>
+                    </div>
+                </div>
+
+                <div class="weapon-table">
+                    <h2 class="header-with-button">
+                        <button type="button" class="create-item" data-create="weapon">+</button> 
+                        <span>Weapons</span>
+                    </h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="table-left-align">Name</th>
+                                <th>Range</th>
+                                <th>Damage</th>
+                                <th>Capacity</th>
+                                <th>EV</th>
+                                <th><a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each actor.data.weapon as |item id|}}
+                                <tr class="item" data-item-id="{{item._id}}">
+                                    <td>
+                                        <div class="item-name-flex-container">
+                                            <i class="fas fa-dice-d20 damage-roll"></i>
+                                            <div class="item-name">{{item.name}}</div>
+                                        </div>
+                                    </td>
+                                    <td class="table-center-align">{{item.data.range}}</td>
+                                    <td class="table-center-align">{{item.data.damage}}</td>
+                                    <td>
+                                        <div class="table-flex-cell">
+                                            <div>{{item.data.capacity.value}}</div>
+                                            /
+                                            <div>{{item.data.capacity.max}}</div>
+                                        </div>
+                                    </td>
+                                    <td class="table-center-align">{{item.data.encumbrance}}</td>
+                                    <td class="table-center-align"><a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a></td>
+                                </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="item-table">
+                    <h2 class="header-with-button">
+                        <button type="button" class="create-item" data-create="item">+</button> 
+                        <span>Equipped Items</span>
+                    </h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="table-left-align">Name</th>
+                                <th>Qty</th>
+                                <th>Armor Value</th>
+                                <th>EV</th>
+                                <th><a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each actor.data.equippedItem as |item id|}}
+                                <tr class="item" data-item-id="{{item._id}}">
+                                    <td>
+                                        <div class="item-name-flex-container">
+                                            <input type="checkbox" class="toggleEquipped" {{checked item.data.equipped}}>
+                                            <div class="item-name">{{item.name}}</div>
+                                        </div>
+                                    </td>
+                                    <td class="table-center-align">{{item.data.qty}}</td>
+                                    <td class="table-center-align">{{item.data.armor_value}}</td>
+                                    <td class="table-center-align">{{item.data.encumbrance}}</td>
+                                    <td class="table-center-align"><a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a></td>
+                                </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="item-table">
+                    <h2 class="header-with-button">
+                        <button type="button" class="create-item" data-create="item">+</button> 
+                        <span>Items</span>
+                    </h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="table-left-align">Name</th>
+                                <th>Qty</th>
+                                <th>EV</th>
+                                <th><a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each actor.data.item as |item id|}}
+                                <tr class="item" data-item-id="{{item._id}}">
+                                    <td>
+                                        <div class="item-name-flex-container">
+                                            <input type="checkbox" class="toggleEquipped" {{checked item.data.equipped}}>
+                                            <div class="item-name">{{item.name}}</div>
+                                        </div>
+                                    </td>
+                                    <td class="table-center-align">{{item.data.qty}}</td>
+                                    <td class="table-center-align">{{item.data.encumbrance}}</td>
+                                    <td class="table-center-align"><a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a></td>
+                                </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+    </div>
+</form>

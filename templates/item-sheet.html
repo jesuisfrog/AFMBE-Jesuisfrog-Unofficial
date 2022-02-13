@@ -1,0 +1,39 @@
+<form class="{{cssClass}}" autocomplete="off">
+
+    {{!-- Sheet Header --}}
+    <div class="item-sheet-header">
+        <h1 class="item-header-container">
+            <img class="item-img" src="{{item.img}}" data-edit="img">
+            <input type="text" name="name" value="{{item.name}}" placeholder="Name">
+        </h1>
+    </div>
+
+    <section>
+        <div class="description-container">
+            <div class="item-resource-container">
+                <div class="item-resource">
+                    <div>Equipped</div>
+                    <input type="checkbox" name="data.equipped" {{checked data.equipped}}>
+                </div>
+                <div class="item-resource">
+                    <div>Qty</div>
+                    <input type="text" name="data.qty" value="{{data.qty}}">
+                </div>
+                <div class="item-resource">
+                    <div>Armor Value</div>
+                    <input type="text" name="data.armor_value" value="{{data.armor_value}}">
+                </div>
+                <div class="item-resource">
+                    <div>EV</div>
+                    <input type="number" name="data.encumbrance" value="{{data.encumbrance}}">
+                </div>
+                <div class="item-resource">
+                    <div>Cost</div>
+                    <input type="number" name="data.cost" value="{{data.cost}}">
+                </div>
+            </div>
+            <h2 class="item-desc">Description</h2>
+            {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
+        </div>
+    </section>
+</form>
