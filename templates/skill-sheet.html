@@ -10,14 +10,21 @@
 
     <section>
         <div class="description-container">
-            <div class="item-resource-container">
-                <div class="item-resource">
-                    <div>Level</div>
-                    <input type="number" name="data.level" value="{{data.level}}">
-                </div>
+            <div class="item-attribute-sidebar">
+                <h2>Attributes</h2>
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Level</th>
+                            <td><input type="number" name="data.level" value="{{data.level}}"></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            <h2 class="item-desc">Description</h2>
-            {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
+            <div class="item-description-sidebar">
+                <h2 class="item-desc">Description</h2>
+                {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
+            </div>
         </div>
     </section>
 </form>

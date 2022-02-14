@@ -5,7 +5,7 @@ export class afmbeItemSheet extends ItemSheet {
         return mergeObject(super.defaultOptions, {
             classes: ["afmbe", "sheet", "item"],
             width: 500,
-            height: 350,
+            height: 400,
             tabs: [{navSelector: ".sheet-tabs", contentSelector: ".sheet-body-items", initial: "description"}]
         })
     }

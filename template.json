@@ -163,6 +163,22 @@
             "weapon": {
                 "range": "",
                 "damage": 0,
+                "ammo_type": "",
+                "damage_type": "",
+                "damage_types": ["None", "Two-Handed", "Slashing", "Stabbing", "Normal Bullet", "Hollow Point", "Armor Piercing", "Shotgun", "Explosive", "Poison", "Corrosive"],
+                "damage_types_obj": {
+                    "none": "None",
+                    "twoHanded": "Two-Handed",
+                    "slashing": "Slashing",
+                    "stabbing": "Stabbing",
+                    "bullets": "Normal Bullet",
+                    "hollowPoint": "Hollow Point",
+                    "armorPiercing": "Armor Piercing",
+                    "shotgun": "Shotgun",
+                    "explosive": "Explosive",
+                    "poison": "Poison",
+                    "corrosive": "Corrosive"
+                },
                 "capacity": {
                     "value": 0,
                     "max": 0

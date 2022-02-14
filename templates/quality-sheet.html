@@ -10,30 +10,37 @@
 
     <section>
         <div class="description-container">
-            <div class="item-resource-container">
+            <div class="item-attribute-sidebar">
+                <h2>Attributes</h2>
                 <table>
-                    <thead>
-                        <tr>
-                            <th>Points</th>
-                            <th>HP+</th>
-                            <th>Endurance+</th>
-                            <th>Speed+</th>
-                            <th>Essence+</th>
-                        </tr>
-                    </thead>
                     <tbody>
                         <tr>
+                            <th>Points</th>
                             <td><input type="number" name="data.cost" value="{{data.cost}}"></td>
+                        </tr>
+                        <tr>
+                            <th>HP+</th>
                             <td><input type="number" name="data.resource_bonus.hp" value="{{data.resource_bonus.hp}}"></td>
+                        </tr>
+                        <tr>
+                            <th>Endurance+</th>
                             <td><input type="number" name="data.resource_bonus.endurance_points" value="{{data.resource_bonus.endurance_points}}"></td>
+                        </tr>
+                        <tr>
+                            <th>Speed+</th>
                             <td><input type="number" name="data.resource_bonus.speed" value="{{data.resource_bonus.speed}}"></td>
+                        </tr>
+                        <tr>
+                            <th>Essence+</th>
                             <td><input type="number" name="data.resource_bonus.essence" value="{{data.resource_bonus.essence}}"></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <h2 class="item-desc">Description</h2>
-            {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
+            <div class="item-description-sidebar">
+                <h2 class="item-desc">Description</h2>
+                {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
+            </div>
         </div>
     </section>
 </form>

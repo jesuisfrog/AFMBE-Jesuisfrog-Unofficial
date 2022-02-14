@@ -193,6 +193,11 @@
         TinyMCE Editor
  ---------------------------------------------*/
 
+ .editor h1,
+ .editor h2 {
+    font-family: "Jolly Roger";
+ }
+
  .afmbe .bio-container .editor {
      height: 200px;
      width: 100%;
@@ -503,4 +508,34 @@
      gap: 10px;
      padding: 0 0 10px 0;
      text-align: center;
+ }
+
+ .afmbe .description-container table th {
+     width: 50%;
+     text-align: left;
+ }
+
+ .afmbe .description-container table input {
+     text-align: center;
+ }
+
+ .afmbe .description-container {
+     display: flex;
+     flex-direction: row;
+     gap: 10px;
+ }
+
+ .afmbe .item-description-sidebar {
+     width: 100%;
+ }
+
+ .afmbe .item-attribute-sidebar {
+     width: 200px;
+ }
+
+ .afmbe .item-attribute-flex-container {
+     display: flex;
+     flex-direction: row;
+     align-items: center;
+     justify-content: center;
  }

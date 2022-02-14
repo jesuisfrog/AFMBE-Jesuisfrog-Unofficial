@@ -10,30 +10,41 @@
 
     <section>
         <div class="description-container">
-            <div class="item-resource-container">
+            <div class="item-attribute-sidebar">
+                <h2>Attributes</h2>
                 <table>
-                    <thead>
-                        <tr>
-                            <th>Equipped</th>
-                            <th>Qty</th>
-                            <th>Armor Value</th>
-                            <th>EV</th>
-                            <th>Cost</th>
-                        </tr>
-                    </thead>
                     <tbody>
                         <tr>
-                            <td><input type="checkbox" name="data.equipped" {{checked data.equipped}}></td>
+                            <th>Equipped</th>
+                            <td>
+                                <div class="item-attribute-flex-container">
+                                    <input type="checkbox" name="data.equipped" {{checked data.equipped}}>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Quantity</th>
                             <td><input type="text" name="data.qty" value="{{data.qty}}"></td>
+                        </tr>
+                        <tr>
+                            <th>Armor Value</th>
                             <td><input type="text" name="data.armor_value" value="{{data.armor_value}}"></td>
+                        </tr>
+                        <tr>
+                            <th>EV</th>
                             <td><input type="number" name="data.encumbrance" value="{{data.encumbrance}}"></td>
+                        </tr>
+                        <tr>
+                            <th>Cost</th>
                             <td><input type="number" name="data.cost" value="{{data.cost}}"></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <h2 class="item-desc">Description</h2>
-            {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
+            <div class="item-description-sidebar">
+                <h2 class="item-desc">Description</h2>
+                {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
+            </div>
         </div>
     </section>
 </form>
