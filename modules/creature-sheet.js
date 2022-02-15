@@ -100,6 +100,7 @@ export class afmbeCreatureSheet extends ActorSheet {
         html.find('.damage-roll').click(this._onDamageRoll.bind(this))
         html.find('.toggleEquipped').click(this._onToggleEquipped.bind(this))
         html.find('.armor-button-cell button').click(this._onArmorRoll.bind(this))
+        html.find('.reset-resource').click(this._onResetResource.bind(this))
         
         // Update/Open Inventory Item
         html.find('.create-item').click(this._createItem.bind(this))
@@ -333,36 +334,110 @@ export class afmbeCreatureSheet extends ActorSheet {
         let element = event.currentTarget
         let weapon = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
 
-        let roll = new Roll(weapon.data.data.damage)
-        roll.roll({async: false})
+        let d = new Dialog({
+            title: 'Weapon Roll',
+            content: `<div class="afmbe-dialog-menu">
 
-        // Create Chat Content
-        let chatContent = `<div>
-                                <h2>${weapon.name}</h2>
+                            <div class="afmbe-dialog-menu-text-box">
+                                <p><strong>If a ranged weapon</strong>, select how many shots to take and select weapon firing mode. The number of shots
+                                fired will be reduced from the weapon's current load capacity. Make sure you have enough ammo in the chamber!</p>
 
-                                <table class="afmbe-chat-roll-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Damage</th>
-                                            <th>Detail</th>
-                                        </tr>
-                                    </thead>
+                                <p>Otherwise, leave default and click roll.</p>
+                            </div>
+
+                            <div>
+                                <h2>Options</h2>
+                                <table>
                                     <tbody>
                                         <tr>
-                                            <td>[[${roll.result}]]</td>
-                                            <td>${weapon.data.data.damage}</td>
+                                            <th># of Shots</th>
+                                            <td>
+                                                <input type="number" id="shotNumber" name="shotNumber" value="0">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Firing Mode</th>
+                                            <td>
+                                                <select id="firingMode" name="firingMode">
+                                                    <option>None/Melee</option>
+                                                    <option>Semi-Auto</option>
+                                                    <option>Burst Fire</option>
+                                                    <option>Auto-Fire</option>
+                                                </select>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
-                            </div>`
+                            </div>
+                    <div>`,
 
-        ChatMessage.create({
-            type: CONST.CHAT_MESSAGE_TYPES.ROLL,
-            user: game.user.id,
-            speaker: ChatMessage.getSpeaker(),
-            content: chatContent,
-            roll: roll
-          })
+            buttons: {
+                one: {
+                    label: 'Cancel',
+                    callback: html => console.log('Cancelled')
+                },
+                two: {
+                    label: 'Roll',
+                    callback: html => {
+                        // Grab Values from Dialog
+                        let shotNumber = html[0].querySelector('#shotNumber').value
+                        let firingMode = html[0].querySelector('#firingMode').value
+
+                        let roll = new Roll(weapon.data.data.damage)
+                        roll.roll({async: false})
+
+                        let tags = [`<div>Damage Roll</div>`]
+                        if (firingMode != 'None/Melee') {tags.push(`<div>${firingMode}: ${shotNumber}</div>`)}
+                        if (weapon.data.data.damage_types[weapon.data.data.damage_type] != 'None') {tags.push(`<div>${weapon.data.data.damage_types[weapon.data.data.damage_type]}</div>`)}
+
+                        // Reduce Fired shots from current load chamber
+                        if (shotNumber > 0) {
+                            switch (weapon.data.data.capacity.value - shotNumber >= 0) {
+                                case true:
+                                    weapon.update({'data.capacity.value': weapon.data.data.capacity.value - shotNumber})
+                                    break
+
+                                case false: 
+                                    return ui.notifications.info(`You do not have enough ammo loaded to fire ${shotNumber} rounds!`)
+                            }
+                        }
+
+                        // Create Chat Content
+                        let chatContent = `<div>
+                                                <h2>${weapon.name}</h2>
+
+                                                <table class="afmbe-chat-roll-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Damage</th>
+                                                            <th>Detail</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>[[${roll.result}]]</td>
+                                                            <td>${weapon.data.data.damage}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>`
+
+                        ChatMessage.create({
+                            type: CONST.CHAT_MESSAGE_TYPES.ROLL,
+                            user: game.user.id,
+                            speaker: ChatMessage.getSpeaker(),
+                            flavor: `<div class="afmbe-tags-flex-container-item">${tags.join('')}</div>`,
+                            content: chatContent,
+                            roll: roll
+                        })
+                    }
+                }
+            },
+            default: "two",
+            close: html => console.log()
+        })
+
+        d.render(true)
     }
 
     _onArmorRoll(event) {
@@ -416,6 +491,14 @@ export class afmbeCreatureSheet extends ActorSheet {
                 equippedItem.update({'data.equipped': true})
                 break
         }
+    }
+
+    _onResetResource(event) {
+        event.preventDefault()
+        let element = event.currentTarget
+        let dataPath = `data.${element.dataset.resource}.value`
+
+        this.actor.update({[dataPath]: this.actor.data.data[element.dataset.resource].max})
     }
 
     _createStatusTags() {

@@ -112,6 +112,7 @@ export class afmbeActorSheet extends ActorSheet {
         html.find('.damage-roll').click(this._onDamageRoll.bind(this))
         html.find('.toggleEquipped').click(this._onToggleEquipped.bind(this))
         html.find('.armor-button-cell button').click(this._onArmorRoll.bind(this))
+        html.find('.reset-resource').click(this._onResetResource.bind(this))
         
         // Update/Open Inventory Item
         html.find('.create-item').click(this._createItem.bind(this))
@@ -521,6 +522,14 @@ export class afmbeActorSheet extends ActorSheet {
                 equippedItem.update({'data.equipped': true})
                 break
         }
+    }
+
+    _onResetResource(event) {
+        event.preventDefault()
+        let element = event.currentTarget
+        let dataPath = `data.${element.dataset.resource}.value`
+
+        this.actor.update({[dataPath]: this.actor.data.data[element.dataset.resource].max})
     }
 
     _createStatusTags() {
