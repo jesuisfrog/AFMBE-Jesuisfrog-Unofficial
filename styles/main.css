@@ -539,3 +539,11 @@
      align-items: center;
      justify-content: center;
  }
+
+ /* ------------------------------------------- 
+        Limited Permission Sheets
+ ---------------------------------------------*/
+
+ .afmbe .blur {
+     filter: blur(5px);
+ }

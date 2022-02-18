@@ -4,7 +4,6 @@ export class afmbeCreatureSheet extends ActorSheet {
       static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
           classes: ["afmbe", "sheet", "actor"],
-          template: "systems/afmbe/templates/creature-sheet.html",
             width: 700,
             height: 780,
             tabs: [{navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "core"}],
@@ -87,6 +86,12 @@ export class afmbeCreatureSheet extends ActorSheet {
       actorData.aspect = aspect
   }
 
+  get template() {
+    const path = "systems/afmbe/templates";
+    if (!game.user.isGM && this.actor.limited) return "systems/afmbe/templates/limited-creature-sheet.html"; 
+    return `${path}/${this.actor.data.type}-sheet.html`;
+  }
+
   /** @override */
     async activateListeners(html) {
         super.activateListeners(html);
@@ -108,7 +113,8 @@ export class afmbeCreatureSheet extends ActorSheet {
         html.find('.item-name').click( (ev) => {
             const li = ev.currentTarget.closest(".item")
             const item = this.actor.items.get(li.dataset.itemId)
-            item.sheet.render(true)
+            console.log(this.actor.data.permission[game.user.data._id])
+            if(this.actor.data.permission[game.user.data._id] >= 2||game.user.isGM) {item.sheet.render(true)}
             item.update({"data.value": item.data.data.value})
         })
 
