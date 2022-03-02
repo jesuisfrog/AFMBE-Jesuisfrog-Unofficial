@@ -41,6 +41,26 @@ export class afmbeActor extends Actor {
       data.endurance_points.max = this._calcEndurancePoints(data)
       this._calcSpeed(data)
       data.essence.max = this._calcEssencePool(data)
+      data.initiative.value = this._calcInitiative(data)
+
+      // Determine Secondary Attribute Loss Penalties
+      if (data.endurance_points.value <= 5) {
+        data.endurance_points.loss_toggle = true
+        data.endurance_points.loss_penalty = -2
+      }
+      else {
+        data.endurance_points.loss_toggle = false
+        data.endurance_points.loss_penalty = 0
+      }
+
+      if (data.essence.value <= 1) {
+        data.essence.loss_toggle = true
+        data.essence.loss_penalty = -3
+      }
+      else {
+        data.essence.loss_toggle = false
+        data.essence.loss_penalty = 0
+      }
 
     }
 
@@ -58,6 +78,7 @@ export class afmbeActor extends Actor {
       data.endurance_points.max = this._calcEndurancePoints(data)
       this._calcSpeed(data)
       data.essence.max = this._calcEssencePool(data)
+      data.initiative.value = this._calcInitiative(data)
 
       // Calculate Power Total
       data.power = this._calculatePowerTotal(data)
@@ -120,6 +141,17 @@ export class afmbeActor extends Actor {
       }
 
       return data.strength.value + data.dexterity.value + data.constitution.value + data.intelligence.value + data.perception.value + data.willpower.value + itemBonus
+    }
+
+    _calcInitiative(data) {
+      // Calculate bonuses from all items
+      let itemsWithBonus = this.items.filter(item => item.data.data.hasOwnProperty('resource_bonus'))
+      let itemBonus = 0
+      for (let item of itemsWithBonus) {
+        itemBonus = itemBonus + item.data.data.resource_bonus.initiative
+      }
+
+      return data.dexterity.value + itemBonus
     }
 
     _calculateQualityPoints(data) {

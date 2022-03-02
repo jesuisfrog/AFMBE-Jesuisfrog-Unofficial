@@ -5,7 +5,7 @@ export class afmbeActorSheet extends ActorSheet {
         return mergeObject(super.defaultOptions, {
           classes: ["afmbe", "sheet", "actor"],
             width: 700,
-            height: 780,
+            height: 820,
             tabs: [{navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "core"}],
             dragDrop: [{dragSelector: [
             ".item"
@@ -205,7 +205,14 @@ export class afmbeActorSheet extends ActorSheet {
             let option = `<option value="${drawback.id}">${drawback.name} ${drawback.data.data.cost}</option>`
             drawbackOptions.push(option)
         }
+
+        // Create penalty tags from Resource Loss Status
+        let penaltyTags = []
+        if (this.actor.data.data.endurance_points.loss_toggle) {penaltyTags.push(`<div>Endurance Loss ${this.actor.data.data.endurance_points.loss_penalty}</div>`)}
+        if (this.actor.data.data.essence.loss_toggle) {penaltyTags.push(`<div>Essence Loss ${this.actor.data.data.essence.loss_penalty}</div>`)}
         
+
+        // Create Dialog Prompt
         let d = new Dialog({
             title: 'Attribute Roll',
             content: `<div class="afmbe-dialog-menu">
@@ -220,6 +227,10 @@ export class afmbeActorSheet extends ActorSheet {
                                         <li>Difficult Test: 1x Attribute</li>
                                     </ul>
                                 </div>
+                            </div>
+
+                            <div class="afmbe-tags-flex-container">
+                                ${penaltyTags.join('')}
                             </div>
 
 
@@ -288,9 +299,10 @@ export class afmbeActorSheet extends ActorSheet {
                         let skillValue = selectedSkill != undefined ? selectedSkill.data.data.level : 0
                         let qualityValue = selectedQuality != undefined ? selectedQuality.data.data.cost : 0
                         let drawbackValue = selectedDrawback != undefined ? selectedDrawback.data.data.cost : 0
+                        let statusPenalties = this.actor.data.data.endurance_points.loss_penalty + this.actor.data.data.essence.loss_penalty
 
                         // Calculate total modifier to roll
-                        let rollMod = (attributeValue + skillValue + qualityValue + userInputModifier) - drawbackValue
+                        let rollMod = (attributeValue + skillValue + qualityValue + userInputModifier) - drawbackValue + statusPenalties
 
                         // Roll Dice
                         let roll = new Roll('1d10')
@@ -302,10 +314,10 @@ export class afmbeActorSheet extends ActorSheet {
                         // Create Chat Message Content
                         let tags = [`<div>${attributeTestSelect} Test</div>`]
                         let ruleOfDiv = ``
-                        if (userInputModifier != 0) {tags.push(`<div>User Modifier: ${userInputModifier}</div>`)}
-                        if (selectedSkill != undefined) {tags.push(`<div>${selectedSkill.name}</div>`)}
-                        if (selectedQuality != undefined) {tags.push(`<div>${selectedQuality.name}</div>`)}
-                        if (selectedDrawback != undefined) {tags.push(`<div>${selectedDrawback.name}</div>`)}
+                        if (userInputModifier != 0) {tags.push(`<div>User Modifier ${userInputModifier >= 0 ? "+" : ''}${userInputModifier}</div>`)}
+                        if (selectedSkill != undefined) {tags.push(`<div>${selectedSkill.name} ${selectedSkill.data.data.level >= 0 ? '+' : ''}${selectedSkill.data.data.level}</div>`)}
+                        if (selectedQuality != undefined) {tags.push(`<div>${selectedQuality.name} ${selectedQuality.data.data.cost >= 0 ? '+' : ''}${selectedQuality.data.data.cost}</div>`)}
+                        if (selectedDrawback != undefined) {tags.push(`<div>${selectedDrawback.name} ${selectedQuality.data.data.cost >= 0 ? '-' : '+'}${Math.abs(selectedDrawback.data.data.cost)}</div>`)}
 
                         if (roll.result == 10) {
                             ruleOfDiv = `<h2 class="rule-of-chat-text">Rule of 10!</h2>
@@ -347,7 +359,7 @@ export class afmbeActorSheet extends ActorSheet {
                             type: CONST.CHAT_MESSAGE_TYPES.ROLL,
                             user: game.user.id,
                             speaker: ChatMessage.getSpeaker(),
-                            flavor: `<div class="afmbe-tags-flex-container">${tags.join('')}</div>`,
+                            flavor: `<div class="afmbe-tags-flex-container">${tags.join('')} ${penaltyTags.join('')}</div>`,
                             content: chatContent,
                             roll: roll
                           })
@@ -546,7 +558,7 @@ export class afmbeActorSheet extends ActorSheet {
 
         // Create Essence Tag and & Append
         if (this.actor.data.data.essence.value <= 1) {
-            essenceTag.innerHTML = `<div>Hopless</div>`
+            essenceTag.innerHTML = `<div>Hopeless</div>`
             essenceTag.classList.add('tag')
             tagContainer.append(essenceTag)
         }
@@ -564,9 +576,22 @@ export class afmbeActorSheet extends ActorSheet {
         }
 
         // Create Injury Tag and & Append
-        if (this.actor.data.data.hp.value <= 5) {
+        if (this.actor.data.data.hp.value <= -10) {
+            injuryTag.innerHTML = `<div>Dying</div>`
+            injuryTag.classList.add('tag')
+            injuryTag.title = 'Survival Test required to avoid instant death'
+            tagContainer.append(injuryTag)
+        }
+        else if (this.actor.data.data.hp.value <= 0) {
+            injuryTag.innerHTML = `<div>Semi-Conscious</div>`
+            injuryTag.classList.add('tag')
+            injuryTag.title = 'Willpower test required to regain consciousness, penalized by the number their HP is below 0'
+            tagContainer.append(injuryTag)
+        }
+        else if (this.actor.data.data.hp.value <= 5) {
             injuryTag.innerHTML = `<div>Severely Injured</div>`
             injuryTag.classList.add('tag')
+            injuryTag.title = 'Most actions suffer -1 through -5 penalty'
             tagContainer.append(injuryTag)
         }
 

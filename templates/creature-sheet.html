@@ -70,7 +70,7 @@
                             <h2>Secondary Attributes</h2>
                             <div class="resource-container">
                                 <div class="resource">
-                                    <button class="reset-resource" data-resource="hp">Life Points</button>
+                                    <button type="button" class="reset-resource" data-resource="hp">Life Points</button>
                                     <div class="resource-values secondaryAttribute">
                                         <input type="number" name="data.hp.value" value="{{data.hp.value}}">
                                         / 
@@ -78,7 +78,7 @@
                                     </div>
                                 </div>
                                 <div class="resource">
-                                    <button class="reset-resource" data-resource="endurance_points">Endurance</button>
+                                    <button type="button" class="reset-resource" data-resource="endurance_points">Endurance</button>
                                     <div class="resource-values secondaryAttribute">
                                         <input type="number" name="data.endurance_points.value" value="{{data.endurance_points.value}}">
                                         / 
@@ -86,18 +86,24 @@
                                     </div>
                                 </div>
                                 <div class="resource">
-                                    <button>Speed</button>
+                                    <button type="button" class="reset-resource" data-resource="essence">Essence Pool</button>
+                                    <div class="resource-values secondaryAttribute">
+                                        <input type="number" name="data.essence.value" value="{{data.essence.value}}">
+                                        / 
+                                        <div>{{data.essence.max}}</div>
+                                    </div>
+                                </div>
+                                <div class="resource">
+                                    <button type="button">Speed</button>
                                     <div class="resource-values secondaryAttribute">
                                         <div>{{data.speed.value}}mph</div>
                                         <div>[{{data.speed.halfValue}}m/sec]</div>
                                     </div>
                                 </div>
                                 <div class="resource">
-                                    <button class="reset-resource" data-resource="essence">Essence Pool</button>
+                                    <button type="button">Initiative</button>
                                     <div class="resource-values secondaryAttribute">
-                                        <input type="number" name="data.essence.value" value="{{data.essence.value}}">
-                                        / 
-                                        <div>{{data.essence.max}}</div>
+                                        <div>{{data.initiative.value}}</div>
                                     </div>
                                 </div>
                             </div>

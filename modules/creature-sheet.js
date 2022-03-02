@@ -5,7 +5,7 @@ export class afmbeCreatureSheet extends ActorSheet {
         return mergeObject(super.defaultOptions, {
           classes: ["afmbe", "sheet", "actor"],
             width: 700,
-            height: 780,
+            height: 820,
             tabs: [{navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "core"}],
             dragDrop: [{dragSelector: [
             ".item"
@@ -167,16 +167,10 @@ export class afmbeCreatureSheet extends ActorSheet {
             skillOptions.push(option)
         }
 
-        let qualityOptions = []
-        for (let quality of this.actor.items.filter(item => item.type === 'quality')) {
-            let option = `<option value="${quality.id}">${quality.name} ${quality.data.data.cost}</option>`
-            qualityOptions.push(option)
-        }
-
-        let drawbackOptions = []
-        for (let drawback of this.actor.items.filter(item => item.type === 'drawback')) {
-            let option = `<option value="${drawback.id}">${drawback.name} ${drawback.data.data.cost}</option>`
-            drawbackOptions.push(option)
+        let aspectOptions = []
+        for (let aspect of this.actor.items.filter(item => item.type === 'aspect')) {
+            let option = `<option value="${aspect.id}">${aspect.name} ${aspect.data.data.power}</option>`
+            aspectOptions.push(option)
         }
         
         let d = new Dialog({
@@ -186,7 +180,7 @@ export class afmbeCreatureSheet extends ActorSheet {
 
                             <div class="afmbe-dialog-menu-text-box">
                                 <div>
-                                    <p>Apply modifiers from the character's applicable Qualities, Drawbacks, or Skills.</p>
+                                    <p>Apply modifiers from the creature's Skills & Aspects.</p>
                                     
                                     <ul>
                                         <li>Simple Test: 2x Attribute</li>
@@ -221,20 +215,11 @@ export class afmbeCreatureSheet extends ActorSheet {
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="table-bold-text">Qualities</td>
+                                        <td class="table-bold-text">Aspects</td>
                                         <td class="table-center-align">
-                                            <select id="qualitySelect" name="qualities">
+                                            <select id="aspectSelect" name="aspects">
                                                 <option value="None">None</option>
-                                                ${qualityOptions.join('')}
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="table-bold-text">Drawbacks</td>
-                                        <td class="table-center-align">
-                                            <select id="drawbackSelect" name="drawbacks">
-                                                <option value="None">None</option>
-                                                ${drawbackOptions.join('')}
+                                                ${aspectOptions.join('')}
                                             </select>
                                         </td>
                                     </tr>
@@ -253,17 +238,15 @@ export class afmbeCreatureSheet extends ActorSheet {
                         let attributeTestSelect = html[0].querySelector('#attributeTestSelect').value
                         let userInputModifier = Number(html[0].querySelector('#inputModifier').value)
                         let selectedSkill = this.actor.getEmbeddedDocument("Item", html[0].querySelector('#skillSelect').value)
-                        let selectedQuality = this.actor.getEmbeddedDocument("Item", html[0].querySelector('#qualitySelect').value)
-                        let selectedDrawback = this.actor.getEmbeddedDocument("Item", html[0].querySelector('#drawbackSelect').value)
+                        let selectedAspect = this.actor.getEmbeddedDocument("Item", html[0].querySelector('#aspectSelect').value)
 
                         // Set values for options
                         let attributeValue = attributeTestSelect === 'Simple' ? this.actor.data.data[attributeLabel.toLowerCase()].value * 2 : this.actor.data.data[attributeLabel.toLowerCase()].value
                         let skillValue = selectedSkill != undefined ? selectedSkill.data.data.level : 0
-                        let qualityValue = selectedQuality != undefined ? selectedQuality.data.data.cost : 0
-                        let drawbackValue = selectedDrawback != undefined ? selectedDrawback.data.data.cost : 0
+                        let aspectValue = selectedAspect != undefined ? selectedAspect.data.data.power : 0
 
                         // Calculate total modifier to roll
-                        let rollMod = (attributeValue + skillValue + qualityValue + userInputModifier) - drawbackValue
+                        let rollMod = (attributeValue + skillValue + aspectValue + userInputModifier)
 
                         // Roll Dice
                         let roll = new Roll('1d10')
@@ -275,10 +258,9 @@ export class afmbeCreatureSheet extends ActorSheet {
                         // Create Chat Message Content
                         let tags = [`<div>${attributeTestSelect} Test</div>`]
                         let ruleOfDiv = ``
-                        if (userInputModifier != 0) {tags.push(`<div>User Modifier: ${userInputModifier}</div>`)}
-                        if (selectedSkill != undefined) {tags.push(`<div>${selectedSkill.name}</div>`)}
-                        if (selectedQuality != undefined) {tags.push(`<div>${selectedQuality.name}</div>`)}
-                        if (selectedDrawback != undefined) {tags.push(`<div>${selectedDrawback.name}</div>`)}
+                        if (userInputModifier != 0) {tags.push(`<div>User Modifier ${userInputModifier >= 0 ? '+' : ''}${userInputModifier}</div>`)}
+                        if (selectedSkill != undefined) {tags.push(`<div>${selectedSkill.name} ${selectedSkill.data.data.level >= 0 ? '+' : ''}${selectedSkill.data.data.level}</div>`)}
+                        if (selectedAspect != undefined) {tags.push(`<div>${selectedAspect.name} ${selectedAspect.data.data.power >= 0 ? '+' : ''}${selectedAspect.data.data.power}</div>`)}
 
                         if (roll.result == 10) {
                             ruleOfDiv = `<h2 class="rule-of-chat-text">Rule of 10!</h2>

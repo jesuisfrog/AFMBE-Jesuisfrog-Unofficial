@@ -75,19 +75,30 @@
                 },
                 "hp": {
                     "value": 0,
-                    "max": 0
+                    "max": 0,
+                    "loss_toggle": false,
+                    "loss_penalty": 0
                 },
                 "endurance_points": {
                     "value": 0,
-                    "max": 0
+                    "max": 0,
+                    "loss_toggle": false,
+                    "loss_penalty": 0
                 },
                 "speed": {
                     "value": 0,
-                    "max": 0
+                    "max": 0,
+                    "loss_toggle": false,
+                    "loss_penalty": 0
                 },
                 "essence": {
                     "value": 0,
-                    "max": 0
+                    "max": 0,
+                    "loss_toggle": false,
+                    "loss_penalty": 0
+                },
+                "initiative": {
+                    "value": 0
                 },
                 "strength": {
                     "value": 0,
@@ -194,7 +205,8 @@
                     "hp": 0,
                     "endurance_points": 0,
                     "speed": 0,
-                    "essence": 0
+                    "essence": 0,
+                    "initiative": 0
                 }
             }
         },
