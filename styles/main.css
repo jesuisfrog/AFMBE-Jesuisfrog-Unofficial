@@ -61,7 +61,7 @@
  }
 
  .afmbe-dialog-menu .attribute-input {
-     width: 50px;
+     width: 100%;
  }
 
  .afmbe-dialog-menu .table-center-align {
@@ -70,6 +70,11 @@
 
  .afmbe-dialog-menu .table-bold-text {
      font-weight: bold;
+ }
+
+ .afmbe-dialog-menu input,
+ .afmbe-dialog-menu select {
+     width: 100%;
  }
 
  .afmbe-tags-flex-container,
