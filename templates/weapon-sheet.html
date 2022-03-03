@@ -23,6 +23,19 @@
                             <td><input type="text" name="data.damage" value="{{data.damage}}"></td>
                         </tr>
                         <tr>
+                            <th>Damage Multiplier</th>
+                            <td>
+                                <select id="damage_cha_multiplier" name="data.damage_cha_multiplier">
+                                    {{#select item.data.data.damage_cha_multiplier}}
+                                            <option value="none">None</option>
+                                        {{#each item.data.data.damage_characteristics as |damage_characteristic value|}}
+                                            <option value="{{value}}">{{damage_characteristic}}</option>
+                                        {{/each}}
+                                    {{/select}}
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
                             <th>Damage Type</th>
                             <td>
                                 <select id="damageTypeSelect" name="data.damage_type" data-type="String">

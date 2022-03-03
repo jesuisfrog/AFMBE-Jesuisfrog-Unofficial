@@ -530,7 +530,13 @@
  }
 
  .afmbe .item-attribute-sidebar {
-     width: 200px;
+     width: 350px;
+ }
+
+ .afmbe .item-attribute-sidebar table select,
+ .afmbe .item-attribute-sidebar table input {
+     width: 100%;
+     height: 20px;
  }
 
  .afmbe .item-attribute-flex-container {

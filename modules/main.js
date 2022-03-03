@@ -1,6 +1,7 @@
 // Import Modules
 import { afmbeActorSheet } from "./actor-sheet.js";
 import { afmbeActor } from "./actor.js";
+import { afmbeItem } from "./item.js";
 import { afmbeItemSheet } from "./item-sheet.js";
 import { afmbeCreatureSheet } from "./creature-sheet.js"
 import { afmbeVehicleSheet } from "./vehicle-sheet.js"
@@ -23,6 +24,7 @@ Hooks.once("init", async function() {
 
       // Define Custom Entity Classes
       CONFIG.Actor.documentClass = afmbeActor
+      CONFIG.Item.documentClass = afmbeItem
 
       // Register sheet application classes
       Actors.unregisterSheet("core", ActorSheet)

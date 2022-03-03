@@ -371,7 +371,7 @@ export class afmbeCreatureSheet extends ActorSheet {
                         let shotNumber = html[0].querySelector('#shotNumber').value
                         let firingMode = html[0].querySelector('#firingMode').value
 
-                        let roll = new Roll(weapon.data.data.damage)
+                        let roll = new Roll(weapon.data.data.damage_string)
                         roll.roll({async: false})
 
                         let tags = [`<div>Damage Roll</div>`]
@@ -404,7 +404,7 @@ export class afmbeCreatureSheet extends ActorSheet {
                                                     <tbody>
                                                         <tr>
                                                             <td>[[${roll.result}]]</td>
-                                                            <td>${weapon.data.data.damage}</td>
+                                                            <td>${weapon.data.data.damage_string}</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>

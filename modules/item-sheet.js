@@ -4,8 +4,8 @@ export class afmbeItemSheet extends ItemSheet {
     static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
             classes: ["afmbe", "sheet", "item"],
-            width: 500,
-            height: 400,
+            width: 600,
+            height: 450,
             tabs: [{navSelector: ".sheet-tabs", contentSelector: ".sheet-body-items", initial: "description"}]
         })
     }

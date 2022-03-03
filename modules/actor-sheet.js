@@ -428,7 +428,7 @@ export class afmbeActorSheet extends ActorSheet {
                         let shotNumber = html[0].querySelector('#shotNumber').value
                         let firingMode = html[0].querySelector('#firingMode').value
 
-                        let roll = new Roll(weapon.data.data.damage)
+                        let roll = new Roll(weapon.data.data.damage_string)
                         roll.roll({async: false})
 
                         let tags = [`<div>Damage Roll</div>`]
@@ -461,7 +461,7 @@ export class afmbeActorSheet extends ActorSheet {
                                                     <tbody>
                                                         <tr>
                                                             <td>[[${roll.result}]]</td>
-                                                            <td>${weapon.data.data.damage}</td>
+                                                            <td>${weapon.data.data.damage_string}</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -559,11 +559,13 @@ export class afmbeActorSheet extends ActorSheet {
         // Create Essence Tag and & Append
         if (this.actor.data.data.essence.value <= 1) {
             essenceTag.innerHTML = `<div>Hopeless</div>`
+            essenceTag.title = 'All Tests suffer -3 penalty'
             essenceTag.classList.add('tag')
             tagContainer.append(essenceTag)
         }
         else if (this.actor.data.data.essence.value <= (this.actor.data.data.essence.max / 2)) {
             essenceTag.innerHTML = `<div>Forlorn</div>`
+            essenceTag.title = 'Mental tests suffer a -1 penalty'
             essenceTag.classList.add('tag')
             tagContainer.append(essenceTag)
         }
@@ -571,6 +573,7 @@ export class afmbeActorSheet extends ActorSheet {
         // Create Endurance Tag and & Append
         if (this.actor.data.data.endurance_points.value <= 5) {
             enduranceTag.innerHTML = `<div>Exhausted</div>`
+            enduranceTag.title = 'All Tests suffer -2 penalty'
             enduranceTag.classList.add('tag')
             tagContainer.append(enduranceTag)
         }
