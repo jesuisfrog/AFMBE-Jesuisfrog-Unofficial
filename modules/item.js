@@ -34,7 +34,7 @@ export class afmbeItem extends Item {
 
     _prepareWeaponItem(actorData, itemData) {
         // Build Damage String by combining Damage Entry with Damage Multiplier Entry (Looks at Actor to grab Multiplier Value)
-        if (itemData.damage_cha_multiplier != "none") {
+        if (itemData.damage_cha_multiplier != "none" && this.isEmbedded) {
             itemData.damage_string = `${itemData.damage}*${actorData.data[itemData.damage_cha_multiplier].value}`
         }
         else if (itemData.damage_cha_multiplier === 'none') {
