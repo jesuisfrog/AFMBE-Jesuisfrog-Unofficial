@@ -12,10 +12,68 @@
         Global Styles
  ---------------------------------------------*/
 
+ .afmbe.sheet.actor .window-content,
+ .afmbe.sheet.item .window-content {
+    background: rgb(100, 100, 100);
+    color: rgb(231, 231, 231);
+}
+
+.afmbe.sheet.actor .entity-link,
+.afmbe.sheet.actor .content-link,
+.afmbe.sheet.item .entity-link,
+.afmbe.sheet.item .content-link {
+   color: black;
+}
+
+.afmbe.sheet.item .editable {
+    padding: 0 5px;
+    background: rgb(41, 50, 59);
+}
+
+.afmbe.sheet.actor button,
+.afmbe.sheet.item button {
+    color: white;
+    background:rgb(85, 85, 85);
+    border: 1px solid black;
+}
+
+.afmbe.sheet.actor input,
+.afmbe.sheet.actor select,
+.afmbe.sheet.item input,
+.afmbe.sheet.item select {
+    color: white;
+}
+
+.afmbe option {
+    background: rgb(41, 50, 59);
+}
+
+.app.window-app.dialog .window-content {
+    background: rgb(100, 100, 100);
+}
+
+.app.window-app.dialog .dialog-content {
+    color: white;
+    padding: 0 5px;
+    background: rgb(41, 50, 59);
+}
+
+.app.window-app.dialog .dialog-buttons button {
+    color: white;
+    background: rgb(85, 85, 85);
+    border: 1px solid black;
+}
+
+.window-header {
+    background: black;
+}
+
  .afmbe-dialog-menu {
      display: flex;
      flex-direction: column;
      gap: 5px;
+     background: rgb(41, 50, 59);
+     color: white;
  }
 
  .afmbe h1,
@@ -74,7 +132,12 @@
 
  .afmbe-dialog-menu input,
  .afmbe-dialog-menu select {
+     color: white;
      width: 100%;
+ }
+
+ .afmbe-dialog-menu option {
+    background: rgb(41, 50, 59);
  }
 
  .afmbe-tags-flex-container,
@@ -217,6 +280,15 @@
      min-height: 200px;
  }
 
+ .afmbe .editor .tox-toolbar__group button {
+    background: rgba(190, 190, 190, 0.692);
+    color: black;
+ }
+
+ .afmbe .editor .tox-edit-area {
+     background: rgba(255, 255, 255, 0.808);
+ }
+
  /* ------------------------------------------- 
         Character Sidebar
  ---------------------------------------------*/
@@ -228,6 +300,7 @@
      justify-content: stretch;
      flex-wrap: nowrap;
      height: 100%;
+     background: rgb(41, 50, 59);
  }
 
  .afmbe .sheet-sidebar {
@@ -296,7 +369,7 @@
      position: absolute;
      bottom: 0;
      right: 0;
-     background: rgba(124, 118, 118, 0.493);
+     background: rgba(82, 82, 82, 0.493);
      z-index: 5;
      font-family: "Jolly Roger";
      font-size: x-large;
@@ -358,7 +431,7 @@
  }
 
  .afmbe .attribute-container {
-    background:rgba(197, 186, 186, 0.493);
+    /* background:rgba(82, 82, 82, 0.493); */
     margin: 0 0 10px 0;
  }
 
@@ -374,7 +447,7 @@
      align-items: center;
      justify-content: space-between;
      flex-wrap: nowrap;
-     border-bottom: 1px solid;
+     border-bottom: 1px solid rgb(145, 145, 145);
      padding: 5px 0;
  }
 
@@ -391,17 +464,21 @@
  .afmbe .resource .attribute input {
      width: 75%;
      height: 20px;
+     color: white;
  }
 
  .afmbe .resource .secondaryAttribute input {
     width: 50px;
     height: 20px;
+    color: white;
  }
 
  .afmbe .resource button {
      width: 50%;
      height: 25px;
      line-height: 10px;
+     color: white;
+     border: 1px solid black;
  }
 
  .afmbe #characterTypeSelect {
@@ -472,7 +549,7 @@
  .afmbe .powers-container {
      margin: 10px 0;
      border-bottom: 1px solid;
-     background:rgba(197, 186, 186, 0.493);
+     /* background:rgba(82, 82, 82, 0.493); */
  }
 
  .afmbe .armor-button-cell button {
