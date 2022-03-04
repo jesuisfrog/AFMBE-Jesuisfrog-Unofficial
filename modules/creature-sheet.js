@@ -3,7 +3,7 @@ export class afmbeCreatureSheet extends ActorSheet {
     /** @override */
       static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
-          classes: ["afmbe", "sheet", "actor"],
+          classes: ["afmbe", "sheet", "actor", `${game.settings.get("afmbe", "light-mode") ? "light-mode" : ""}`],
             width: 700,
             height: 820,
             tabs: [{navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "core"}],
@@ -172,7 +172,12 @@ export class afmbeCreatureSheet extends ActorSheet {
             let option = `<option value="${aspect.id}">${aspect.name} ${aspect.data.data.power}</option>`
             aspectOptions.push(option)
         }
-        
+
+        // Create Classes for Dialog Box
+        let mode = game.settings.get("afmbe", "light-mode") ? "light-mode" : ""
+        let dialogOptions = {classes: ["dialog", "afmbe", mode]}
+
+        // Create Dialog Prompt
         let d = new Dialog({
             title: 'Attribute Roll',
             content: `<div class="afmbe-dialog-menu">
@@ -312,7 +317,7 @@ export class afmbeCreatureSheet extends ActorSheet {
             },
             default: 'two',
             close: html => console.log()
-        })
+        }, dialogOptions)
 
         d.render(true)
     }
@@ -322,6 +327,11 @@ export class afmbeCreatureSheet extends ActorSheet {
         let element = event.currentTarget
         let weapon = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
 
+        // Create Classes for Dialog Box
+        let mode = game.settings.get("afmbe", "light-mode") ? "light-mode" : ""
+        let dialogOptions = {classes: ["dialog", "afmbe", mode]}
+
+        // Create Dialog Prompt
         let d = new Dialog({
             title: 'Weapon Roll',
             content: `<div class="afmbe-dialog-menu">
@@ -423,7 +433,7 @@ export class afmbeCreatureSheet extends ActorSheet {
             },
             default: "two",
             close: html => console.log()
-        })
+        }, dialogOptions)
 
         d.render(true)
     }

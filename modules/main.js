@@ -55,6 +55,20 @@ Hooks.once("init", async function() {
           makeDefault: true,
           label: "Default AFMBE Item Sheet"
       })
+
+
+      // Game Settings
+      function delayedReload() {window.setTimeout(() => location.reload(), 500)}
+
+      game.settings.register("afmbe", "light-mode", {
+        name: "Light Mode",
+        hint: "Checking this option enables Light Mode, stripping away the dark mode aesthetics from the sheets.",
+        scope: "world",
+        config: true,
+        default: false,
+        type: Boolean,
+        onChange: delayedReload
+      });
 })
 
 /* -------------------------------------------- */

@@ -3,7 +3,7 @@ export class afmbeItemSheet extends ItemSheet {
     /** @override */
     static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
-            classes: ["afmbe", "sheet", "item"],
+            classes: ["afmbe", "sheet", "item", `${game.settings.get("afmbe", "light-mode") ? "light-mode" : ""}`],
             width: 600,
             height: 450,
             tabs: [{navSelector: ".sheet-tabs", contentSelector: ".sheet-body-items", initial: "description"}]

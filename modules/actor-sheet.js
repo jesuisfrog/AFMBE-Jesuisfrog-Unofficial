@@ -3,7 +3,7 @@ export class afmbeActorSheet extends ActorSheet {
     /** @override */
       static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
-          classes: ["afmbe", "sheet", "actor"],
+          classes: ["afmbe", "sheet", "actor", `${game.settings.get("afmbe", "light-mode") ? "light-mode" : ""}`],
             width: 700,
             height: 820,
             tabs: [{navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "core"}],
@@ -211,6 +211,9 @@ export class afmbeActorSheet extends ActorSheet {
         if (this.actor.data.data.endurance_points.loss_toggle) {penaltyTags.push(`<div>Endurance Loss ${this.actor.data.data.endurance_points.loss_penalty}</div>`)}
         if (this.actor.data.data.essence.loss_toggle) {penaltyTags.push(`<div>Essence Loss ${this.actor.data.data.essence.loss_penalty}</div>`)}
         
+        // Create Classes for Dialog Box
+        let mode = game.settings.get("afmbe", "light-mode") ? "light-mode" : ""
+        let dialogOptions = {classes: ["dialog", "afmbe", mode]}
 
         // Create Dialog Prompt
         let d = new Dialog({
@@ -369,7 +372,7 @@ export class afmbeActorSheet extends ActorSheet {
             },
             default: 'two',
             close: html => console.log()
-        })
+        }, dialogOptions)
 
         d.render(true)
     }
@@ -379,6 +382,11 @@ export class afmbeActorSheet extends ActorSheet {
         let element = event.currentTarget
         let weapon = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
 
+        // Create Classes for Dialog Box
+        let mode = game.settings.get("afmbe", "light-mode") ? "light-mode" : ""
+        let dialogOptions = {classes: ["dialog", "afmbe", mode]}
+
+        // Create Dialog Box
         let d = new Dialog({
             title: 'Weapon Roll',
             content: `<div class="afmbe-dialog-menu">
@@ -480,7 +488,7 @@ export class afmbeActorSheet extends ActorSheet {
             },
             default: "two",
             close: html => console.log()
-        })
+        }, dialogOptions)
 
         d.render(true)
     }

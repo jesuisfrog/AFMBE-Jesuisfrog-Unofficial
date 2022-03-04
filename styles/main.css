@@ -15,7 +15,7 @@
  .afmbe.sheet.actor .window-content,
  .afmbe.sheet.item .window-content {
     background: rgb(22, 22, 22);
-    color: rgb(231, 231, 231);
+    color: rgb(220, 220, 220);
 }
 
 .afmbe.sheet.actor .entity-link,
@@ -30,6 +30,8 @@
     color: rgb(231, 231, 231);
     background:rgb(85, 85, 85);
     border: 1px solid black;
+    height: 25px;
+    line-height: 10px;
 }
 
 .afmbe.sheet.actor input,
@@ -196,7 +198,7 @@
 
  .afmbe .item-name:hover {
      font-weight: bold;
-     color: rgb(0, 0, 0);
+     color: rgb(255, 255, 255);
  }
 
  .afmbe .item-name-flex-container {
@@ -438,7 +440,6 @@
  }
 
  .afmbe .attribute-container {
-    /* background:rgba(82, 82, 82, 0.493); */
     margin: 0 0 10px 0;
  }
 
@@ -652,3 +653,115 @@
  .afmbe .blur {
      filter: blur(5px);
  }
+
+  /* ------------------------------------------- 
+        Light Mode Settings
+ ---------------------------------------------*/
+
+ .afmbe.sheet.actor.light-mode .window-content,
+ .afmbe.sheet.item.light-mode .window-content {
+    background: url('../images/parchment.jpg');
+    color: black;
+}
+
+.afmbe.sheet.actor.light-mode .entity-link,
+.afmbe.sheet.actor.light-mode .content-link,
+.afmbe.sheet.item.light-mode .entity-link,
+.afmbe.sheet.item.light-mode .content-link {
+   color: black;
+}
+
+.afmbe.sheet.actor.light-mode button,
+.afmbe.sheet.item.light-mode button {
+    color: black;
+    background: none;
+    border: 1px solid black;
+}
+
+.afmbe.sheet.actor.light-mode input,
+.afmbe.sheet.actor.light-mode select,
+.afmbe.sheet.item.light-mode input,
+.afmbe.sheet.item.light-mode select {
+    color: rgb(0, 0, 0);
+}
+
+.afmbe.sheet.item.light-mode .window-content .editable {
+    background: none;
+}
+
+.afmbe.light-mode option {
+    background: rgb(228, 228, 228);
+}
+
+.app.window-app.dialog.light-mode .window-content {
+    background: url('../images/parchment.jpg');
+}
+
+.app.window-app.dialog.light-mode .dialog-content {
+    color: rgb(0, 0, 0);
+    background: none;
+}
+
+.app.window-app.dialog.light-mode .dialog-buttons button {
+    color: rgb(0, 0, 0);
+    background: none;
+    border: 1px solid black;
+}
+
+.afmbe.light-mode .sheet-flex-container {
+    background: none;
+}
+
+.afmbe.light-mode .sheet-sidebar {
+    background: none;
+}
+
+.afmbe.light-mode .weapon-table,
+.afmbe.light-mode .item-table,
+.afmbe.light-mode .qualities-container,
+.afmbe.light-mode .drawbacks-container,
+.afmbe.light-mode .skills-container,
+.afmbe.light-mode .powers-container {
+    background: rgba(196, 196, 196, 0.603);
+}
+
+.afmbe.light-mode tbody tr:nth-child(even) {
+    background: rgba(218, 218, 218, 0.541);
+}
+
+.afmbe.light-mode .sheet-nav-container {
+    background: rgba(114, 114, 114, 0.616);
+}
+
+.afmbe.light-mode .item-description-sidebar {
+    border-left: 1px solid rgb(0, 0, 0);
+}
+
+.app.window-app.dialog.light-mode .window-content {
+    background: url('../images/parchment.jpg');
+}
+
+.app.window-app.dialog.light-mode .dialog-content {
+    color: black;
+    background: none;
+}
+
+.app.window-app.dialog.light-mode .dialog-buttons button {
+    color: black;
+    background: none;
+    border: 1px solid black;
+}
+
+.afmbe.window-app.dialog.light-mode .afmbe-dialog-menu {
+     background: none;
+     color: black;
+ }
+
+ .afmbe.window-app.dialog.light-mode .afmbe-dialog-menu-text-box {
+    background: none;
+}
+
+.afmbe.window-app.dialog.light-mode input,
+.afmbe.window-app.dialog.light-mode select {
+    color: black;
+}

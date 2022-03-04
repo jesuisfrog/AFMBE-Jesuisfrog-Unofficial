@@ -3,7 +3,7 @@ export class afmbeVehicleSheet extends ActorSheet {
     /** @override */
       static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
-          classes: ["afmbe", "sheet", "actor"],
+          classes: ["afmbe", "sheet", "actor", `${game.settings.get("afmbe", "light-mode") ? "light-mode" : ""}`],
           template: "systems/afmbe/templates/vehicle-sheet.html",
             width: 700,
             height: 780,
