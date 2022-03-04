@@ -171,6 +171,7 @@
 
  .afmbe h2 {
      margin: 0;
+     font-size: 22px;
  }
 
  .afmbe .table-left-align {
@@ -306,7 +307,7 @@
      justify-content: stretch;
      flex-wrap: nowrap;
      height: 100%;
-     background: rgb(45, 51, 56);
+     background: rgb(62, 64, 66);
  }
 
  .afmbe .sheet-sidebar {
@@ -316,7 +317,7 @@
      height: 100%;
      border-right: 1px solid;
      padding: 0 5px;
-     background: rgb(63, 70, 77);
+     background: rgb(90, 93, 95);
  }
 
  .afmbe .sheet-sidebar input {
@@ -764,4 +765,9 @@
 .afmbe.window-app.dialog.light-mode input,
 .afmbe.window-app.dialog.light-mode select {
     color: black;
+}
+
+.afmbe.light-mode .item-name:hover {
+    font-weight: bold;
+    color: rgb(0, 0, 0);
 }
