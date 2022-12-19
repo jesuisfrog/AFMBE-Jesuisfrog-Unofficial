@@ -15,7 +15,7 @@ export class afmbeItemSheet extends ItemSheet {
     /** @override */
     get template() {
         const path = "systems/afmbe/templates";
-        return `${path}/${this.item.data.type}-sheet.html`;
+        return `${path}/${this.item.type}-sheet.html`;
     }
 
     getData() {
@@ -23,9 +23,8 @@ export class afmbeItemSheet extends ItemSheet {
         data.dtypes = ["String", "Number", "Boolean"];
         data.isGM = game.user.isGM;
         data.editable = data.options.editable;
-        const itemData = data.data;
-        data.actor = itemData;
-        data.data = itemData.data;
+        const itemData = data.system;
+        data.data = itemData;
 
         return data;
         }
