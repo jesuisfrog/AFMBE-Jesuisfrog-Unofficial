@@ -18,13 +18,10 @@ export class afmbeActorSheet extends ActorSheet {
     /** @override */
 
   getData() {
-    const  data = super.getData(); 
-    data.dtypes = ["String", "Number", "Boolean"];
+    const data = super.getData(); 
     data.isGM = game.user.isGM;
     data.editable = data.options.editable;
-    const actorData = data.data;
-    data.actor = actorData;
-    data.data = actorData.data;
+    const actorData = data.system;
     let options = 0;
     let user = this.user;
 
@@ -34,7 +31,7 @@ export class afmbeActorSheet extends ActorSheet {
   }
 
   _prepareCharacterItems(sheetData) {
-      const actorData = sheetData.actor.data
+      const actorData = sheetData.actor
 
       // Initialize Containers
       const item = [];
@@ -49,7 +46,7 @@ export class afmbeActorSheet extends ActorSheet {
       for (let i of sheetData.items) {
           switch (i.type) {
             case "item": 
-                if (i.data.equipped) {equippedItem.push(i)}
+                if (i.system.equipped) {equippedItem.push(i)}
                 else {item.push(i)}
                 break
             
@@ -101,7 +98,7 @@ export class afmbeActorSheet extends ActorSheet {
   get template() {
     const path = "systems/afmbe/templates";
     if (!game.user.isGM && this.actor.limited) return "systems/afmbe/templates/limited-character-sheet.html"; 
-    return `${path}/${this.actor.data.type}-sheet.html`;
+    return `${path}/${this.actor.type}-sheet.html`;
   }
 
   /** @override */
@@ -125,8 +122,8 @@ export class afmbeActorSheet extends ActorSheet {
         html.find('.item-name').click( (ev) => {
             const li = ev.currentTarget.closest(".item")
             const item = this.actor.items.get(li.dataset.itemId)
-            if(this.actor.data.permission[game.user.data._id] >= 2||game.user.isGM) {item.sheet.render(true)}
-            item.update({"data.value": item.data.data.value})
+            if(this.actor.permission[game.user.data._id] >= 2||game.user.isGM) {item.sheet.render(true)}
+            item.update({"data.value": item.system.value})
         })
 
         // Delete Inventory Item
@@ -156,28 +153,29 @@ export class afmbeActorSheet extends ActorSheet {
     }
 
     _createCharacterPointDivs() {
+        let actorData = this.actor.system
         let attributesDiv = document.createElement('div')
         let qualityDiv = document.createElement('div')
         let drawbackDiv = document.createElement('div')
         let skillDiv = document.createElement('div')
         let powerDiv = document.createElement('div')
-        let characterTypePath = this.actor.data.data.characterTypes[this.actor.data.data.characterType]
+        let characterTypePath = actorData.characterTypes[actorData.characterType]
 
         // Construct and assign div elements to the headers
         if(characterTypePath != undefined) {
-            attributesDiv.innerHTML = `- [${this.actor.data.data.characterTypeValues[characterTypePath].attributePoints.value} / ${this.actor.data.data.characterTypeValues[characterTypePath].attributePoints.max}]`
+            attributesDiv.innerHTML = `- [${actorData.characterTypeValues[characterTypePath].attributePoints.value} / ${actorData.characterTypeValues[characterTypePath].attributePoints.max}]`
             this.form.querySelector('#attributes-header').append(attributesDiv)
 
-            qualityDiv.innerHTML = `- [${this.actor.data.data.characterTypeValues[characterTypePath].qualityPoints.value} / ${this.actor.data.data.characterTypeValues[characterTypePath].qualityPoints.max}]`
+            qualityDiv.innerHTML = `- [${actorData.characterTypeValues[characterTypePath].qualityPoints.value} / ${actorData.characterTypeValues[characterTypePath].qualityPoints.max}]`
             this.form.querySelector('#quality-header').append(qualityDiv)
 
-            drawbackDiv.innerHTML = `- [${this.actor.data.data.characterTypeValues[characterTypePath].drawbackPoints.value} / ${this.actor.data.data.characterTypeValues[characterTypePath].drawbackPoints.max}]`
+            drawbackDiv.innerHTML = `- [${actorData.characterTypeValues[characterTypePath].drawbackPoints.value} / ${actorData.characterTypeValues[characterTypePath].drawbackPoints.max}]`
             this.form.querySelector('#drawback-header').append(drawbackDiv)
 
-            skillDiv.innerHTML = `- [${this.actor.data.data.characterTypeValues[characterTypePath].skillPoints.value} / ${this.actor.data.data.characterTypeValues[characterTypePath].skillPoints.max}]`
+            skillDiv.innerHTML = `- [${actorData.characterTypeValues[characterTypePath].skillPoints.value} / ${actorData.characterTypeValues[characterTypePath].skillPoints.max}]`
             this.form.querySelector('#skill-header').append(skillDiv)
 
-            powerDiv.innerHTML = `- [${this.actor.data.data.characterTypeValues[characterTypePath].metaphysicsPoints.value} / ${this.actor.data.data.characterTypeValues[characterTypePath].metaphysicsPoints.max}]`
+            powerDiv.innerHTML = `- [${actorData.characterTypeValues[characterTypePath].metaphysicsPoints.value} / ${actorData.characterTypeValues[characterTypePath].metaphysicsPoints.max}]`
             this.form.querySelector('#power-header').append(powerDiv)
         }
     }
@@ -186,30 +184,31 @@ export class afmbeActorSheet extends ActorSheet {
         event.preventDefault()
         let element = event.currentTarget
         let attributeLabel = element.dataset.attributeName
+        let actorData = this.actor.system
 
         // Create options for Qualities/Drawbacks/Skills
         let skillOptions = []
         for (let skill of this.actor.items.filter(item => item.type === 'skill')) {
-            let option = `<option value="${skill.id}">${skill.name} ${skill.data.data.level}</option>`
+            let option = `<option value="${skill.id}">${skill.name} ${skill.system.level}</option>`
             skillOptions.push(option)
         }
 
         let qualityOptions = []
         for (let quality of this.actor.items.filter(item => item.type === 'quality')) {
-            let option = `<option value="${quality.id}">${quality.name} ${quality.data.data.cost}</option>`
+            let option = `<option value="${quality.id}">${quality.name} ${quality.system.cost}</option>`
             qualityOptions.push(option)
         }
 
         let drawbackOptions = []
         for (let drawback of this.actor.items.filter(item => item.type === 'drawback')) {
-            let option = `<option value="${drawback.id}">${drawback.name} ${drawback.data.data.cost}</option>`
+            let option = `<option value="${drawback.id}">${drawback.name} ${drawback.system.cost}</option>`
             drawbackOptions.push(option)
         }
 
         // Create penalty tags from Resource Loss Status
         let penaltyTags = []
-        if (this.actor.data.data.endurance_points.loss_toggle) {penaltyTags.push(`<div>Endurance Loss ${this.actor.data.data.endurance_points.loss_penalty}</div>`)}
-        if (this.actor.data.data.essence.loss_toggle) {penaltyTags.push(`<div>Essence Loss ${this.actor.data.data.essence.loss_penalty}</div>`)}
+        if (actorData.endurance_points.loss_toggle) {penaltyTags.push(`<div>Endurance Loss ${actorData.endurance_points.loss_penalty}</div>`)}
+        if (actorData.essence.loss_toggle) {penaltyTags.push(`<div>Essence Loss ${actorData.essence.loss_penalty}</div>`)}
         
         // Create Classes for Dialog Box
         let mode = game.settings.get("afmbe", "light-mode") ? "light-mode" : ""
@@ -298,11 +297,11 @@ export class afmbeActorSheet extends ActorSheet {
                         let selectedDrawback = this.actor.getEmbeddedDocument("Item", html[0].querySelector('#drawbackSelect').value)
 
                         // Set values for options
-                        let attributeValue = attributeTestSelect === 'Simple' ? this.actor.data.data[attributeLabel.toLowerCase()].value * 2 : this.actor.data.data[attributeLabel.toLowerCase()].value
-                        let skillValue = selectedSkill != undefined ? selectedSkill.data.data.level : 0
-                        let qualityValue = selectedQuality != undefined ? selectedQuality.data.data.cost : 0
-                        let drawbackValue = selectedDrawback != undefined ? selectedDrawback.data.data.cost : 0
-                        let statusPenalties = this.actor.data.data.endurance_points.loss_penalty + this.actor.data.data.essence.loss_penalty
+                        let attributeValue = attributeTestSelect === 'Simple' ? actorData[attributeLabel.toLowerCase()].value * 2 : actorData[attributeLabel.toLowerCase()].value
+                        let skillValue = selectedSkill != undefined ? selectedSkill.system.level : 0
+                        let qualityValue = selectedQuality != undefined ? selectedQuality.system.cost : 0
+                        let drawbackValue = selectedDrawback != undefined ? selectedDrawback.system.cost : 0
+                        let statusPenalties = actorData.endurance_points.loss_penalty + actorData.essence.loss_penalty
 
                         // Calculate total modifier to roll
                         let rollMod = (attributeValue + skillValue + qualityValue + userInputModifier) - drawbackValue + statusPenalties
@@ -318,9 +317,9 @@ export class afmbeActorSheet extends ActorSheet {
                         let tags = [`<div>${attributeTestSelect} Test</div>`]
                         let ruleOfDiv = ``
                         if (userInputModifier != 0) {tags.push(`<div>User Modifier ${userInputModifier >= 0 ? "+" : ''}${userInputModifier}</div>`)}
-                        if (selectedSkill != undefined) {tags.push(`<div>${selectedSkill.name} ${selectedSkill.data.data.level >= 0 ? '+' : ''}${selectedSkill.data.data.level}</div>`)}
-                        if (selectedQuality != undefined) {tags.push(`<div>${selectedQuality.name} ${selectedQuality.data.data.cost >= 0 ? '+' : ''}${selectedQuality.data.data.cost}</div>`)}
-                        if (selectedDrawback != undefined) {tags.push(`<div>${selectedDrawback.name} ${selectedQuality.data.data.cost >= 0 ? '-' : '+'}${Math.abs(selectedDrawback.data.data.cost)}</div>`)}
+                        if (selectedSkill != undefined) {tags.push(`<div>${selectedSkill.name} ${selectedSkill.system.level >= 0 ? '+' : ''}${selectedSkill.system.level}</div>`)}
+                        if (selectedQuality != undefined) {tags.push(`<div>${selectedQuality.name} ${selectedQuality.system.cost >= 0 ? '+' : ''}${selectedQuality.system.cost}</div>`)}
+                        if (selectedDrawback != undefined) {tags.push(`<div>${selectedDrawback.name} ${selectedQuality.system.cost >= 0 ? '-' : '+'}${Math.abs(selectedDrawback.system.cost)}</div>`)}
 
                         if (roll.result == 10) {
                             ruleOfDiv = `<h2 class="rule-of-chat-text">Rule of 10!</h2>
@@ -334,7 +333,7 @@ export class afmbeActorSheet extends ActorSheet {
                         }
 
                         let chatContent = `<form>
-                                                <h2>${attributeLabel} Roll [${this.actor.data.data[attributeLabel.toLowerCase()].value}]</h2>
+                                                <h2>${attributeLabel} Roll [${actorData[attributeLabel.toLowerCase()].value}]</h2>
 
                                                 <table class="afmbe-chat-roll-table">
                                                     <thead>
@@ -436,18 +435,18 @@ export class afmbeActorSheet extends ActorSheet {
                         let shotNumber = html[0].querySelector('#shotNumber').value
                         let firingMode = html[0].querySelector('#firingMode').value
 
-                        let roll = new Roll(weapon.data.data.damage_string)
+                        let roll = new Roll(weapon.system.damage_string)
                         roll.roll({async: false})
 
                         let tags = [`<div>Damage Roll</div>`]
                         if (firingMode != 'None/Melee') {tags.push(`<div>${firingMode}: ${shotNumber}</div>`)}
-                        if (weapon.data.data.damage_types[weapon.data.data.damage_type] != 'None') {tags.push(`<div>${weapon.data.data.damage_types[weapon.data.data.damage_type]}</div>`)}
+                        if (weapon.system.damage_types[weapon.system.damage_type] != 'None') {tags.push(`<div>${weapon.system.damage_types[weapon.system.damage_type]}</div>`)}
 
                         // Reduce Fired shots from current load chamber
                         if (shotNumber > 0) {
-                            switch (weapon.data.data.capacity.value - shotNumber >= 0) {
+                            switch (weapon.system.capacity.value - shotNumber >= 0) {
                                 case true:
-                                    weapon.update({'data.capacity.value': weapon.data.data.capacity.value - shotNumber})
+                                    weapon.update({'data.capacity.value': weapon.system.capacity.value - shotNumber})
                                     break
 
                                 case false: 
@@ -469,7 +468,7 @@ export class afmbeActorSheet extends ActorSheet {
                                                     <tbody>
                                                         <tr>
                                                             <td>[[${roll.result}]]</td>
-                                                            <td>${weapon.data.data.damage_string}</td>
+                                                            <td>${weapon.system.damage_string}</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -498,7 +497,7 @@ export class afmbeActorSheet extends ActorSheet {
         let element = event.currentTarget
         let equippedItem = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
 
-        let roll = new Roll(equippedItem.data.data.armor_value)
+        let roll = new Roll(equippedItem.system.armor_value)
         roll.roll({async: false})
 
         let tags = [`<div>Armor Roll</div>`]
@@ -517,7 +516,7 @@ export class afmbeActorSheet extends ActorSheet {
                                     <tbody>
                                         <tr>
                                             <td>[[${roll.result}]]</td>
-                                            <td>${equippedItem.data.data.armor_value}</td>
+                                            <td>${equippedItem.system.armor_value}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -538,7 +537,7 @@ export class afmbeActorSheet extends ActorSheet {
         let element = event.currentTarget
         let equippedItem = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
 
-        switch (equippedItem.data.data.equipped) {
+        switch (equippedItem.system.equipped) {
             case true:
                 equippedItem.update({'data.equipped': false})
                 break
@@ -551,10 +550,11 @@ export class afmbeActorSheet extends ActorSheet {
 
     _onResetResource(event) {
         event.preventDefault()
+        let actorData = this.actor.system
         let element = event.currentTarget
         let dataPath = `data.${element.dataset.resource}.value`
 
-        this.actor.update({[dataPath]: this.actor.data.data[element.dataset.resource].max})
+        this.actor.update({[dataPath]: actorData[element.dataset.resource].max})
     }
 
     _createStatusTags() {
@@ -563,15 +563,16 @@ export class afmbeActorSheet extends ActorSheet {
         let enduranceTag = document.createElement('div')
         let essenceTag = document.createElement('div')
         let injuryTag = document.createElement('div')
+        let actorData = this.actor.system
 
         // Create Essence Tag and & Append
-        if (this.actor.data.data.essence.value <= 1) {
+        if (actorData.essence.value <= 1) {
             essenceTag.innerHTML = `<div>Hopeless</div>`
             essenceTag.title = 'All Tests suffer -3 penalty'
             essenceTag.classList.add('tag')
             tagContainer.append(essenceTag)
         }
-        else if (this.actor.data.data.essence.value <= (this.actor.data.data.essence.max / 2)) {
+        else if (actorData.essence.value <= (actorData.essence.max / 2)) {
             essenceTag.innerHTML = `<div>Forlorn</div>`
             essenceTag.title = 'Mental tests suffer a -1 penalty'
             essenceTag.classList.add('tag')
@@ -579,7 +580,7 @@ export class afmbeActorSheet extends ActorSheet {
         }
 
         // Create Endurance Tag and & Append
-        if (this.actor.data.data.endurance_points.value <= 5) {
+        if (actorData.endurance_points.value <= 5) {
             enduranceTag.innerHTML = `<div>Exhausted</div>`
             enduranceTag.title = 'All Tests suffer -2 penalty'
             enduranceTag.classList.add('tag')
@@ -587,19 +588,19 @@ export class afmbeActorSheet extends ActorSheet {
         }
 
         // Create Injury Tag and & Append
-        if (this.actor.data.data.hp.value <= -10) {
+        if (actorData.hp.value <= -10) {
             injuryTag.innerHTML = `<div>Dying</div>`
             injuryTag.classList.add('tag')
             injuryTag.title = 'Survival Test required to avoid instant death'
             tagContainer.append(injuryTag)
         }
-        else if (this.actor.data.data.hp.value <= 0) {
+        else if (actorData.hp.value <= 0) {
             injuryTag.innerHTML = `<div>Semi-Conscious</div>`
             injuryTag.classList.add('tag')
             injuryTag.title = 'Willpower test required to regain consciousness, penalized by the number their HP is below 0'
             tagContainer.append(injuryTag)
         }
-        else if (this.actor.data.data.hp.value <= 5) {
+        else if (actorData.hp.value <= 5) {
             injuryTag.innerHTML = `<div>Severely Injured</div>`
             injuryTag.classList.add('tag')
             injuryTag.title = 'Most actions suffer -1 through -5 penalty'
@@ -607,7 +608,7 @@ export class afmbeActorSheet extends ActorSheet {
         }
 
         // Create Encumbrance Tags & Append
-        switch (this.actor.data.data.encumbrance.level) {
+        switch (actorData.encumbrance.level) {
             case 1:
                 encTag.innerHTML = `<div>Lightly Encumbered</div>`
                 encTag.classList.add('tag')
