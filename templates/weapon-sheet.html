@@ -16,19 +16,19 @@
                     <tbody>
                         <tr>
                             <th>Range</th>
-                            <td><input type="text" name="data.range" value="{{data.range}}"></td>
+                            <td><input type="text" name="system.range" value="{{item.system.range}}"></td>
                         </tr>
                         <tr>
                             <th>Damage</th>
-                            <td><input type="text" name="data.damage" value="{{data.damage}}"></td>
+                            <td><input type="text" name="system.damage" value="{{item.system.damage}}"></td>
                         </tr>
                         <tr>
                             <th>Damage Multiplier</th>
                             <td>
-                                <select id="damage_cha_multiplier" name="data.damage_cha_multiplier">
-                                    {{#select item.data.data.damage_cha_multiplier}}
+                                <select id="damage_cha_multiplier" name="system.damage_cha_multiplier">
+                                    {{#select item.system.damage_cha_multiplier}}
                                             <option value="none">None</option>
-                                        {{#each item.data.data.damage_characteristics as |damage_characteristic value|}}
+                                        {{#each item.system.damage_characteristics as |damage_characteristic value|}}
                                             <option value="{{value}}">{{damage_characteristic}}</option>
                                         {{/each}}
                                     {{/select}}
@@ -38,9 +38,9 @@
                         <tr>
                             <th>Damage Type</th>
                             <td>
-                                <select id="damageTypeSelect" name="data.damage_type" data-type="String">
-                                    {{#select item.data.data.damage_type}}
-                                        {{#each item.data.data.damage_types as |damage_types key|}}
+                                <select id="damageTypeSelect" name="system.damage_type" data-type="String">
+                                    {{#select item.system.damage_type}}
+                                        {{#each item.system.damage_types as |damage_types key|}}
                                             <option value="{{key}}">{{damage_types}}</option>
                                         {{/each}}
                                     {{/select}}
@@ -49,31 +49,31 @@
                         </tr>
                         <tr>
                             <th>Ammo Type</th>
-                            <td><input type="text" name="data.ammo_type" value="{{data.ammo_type}}"></td>
+                            <td><input type="text" name="system.ammo_type" value="{{item.system.ammo_type}}"></td>
                         </tr>
                         <tr>
                             <th>Capacity</th>
                             <td>
                                 <div class="item-name-flex-container">
-                                    <input type="number" name="data.capacity.value" value="{{data.capacity.value}}">
-                                    <input type="number" name="data.capacity.max" value="{{data.capacity.max}}">
+                                    <input type="number" name="system.capacity.value" value="{{item.system.capacity.value}}">
+                                    <input type="number" name="system.capacity.max" value="{{item.system.capacity.max}}">
                                 </div>
                             </td>
                         </tr>
                         <tr>
                             <th>EV</th>
-                            <td><input type="number" name="data.encumbrance" value="{{data.encumbrance}}"></td>
+                            <td><input type="number" name="system.encumbrance" value="{{item.system.encumbrance}}"></td>
                         </tr>
                         <tr>
                             <th>Cost</th>
-                            <td><input type="number" name="data.cost" value="{{data.cost}}"></td>
+                            <td><input type="number" name="system.cost" value="{{item.system.cost}}"></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="item-description-sidebar">
                 <h2 class="item-desc">Description</h2>
-                {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
+                {{editor item.system.description target="system.description" button=true owner=owner editable=editable}}
             </div>
         </div>
     </section>
