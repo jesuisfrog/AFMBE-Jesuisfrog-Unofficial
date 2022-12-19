@@ -4,8 +4,8 @@ export class afmbeItem extends Item {
         super.prepareData()
 
         // Get the Item's data & Actor's data
-        const itemData = this.data.data
-        const actorData = this.actor ? this.actor.data : {}
+        const itemData = this.system
+        const actorData = this.actor ? this.actor.system : {}
 
         // Prepare Data based on item type
         if (itemData && actorData) {
@@ -34,10 +34,11 @@ export class afmbeItem extends Item {
 
     _prepareWeaponItem(actorData, itemData) {
         // Build Damage String by combining Damage Entry with Damage Multiplier Entry (Looks at Actor to grab Multiplier Value)
-        if (itemData.damage_cha_multiplier != "none" && this.isEmbedded) {
-            itemData.damage_string = `${itemData.damage}*${actorData.data[itemData.damage_cha_multiplier].value + (itemData.damage_type == 1 ? 1 : 0)}`
+        // This does not apply to weapons on vehicles
+        if (itemData.damage_cha_multiplier != "none" && this.isEmbedded && this.actor.type != 'vehicle') {
+            itemData.damage_string = `${itemData.damage}*${actorData[itemData.damage_cha_multiplier].value + (itemData.damage_type == 1 ? 1 : 0)}`
         }
-        else if (itemData.damage_cha_multiplier === 'none') {
+        else  {
             itemData.damage_string = itemData.damage
         }
     }
