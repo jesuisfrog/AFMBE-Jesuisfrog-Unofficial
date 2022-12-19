@@ -16,14 +16,14 @@
                     <tbody>
                         <tr>
                             <th>Level</th>
-                            <td><input type="number" name="data.level" value="{{data.level}}"></td>
+                            <td><input type="number" name="system.level" value="{{item.system.level}}"></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="item-description-sidebar">
                 <h2 class="item-desc">Description</h2>
-                {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
+                {{editor item.system.description target="system.description" button=true owner=owner editable=editable}}
             </div>
         </div>
     </section>
