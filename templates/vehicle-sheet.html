@@ -30,67 +30,67 @@
                                 <div class="resource">
                                     <button type="button">Weight</button>
                                     <div class="resource-values attribute">
-                                        <input type="number" name="data.weight" value="{{data.weight}}">
+                                        <input type="number" name="system.weight" value="{{actor.system.weight}}">
                                     </div>
                                 </div>
                                 <div class="resource">
                                     <button type="button">Speed</button>
                                     <div class="resource-values attribute">
-                                        <input type="number" name="data.speed" value="{{data.speed}}">
+                                        <input type="number" name="system.speed" value="{{actor.system.speed}}">
                                     </div>
                                 </div>
                                 <div class="resource">
                                     <button type="button">Acceleration</button>
                                     <div class="resource-values attribute">
-                                        <input type="number" name="data.acceleration" value="{{data.acceleration}}">
+                                        <input type="number" name="system.acceleration" value="{{actor.system.acceleration}}">
                                     </div>
                                 </div>
                                 <div class="resource">
                                     <button type="button">Range</button>
                                     <div class="resource-values attribute">
-                                        <input type="number" name="data.range" value="{{data.range}}">
+                                        <input type="number" name="system.range" value="{{actor.system.range}}">
                                     </div>
                                 </div>
                                 <div class="resource">
                                     <button type="button">Toughness</button>
                                     <div class="resource-values attribute">
-                                        <input type="number" name="data.toughness" value="{{data.toughness}}">
+                                        <input type="number" name="system.toughness" value="{{actor.system.toughness}}">
                                     </div>
                                 </div>
                                 <div class="resource">
                                     <button type="button">Handling</button>
                                     <div class="resource-values attribute">
-                                        <input type="number" name="data.handling" value="{{data.handling}}">
+                                        <input type="number" name="system.handling" value="{{actor.system.handling}}">
                                     </div>
                                 </div>
                                 <div class="resource">
                                     <button type="button">Damage Cpty</button>
                                     <div class="resource-values attribute">
-                                        <input type="number" name="data.damage_capacity" value="{{data.damage_capacity}}">
+                                        <input type="number" name="system.damage_capacity" value="{{actor.system.damage_capacity}}">
                                     </div>
                                 </div>
                                 <div class="resource">
                                     <button type="button">Armor Value</button>
                                     <div class="resource-values attribute">
-                                        <input type="number" name="data.armor_value" value="{{data.armor_value}}">
+                                        <input type="number" name="system.armor_value" value="{{actor.system.armor_value}}">
                                     </div>
                                 </div>
                                 <div class="resource">
                                     <button type="button">Accuracy</button>
                                     <div class="resource-values attribute">
-                                        <input type="number" name="data.accuracy" value="{{data.accuracy}}">
+                                        <input type="number" name="system.accuracy" value="{{actor.system.accuracy}}">
                                     </div>
                                 </div>
                                 <div class="resource">
                                     <button type="button">Cost</button>
                                     <div class="resource-values attribute">
-                                        <input type="number" name="data.cost" value="{{data.cost}}">
+                                        <input type="number" name="system.cost" value="{{actor.system.cost}}">
                                     </div>
                                 </div>
                                 <div class="resource">
                                     <button type="button">Availability</button>
                                     <div class="resource-values attribute">
-                                        <input type="text" name="data.availability" value="{{data.availability}}">
+                                        <input type="text" name="system.availability" value="{{actor.system.availability}}">
                                     </div>
                                 </div>
                             </div>
@@ -105,7 +105,7 @@
             <div class="tab core" data-group="primary" data-tab="core">
                 <div class="bio-container">
                     <h2>Description</h2>
-                    {{editor content=data.biography target="data.biography" button=true owner=owner editable=editable}}
+                    {{editor actor.system.biography target="system.biography" button=true owner=owner editable=editable}}
                 </div>
 
                 <div class="weapon-table">
@@ -125,7 +125,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{#each actor.data.weapon as |item id|}}
+                            {{#each actor.weapon as |item id|}}
                                 <tr class="item" data-item-id="{{item._id}}">
                                     <td>
                                         <div class="item-name-flex-container">
@@ -133,16 +133,16 @@
                                             <div class="item-name">{{item.name}}</div>
                                         </div>
                                     </td>
-                                    <td class="table-center-align">{{item.data.range}}</td>
-                                    <td class="table-center-align">{{item.data.damage}}</td>
+                                    <td class="table-center-align">{{item.system.range}}</td>
+                                    <td class="table-center-align">{{item.system.damage}}</td>
                                     <td>
                                         <div class="table-flex-cell">
-                                            <div>{{item.data.capacity.value}}</div>
+                                            <div>{{item.system.capacity.value}}</div>
                                             /
-                                            <div>{{item.data.capacity.max}}</div>
+                                            <div>{{item.system.capacity.max}}</div>
                                         </div>
                                     </td>
-                                    <td class="table-center-align">{{item.data.encumbrance}}</td>
+                                    <td class="table-center-align">{{item.system.encumbrance}}</td>
                                     <td class="table-center-align"><a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a></td>
                                 </tr>
                             {{/each}}
@@ -166,19 +166,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{#each actor.data.equippedItem as |item id|}}
+                            {{#each actor.equippedItem as |item id|}}
                                 <tr class="item" data-item-id="{{item._id}}">
                                     <td>
                                         <div class="item-name-flex-container">
-                                            <input type="checkbox" class="toggleEquipped" {{checked item.data.equipped}}>
+                                            <input type="checkbox" class="toggleEquipped" {{checked item.system.equipped}}>
                                             <div class="item-name">{{item.name}}</div>
                                         </div>
                                     </td>
-                                    <td class="table-center-align">{{item.data.qty}}</td>
+                                    <td class="table-center-align">{{item.system.qty}}</td>
                                     <td class="table-center-align armor-button-cell">
-                                        <button type="button">{{item.data.armor_value}}</button>
+                                        <button type="button">{{item.system.armor_value}}</button>
                                     </td>
-                                    <td class="table-center-align">{{item.data.encumbrance}}</td>
+                                    <td class="table-center-align">{{item.system.encumbrance}}</td>
                                     <td class="table-center-align"><a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a></td>
                                 </tr>
                             {{/each}}
@@ -201,16 +201,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{#each actor.data.item as |item id|}}
+                            {{#each actor.item as |item id|}}
                                 <tr class="item" data-item-id="{{item._id}}">
                                     <td>
                                         <div class="item-name-flex-container">
-                                            <input type="checkbox" class="toggleEquipped" {{checked item.data.equipped}}>
+                                            <input type="checkbox" class="toggleEquipped" {{checked item.system.equipped}}>
                                             <div class="item-name">{{item.name}}</div>
                                         </div>
                                     </td>
-                                    <td class="table-center-align">{{item.data.qty}}</td>
-                                    <td class="table-center-align">{{item.data.encumbrance}}</td>
+                                    <td class="table-center-align">{{item.system.qty}}</td>
+                                    <td class="table-center-align">{{item.system.encumbrance}}</td>
                                     <td class="table-center-align"><a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a></td>
                                 </tr>
                             {{/each}}
