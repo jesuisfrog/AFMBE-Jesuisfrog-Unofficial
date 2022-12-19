@@ -2,14 +2,22 @@ export class afmbeActor extends Actor {
     async _preCreate(data, options, user) {
       await super._preCreate(data, options, user);
       if (data.type === "character") {
-        this.data.token.update({vision: true, actorLink: true, disposition: 1})
+        this.prototypeToken.updateSource({'sight.enabled': true, actorLink: true, disposition: 1})
+      }
+
+      if (data.type === 'creature') {
+        this.prototypeToken.updateSource({disposition: -1})
+      }
+
+      if (data.type === 'vehicle') {
+        this.prototypeToken.updateSource({disposition: 0})
       }
     }
 
     prepareData() {
         super.prepareData()
-        const actorData = this.data;
-        const data = actorData.data;
+        const actorData = this;
+        const data = actorData.system;
         const flags = actorData.flags;
 
         if (actorData.type === 'character') {this._prepareCharacterData(actorData)}
@@ -18,7 +26,7 @@ export class afmbeActor extends Actor {
     }
 
     _prepareCharacterData(actorData) {
-      const data = actorData.data
+      const data = actorData.system
 
       // Set Character Point Values
       let chaTypeLabel = data.characterTypes[data.characterType]
@@ -65,7 +73,7 @@ export class afmbeActor extends Actor {
     }
 
     _prepareCreatureData(actorData) {
-      const data = actorData.data
+      const data = actorData.system
 
       // Set Encumbrance Values
       data.encumbrance.lifting_capacity = this._calculateLiftingCapacity(data)
@@ -91,10 +99,10 @@ export class afmbeActor extends Actor {
 
     _calcLifePoints(data) {
       // Calculate bonuses from all items
-      let itemsWithBonus = this.items.filter(item => item.data.data.hasOwnProperty('resource_bonus'))
+      let itemsWithBonus = this.items.filter(item => item.system.hasOwnProperty('resource_bonus'))
       let itemBonus = 0
       for (let item of itemsWithBonus) {
-        itemBonus = itemBonus + item.data.data.resource_bonus.hp
+        itemBonus = itemBonus + item.system.resource_bonus.hp
       }
 
       // Set return values depending on attribute values
@@ -111,10 +119,10 @@ export class afmbeActor extends Actor {
 
     _calcEndurancePoints(data) {
       // Calculate bonuses from all items
-      let itemsWithBonus = this.items.filter(item => item.data.data.hasOwnProperty('resource_bonus'))
+      let itemsWithBonus = this.items.filter(item => item.system.hasOwnProperty('resource_bonus'))
       let itemBonus = 0
       for (let item of itemsWithBonus) {
-        itemBonus = itemBonus + item.data.data.resource_bonus.endurance_points
+        itemBonus = itemBonus + item.system.resource_bonus.endurance_points
       }
 
       return (3 * (data.constitution.value + data.strength.value + data.willpower.value)) + 5 + itemBonus
@@ -122,10 +130,10 @@ export class afmbeActor extends Actor {
 
     _calcSpeed(data) {
       // Calculate bonuses from all items
-      let itemsWithBonus = this.items.filter(item => item.data.data.hasOwnProperty('resource_bonus'))
+      let itemsWithBonus = this.items.filter(item => item.system.hasOwnProperty('resource_bonus'))
       let itemBonus = 0
       for (let item of itemsWithBonus) {
-        itemBonus = itemBonus + item.data.data.resource_bonus.speed
+        itemBonus = itemBonus + item.system.resource_bonus.speed
       }
 
       data.speed.value = 2 * (data.constitution.value + data.dexterity.value) + itemBonus - data.encumbrance.level
@@ -134,10 +142,10 @@ export class afmbeActor extends Actor {
 
     _calcEssencePool(data) {
       // Calculate bonuses from all items
-      let itemsWithBonus = this.items.filter(item => item.data.data.hasOwnProperty('resource_bonus'))
+      let itemsWithBonus = this.items.filter(item => item.system.hasOwnProperty('resource_bonus'))
       let itemBonus = 0
       for (let item of itemsWithBonus) {
-        itemBonus = itemBonus + item.data.data.resource_bonus.essence
+        itemBonus = itemBonus + item.system.resource_bonus.essence
       }
 
       return data.strength.value + data.dexterity.value + data.constitution.value + data.intelligence.value + data.perception.value + data.willpower.value + itemBonus
@@ -145,10 +153,10 @@ export class afmbeActor extends Actor {
 
     _calcInitiative(data) {
       // Calculate bonuses from all items
-      let itemsWithBonus = this.items.filter(item => item.data.data.hasOwnProperty('resource_bonus'))
+      let itemsWithBonus = this.items.filter(item => item.system.hasOwnProperty('resource_bonus'))
       let itemBonus = 0
       for (let item of itemsWithBonus) {
-        itemBonus = itemBonus + item.data.data.resource_bonus.initiative
+        itemBonus = itemBonus + item.system.resource_bonus.initiative
       }
 
       return data.dexterity.value + itemBonus
@@ -157,7 +165,7 @@ export class afmbeActor extends Actor {
     _calculateQualityPoints(data) {
       let total = 0
       for (let quality of this.items.filter(item => item.type === 'quality')) {
-        total = total + quality.data.data.cost
+        total = total + quality.system.cost
       }
       return total
     }
@@ -165,7 +173,7 @@ export class afmbeActor extends Actor {
     _calculateDrawbackPoints(data) {
       let total = 0
       for (let drawback of this.items.filter(item => item.type === 'drawback')) {
-        total = total + drawback.data.data.cost
+        total = total + drawback.system.cost
       }
       return total
     }
@@ -173,7 +181,7 @@ export class afmbeActor extends Actor {
     _calculateSkillPoints(data) {
       let total = 0
       for (let skill of this.items.filter(item => item.type === 'skill')) {
-        total = total + skill.data.data.level
+        total = total + skill.system.level
       }
       return total
     }
@@ -181,7 +189,7 @@ export class afmbeActor extends Actor {
     _calculateMetaphysicsPoints(data) {
       let total = 0
       for (let power of this.items.filter(item => item.type === 'power')) {
-        total = total + power.data.data.level
+        total = total + power.system.level
       }
       return total
     }
@@ -214,9 +222,9 @@ export class afmbeActor extends Actor {
 
     _calculateEncumbrance(data) {
       let total = 0
-      for (let item of this.items.filter(i => i.data.data.hasOwnProperty('encumbrance'))) {
-        let qty = item.data.data.qty != undefined ? item.data.data.qty : 1
-        total = total + (item.data.data.encumbrance * qty)
+      for (let item of this.items.filter(i => i.system.hasOwnProperty('encumbrance'))) {
+        let qty = item.system.qty != undefined ? item.system.qty : 1
+        total = total + (item.system.encumbrance * qty)
       }
 
       return total.toFixed(1)
@@ -232,7 +240,7 @@ export class afmbeActor extends Actor {
     _calculatePowerTotal(data) {
       let total = 0
       for (let aspect of this.items.filter(item => item.type === 'aspect')) {
-        total = total + aspect.data.data.power
+        total = total + aspect.system.power
       }
 
       return total
