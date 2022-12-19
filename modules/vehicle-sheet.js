@@ -20,12 +20,9 @@ export class afmbeVehicleSheet extends ActorSheet {
 
   getData() {
     const  data = super.getData(); 
-    data.dtypes = ["String", "Number", "Boolean"];
     data.isGM = game.user.isGM;
     data.editable = data.options.editable;
-    const actorData = data.data;
-    data.actor = actorData;
-    data.data = actorData.data;
+    const actorData = data.system;
     let options = 0;
     let user = this.user;
 
@@ -35,7 +32,7 @@ export class afmbeVehicleSheet extends ActorSheet {
   }
 
   _prepareCharacterItems(sheetData) {
-      const actorData = sheetData.actor.data
+      const actorData = sheetData.actor
 
       // Initialize Containers
       const item = [];
@@ -46,7 +43,7 @@ export class afmbeVehicleSheet extends ActorSheet {
       for (let i of sheetData.items) {
           switch (i.type) {
             case "item": 
-                if (i.data.equipped) {equippedItem.push(i)}
+                if (i.system.equipped) {equippedItem.push(i)}
                 else {item.push(i)}
                 break
             
@@ -91,7 +88,7 @@ export class afmbeVehicleSheet extends ActorSheet {
             const li = ev.currentTarget.closest(".item")
             const item = this.actor.items.get(li.dataset.itemId)
             item.sheet.render(true)
-            item.update({"data.value": item.data.data.value})
+            item.update({"data.value": item.system.value})
         })
 
         // Delete Inventory Item
@@ -125,7 +122,7 @@ export class afmbeVehicleSheet extends ActorSheet {
         let element = event.currentTarget
         let weapon = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
 
-        let roll = new Roll(weapon.data.data.damage)
+        let roll = new Roll(weapon.system.damage)
         roll.roll({async: false})
 
         // Create Chat Content
@@ -142,7 +139,7 @@ export class afmbeVehicleSheet extends ActorSheet {
                                     <tbody>
                                         <tr>
                                             <td>[[${roll.result}]]</td>
-                                            <td>${weapon.data.data.damage}</td>
+                                            <td>${weapon.system.damage}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -162,7 +159,7 @@ export class afmbeVehicleSheet extends ActorSheet {
         let element = event.currentTarget
         let equippedItem = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
 
-        let roll = new Roll(equippedItem.data.data.armor_value)
+        let roll = new Roll(equippedItem.system.armor_value)
         roll.roll({async: false})
 
         // Create Chat Content
@@ -179,7 +176,7 @@ export class afmbeVehicleSheet extends ActorSheet {
                                     <tbody>
                                         <tr>
                                             <td>[[${roll.result}]]</td>
-                                            <td>${equippedItem.data.data.armor_value}</td>
+                                            <td>${equippedItem.system.armor_value}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -199,7 +196,7 @@ export class afmbeVehicleSheet extends ActorSheet {
         let element = event.currentTarget
         let equippedItem = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
 
-        switch (equippedItem.data.data.equipped) {
+        switch (equippedItem.system.equipped) {
             case true:
                 equippedItem.update({'data.equipped': false})
                 break
