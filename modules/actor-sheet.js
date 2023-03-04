@@ -319,7 +319,7 @@ export class afmbeActorSheet extends ActorSheet {
                         if (userInputModifier != 0) {tags.push(`<div>User Modifier ${userInputModifier >= 0 ? "+" : ''}${userInputModifier}</div>`)}
                         if (selectedSkill != undefined) {tags.push(`<div>${selectedSkill.name} ${selectedSkill.system.level >= 0 ? '+' : ''}${selectedSkill.system.level}</div>`)}
                         if (selectedQuality != undefined) {tags.push(`<div>${selectedQuality.name} ${selectedQuality.system.cost >= 0 ? '+' : ''}${selectedQuality.system.cost}</div>`)}
-                        if (selectedDrawback != undefined) {tags.push(`<div>${selectedDrawback.name} ${selectedQuality.system.cost >= 0 ? '-' : '+'}${Math.abs(selectedDrawback.system.cost)}</div>`)}
+                        if (selectedDrawback != undefined) {tags.push(`<div>${selectedDrawback.name} ${selectedDrawback.system.cost >= 0 ? '-' : '+'}${Math.abs(selectedDrawback.system.cost)}</div>`)}
 
                         if (roll.result == 10) {
                             ruleOfDiv = `<h2 class="rule-of-chat-text">Rule of 10!</h2>
