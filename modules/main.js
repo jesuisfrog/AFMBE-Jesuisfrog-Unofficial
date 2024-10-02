@@ -10,57 +10,57 @@ import { afmbeVehicleSheet } from "./vehicle-sheet.js"
 /*  Foundry VTT Initialization                  */
 /* -------------------------------------------- */
 
-Hooks.once("init", async function() {
+Hooks.once("init", async function () {
     console.log(`Initializing AFMBE System`);
 
     /**
-	 * Set an initiative formula for the system
-	 * @type {String}
-	 */
-	CONFIG.Combat.initiative = {
+     * Set an initiative formula for the system
+     * @type {String}
+     */
+    CONFIG.Combat.initiative = {
         formula: "1d10 + @initiative.value",
         decimals: 0
-      };
+    };
 
-      // Define Custom Entity Classes
-      CONFIG.Actor.documentClass = afmbeActor
-      CONFIG.Item.documentClass = afmbeItem
+    // Define Custom Entity Classes
+    CONFIG.Actor.documentClass = afmbeActor
+    CONFIG.Item.documentClass = afmbeItem
 
-      // Register sheet application classes
-      Actors.unregisterSheet("core", ActorSheet)
+    // Register sheet application classes
+    Actors.unregisterSheet("core", ActorSheet)
 
-      Actors.registerSheet("afmbe", afmbeActorSheet, 
-      {
-          types: ["character"],
-          makeDefault: true,
-          label: "Default AFMBE Character Sheet"
-      })
+    Actors.registerSheet("afmbe-jesuisfrog", afmbeActorSheet,
+        {
+            types: ["character"],
+            makeDefault: true,
+            label: "Default AFMBE Character Sheet"
+        })
 
-      Actors.registerSheet("afmbe", afmbeCreatureSheet, 
-      {
-          types: ["creature"],
-          makeDefault: true,
-          label: "Default AFMBE Creature Sheet"
-      })
+    Actors.registerSheet("afmbe-jesuisfrog", afmbeCreatureSheet,
+        {
+            types: ["creature"],
+            makeDefault: true,
+            label: "Default AFMBE Creature Sheet"
+        })
 
-      Actors.registerSheet("afmbe", afmbeVehicleSheet, 
-      {
-          types: ["vehicle"],
-          makeDefault: true,
-          label: "Default AFMBE Vehicle Sheet"
-      })
+    Actors.registerSheet("afmbe-jesuisfrog", afmbeVehicleSheet,
+        {
+            types: ["vehicle"],
+            makeDefault: true,
+            label: "Default AFMBE Vehicle Sheet"
+        })
 
-      Items.registerSheet("afmbe", afmbeItemSheet, 
-      {
-          makeDefault: true,
-          label: "Default AFMBE Item Sheet"
-      })
+    Items.registerSheet("afmbe-jesuisfrog", afmbeItemSheet,
+        {
+            makeDefault: true,
+            label: "Default AFMBE Item Sheet"
+        })
 
 
-      // Game Settings
-      function delayedReload() {window.setTimeout(() => location.reload(), 500)}
+    // Game Settings
+    function delayedReload() { window.setTimeout(() => location.reload(), 500) }
 
-      game.settings.register("afmbe", "light-mode", {
+    game.settings.register("afmbe-jesuisfrog", "light-mode", {
         name: "Light Mode",
         hint: "Checking this option enables Light Mode, stripping away the dark mode aesthetics from the sheets.",
         scope: "world",
@@ -68,7 +68,7 @@ Hooks.once("init", async function() {
         default: false,
         type: Boolean,
         onChange: delayedReload
-      });
+    });
 })
 
 /* -------------------------------------------- */
@@ -83,11 +83,11 @@ Hooks.on("renderChatMessage", (app, html, data) => {
         chatButton.addEventListener('click', () => {
             let ruleTag = ''
 
-            if (html[0].querySelector("[data-roll='dice-result']").textContent == 10) {ruleTag = 'Rule of Ten Re-Roll'}
-            if (html[0].querySelector("[data-roll='dice-result']").textContent == 1)  {ruleTag = 'Rule of One Re-Roll'}
+            if (html[0].querySelector("[data-roll='dice-result']").textContent == 10) { ruleTag = 'Rule of Ten Re-Roll' }
+            if (html[0].querySelector("[data-roll='dice-result']").textContent == 1) { ruleTag = 'Rule of One Re-Roll' }
 
             let roll = new Roll('1d10')
-            roll.roll({async: false})
+            roll.roll({ async: false })
 
             // Grab and Set Values from Previous Roll
             let attributeLabel = html[0].querySelector('h2').outerHTML

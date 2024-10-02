@@ -1,95 +1,97 @@
 export class afmbeCreatureSheet extends ActorSheet {
 
     /** @override */
-      static get defaultOptions() {
+    static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
-          classes: ["afmbe", "sheet", "actor", `${game.settings.get("afmbe", "light-mode") ? "light-mode" : ""}`],
+            classes: ["afmbe-jesuisfrog", "sheet", "actor", `${game.settings.get("afmbe-jesuisfrog", "light-mode") ? "light-mode" : ""}`],
             width: 700,
             height: 820,
-            tabs: [{navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "core"}],
-            dragDrop: [{dragSelector: [
-            ".item"
-            ], 
-            dropSelector: null}]
-      });
+            tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "core" }],
+            dragDrop: [{
+                dragSelector: [
+                    ".item"
+                ],
+                dropSelector: null
+            }]
+        });
     }
-  
+
     /* -------------------------------------------- */
     /** @override */
 
-  getData() {
-    const data = super.getData(); 
-    data.isGM = game.user.isGM;
-    data.editable = data.options.editable;
-    const actorData = data.system;
-    let options = 0;
-    let user = this.user;
+    getData() {
+        const data = super.getData();
+        data.isGM = game.user.isGM;
+        data.editable = data.options.editable;
+        const actorData = data.system;
+        let options = 0;
+        let user = this.user;
 
-    this._prepareCharacterItems(data)
+        this._prepareCharacterItems(data)
 
-    return data
-  }
+        return data
+    }
 
-  _prepareCharacterItems(sheetData) {
-      const actorData = sheetData.actor
+    _prepareCharacterItems(sheetData) {
+        const actorData = sheetData.actor
 
-      // Initialize Containers
-      const item = [];
-      const equippedItem = [];
-      const weapon = [];
-      const skill = [];
-      const aspect = [];
+        // Initialize Containers
+        const item = [];
+        const equippedItem = [];
+        const weapon = [];
+        const skill = [];
+        const aspect = [];
 
-      // Iterate through items and assign to containers
-      for (let i of sheetData.items) {
-          switch (i.type) {
-            case "item": 
-                if (i.system.equipped) {equippedItem.push(i)}
-                else {item.push(i)}
-                break
-            
-            case "weapon": 
-                weapon.push(i)
-                break
+        // Iterate through items and assign to containers
+        for (let i of sheetData.items) {
+            switch (i.type) {
+                case "item":
+                    if (i.system.equipped) { equippedItem.push(i) }
+                    else { item.push(i) }
+                    break
 
-            case "skill": 
-                skill.push(i)
-                break
+                case "weapon":
+                    weapon.push(i)
+                    break
 
-            case "aspect":
-                aspect.push(i)
-                break
-          }
-      }
+                case "skill":
+                    skill.push(i)
+                    break
 
-      // Alphabetically sort all items
-      const itemCats = [item, equippedItem, weapon, skill, aspect]
-      for (let category of itemCats) {
-          if (category.length > 1) {
-              category.sort((a,b) => {
-                  let nameA = a.name.toLowerCase()
-                  let nameB = b.name.toLowerCase()
-                  if (nameA > nameB) {return 1}
-                  else {return -1}
-              })
-          }
-      }
+                case "aspect":
+                    aspect.push(i)
+                    break
+            }
+        }
 
-      // Assign and return items
-      actorData.item = item
-      actorData.equippedItem = equippedItem
-      actorData.weapon = weapon
-      actorData.skill = skill
-      actorData.aspect = aspect
-  }
+        // Alphabetically sort all items
+        const itemCats = [item, equippedItem, weapon, skill, aspect]
+        for (let category of itemCats) {
+            if (category.length > 1) {
+                category.sort((a, b) => {
+                    let nameA = a.name.toLowerCase()
+                    let nameB = b.name.toLowerCase()
+                    if (nameA > nameB) { return 1 }
+                    else { return -1 }
+                })
+            }
+        }
 
-  get template() {
-    const path = "systems/afmbe/templates";
-    if (!game.user.isGM && this.actor.limited) return "systems/afmbe/templates/limited-creature-sheet.html"; 
-    return `${path}/${this.actor.type}-sheet.html`;
-  }
+        // Assign and return items
+        actorData.item = item
+        actorData.equippedItem = equippedItem
+        actorData.weapon = weapon
+        actorData.skill = skill
+        actorData.aspect = aspect
+    }
 
-  /** @override */
+    get template() {
+        const path = "systems/afmbe/templates";
+        if (!game.user.isGM && this.actor.limited) return "systems/afmbe/templates/limited-creature-sheet.html";
+        return `${path}/${this.actor.type}-sheet.html`;
+    }
+
+    /** @override */
     async activateListeners(html) {
         super.activateListeners(html);
 
@@ -103,15 +105,15 @@ export class afmbeCreatureSheet extends ActorSheet {
         html.find('.toggleEquipped').click(this._onToggleEquipped.bind(this))
         html.find('.armor-button-cell button').click(this._onArmorRoll.bind(this))
         html.find('.reset-resource').click(this._onResetResource.bind(this))
-        
+
         // Update/Open Inventory Item
         html.find('.create-item').click(this._createItem.bind(this))
 
-        html.find('.item-name').click( (ev) => {
+        html.find('.item-name').click((ev) => {
             const li = ev.currentTarget.closest(".item")
             const item = this.actor.items.get(li.dataset.itemId)
-            if(this.actor.permission[game.user._id] >= 2||game.user.isGM) {item.sheet.render(true)}
-            item.update({"system.value": item.system.value})
+            if (this.actor.permission[game.user._id] >= 2 || game.user.isGM) { item.sheet.render(true) }
+            item.update({ "system.value": item.system.value })
         })
 
         // Delete Inventory Item
@@ -130,14 +132,14 @@ export class afmbeCreatureSheet extends ActorSheet {
     _createItem(event) {
         event.preventDefault()
         const element = event.currentTarget
-        
+
         let itemData = {
             name: `New ${element.dataset.create}`,
             type: element.dataset.create,
             cost: 0,
             level: 0
         }
-        return Item.create(itemData, {parent: this.actor})
+        return Item.create(itemData, { parent: this.actor })
     }
 
     _createCharacterPointDivs() {
@@ -145,7 +147,7 @@ export class afmbeCreatureSheet extends ActorSheet {
         let characterTypePath = this.actor.system.characterTypes[this.actor.system.characterType]
 
         // Construct and assign div elements to the headers
-        if(characterTypePath != undefined) {
+        if (characterTypePath != undefined) {
             powerDiv.innerHTML = `- [${this.actor.system.power}]`
             this.form.querySelector('#aspect-header').append(powerDiv)
         }
@@ -170,8 +172,8 @@ export class afmbeCreatureSheet extends ActorSheet {
         }
 
         // Create Classes for Dialog Box
-        let mode = game.settings.get("afmbe", "light-mode") ? "light-mode" : ""
-        let dialogOptions = {classes: ["dialog", "afmbe", mode]}
+        let mode = game.settings.get("afmbe-jesuisfrog", "light-mode") ? "light-mode" : ""
+        let dialogOptions = { classes: ["dialog", "afmbe-jesuisfrog", mode] }
 
         // Create Dialog Prompt
         let d = new Dialog({
@@ -251,7 +253,7 @@ export class afmbeCreatureSheet extends ActorSheet {
 
                         // Roll Dice
                         let roll = new Roll('1d10')
-                        roll.roll({async: false})
+                        roll.roll({ async: false })
 
                         // Calculate total result after modifiers
                         let totalResult = Number(roll.result) + rollMod
@@ -259,9 +261,9 @@ export class afmbeCreatureSheet extends ActorSheet {
                         // Create Chat Message Content
                         let tags = [`<div>${attributeTestSelect} Test</div>`]
                         let ruleOfDiv = ``
-                        if (userInputModifier != 0) {tags.push(`<div>User Modifier ${userInputModifier >= 0 ? '+' : ''}${userInputModifier}</div>`)}
-                        if (selectedSkill != undefined) {tags.push(`<div>${selectedSkill.name} ${selectedSkill.system.level >= 0 ? '+' : ''}${selectedSkill.system.level}</div>`)}
-                        if (selectedAspect != undefined) {tags.push(`<div>${selectedAspect.name} ${selectedAspect.system.power >= 0 ? '+' : ''}${selectedAspect.system.power}</div>`)}
+                        if (userInputModifier != 0) { tags.push(`<div>User Modifier ${userInputModifier >= 0 ? '+' : ''}${userInputModifier}</div>`) }
+                        if (selectedSkill != undefined) { tags.push(`<div>${selectedSkill.name} ${selectedSkill.system.level >= 0 ? '+' : ''}${selectedSkill.system.level}</div>`) }
+                        if (selectedAspect != undefined) { tags.push(`<div>${selectedAspect.name} ${selectedAspect.system.power >= 0 ? '+' : ''}${selectedAspect.system.power}</div>`) }
 
                         if (roll.result == 10) {
                             ruleOfDiv = `<h2 class="rule-of-chat-text">Rule of 10!</h2>
@@ -306,8 +308,8 @@ export class afmbeCreatureSheet extends ActorSheet {
                             flavor: `<div class="afmbe-tags-flex-container">${tags.join('')}</div>`,
                             content: chatContent,
                             roll: roll
-                          })
-                        
+                        })
+
                     }
                 }
             },
@@ -324,8 +326,8 @@ export class afmbeCreatureSheet extends ActorSheet {
         let weapon = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
 
         // Create Classes for Dialog Box
-        let mode = game.settings.get("afmbe", "light-mode") ? "light-mode" : ""
-        let dialogOptions = {classes: ["dialog", "afmbe", mode]}
+        let mode = game.settings.get("afmbe-jesuisfrog", "light-mode") ? "light-mode" : ""
+        let dialogOptions = { classes: ["dialog", "afmbe-jesuisfrog", mode] }
 
         // Create Dialog Prompt
         let d = new Dialog({
@@ -378,20 +380,20 @@ export class afmbeCreatureSheet extends ActorSheet {
                         let firingMode = html[0].querySelector('#firingMode').value
 
                         let roll = new Roll(weapon.system.damage_string)
-                        roll.roll({async: false})
+                        roll.roll({ async: false })
 
                         let tags = [`<div>Damage Roll</div>`]
-                        if (firingMode != 'None/Melee') {tags.push(`<div>${firingMode}: ${shotNumber}</div>`)}
-                        if (weapon.system.damage_types[weapon.system.damage_type] != 'None') {tags.push(`<div>${weapon.system.damage_types[weapon.system.damage_type]}</div>`)}
+                        if (firingMode != 'None/Melee') { tags.push(`<div>${firingMode}: ${shotNumber}</div>`) }
+                        if (weapon.system.damage_types[weapon.system.damage_type] != 'None') { tags.push(`<div>${weapon.system.damage_types[weapon.system.damage_type]}</div>`) }
 
                         // Reduce Fired shots from current load chamber
                         if (shotNumber > 0) {
                             switch (weapon.system.capacity.value - shotNumber >= 0) {
                                 case true:
-                                    weapon.update({'data.capacity.value': weapon.system.capacity.value - shotNumber})
+                                    weapon.update({ 'data.capacity.value': weapon.system.capacity.value - shotNumber })
                                     break
 
-                                case false: 
+                                case false:
                                     return ui.notifications.info(`You do not have enough ammo loaded to fire ${shotNumber} rounds!`)
                             }
                         }
@@ -440,7 +442,7 @@ export class afmbeCreatureSheet extends ActorSheet {
         let equippedItem = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
 
         let roll = new Roll(equippedItem.system.armor_value)
-        roll.roll({async: false})
+        roll.roll({ async: false })
 
         // Create Chat Content
         let chatContent = `<div>
@@ -468,7 +470,7 @@ export class afmbeCreatureSheet extends ActorSheet {
             speaker: ChatMessage.getSpeaker(),
             content: chatContent,
             roll: roll
-          })
+        })
     }
 
     _onToggleEquipped(event) {
@@ -478,11 +480,11 @@ export class afmbeCreatureSheet extends ActorSheet {
 
         switch (equippedItem.system.equipped) {
             case true:
-                equippedItem.update({'data.equipped': false})
+                equippedItem.update({ 'data.equipped': false })
                 break
-            
+
             case false:
-                equippedItem.update({'data.equipped': true})
+                equippedItem.update({ 'data.equipped': true })
                 break
         }
     }
@@ -492,7 +494,7 @@ export class afmbeCreatureSheet extends ActorSheet {
         let element = event.currentTarget
         let dataPath = `data.${element.dataset.resource}.value`
 
-        this.actor.update({[dataPath]: this.actor.system[element.dataset.resource].max})
+        this.actor.update({ [dataPath]: this.actor.system[element.dataset.resource].max })
     }
 
     _createStatusTags() {
@@ -513,7 +515,7 @@ export class afmbeCreatureSheet extends ActorSheet {
                 tagContainer.append(encTag)
                 break
 
-            case 3: 
+            case 3:
                 encTag.innerHTML = `<div>Heavily Encumbered</div>`
                 encTag.classList.add('tag')
                 tagContainer.append(encTag)

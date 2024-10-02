@@ -3,10 +3,10 @@ export class afmbeItemSheet extends ItemSheet {
     /** @override */
     static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
-            classes: ["afmbe", "sheet", "item", `${game.settings.get("afmbe", "light-mode") ? "light-mode" : ""}`],
+            classes: ["afmbe-jesuisfrog", "sheet", "item", `${game.settings.get("afmbe-jesuisfrog", "light-mode") ? "light-mode" : ""}`],
             width: 600,
             height: 450,
-            tabs: [{navSelector: ".sheet-tabs", contentSelector: ".sheet-body-items", initial: "description"}]
+            tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body-items", initial: "description" }]
         })
     }
 
@@ -19,7 +19,7 @@ export class afmbeItemSheet extends ItemSheet {
     }
 
     getData() {
-        const  data = super.getData(); 
+        const data = super.getData();
         data.dtypes = ["String", "Number", "Boolean"];
         data.isGM = game.user.isGM;
         data.editable = data.options.editable;
@@ -27,12 +27,12 @@ export class afmbeItemSheet extends ItemSheet {
         data.data = itemData;
 
         return data;
-        }
+    }
 
-/* -------------------------------------------- */
+    /* -------------------------------------------- */
 
     /** @override */
-    setPosition(options={}) {
+    setPosition(options = {}) {
         const position = super.setPosition(options);
         const sheetBody = this.element.find(".sheet-body");
         const bodyHeight = position.height - 192;
