@@ -124,7 +124,9 @@ export class afmbeActorSheet extends ActorSheet {
         html.find('.item-name').click((ev) => {
             const li = ev.currentTarget.closest(".item")
             const item = this.actor.items.get(li.dataset.itemId)
-            if (this.actor.permission[game.user.data._id] >= 2 || game.user.isGM) { item.sheet.render(true) }
+            if (item.isOwner) {
+                item.sheet.render(true)
+            }
             item.update({ "data.value": item.system.value })
         })
 
