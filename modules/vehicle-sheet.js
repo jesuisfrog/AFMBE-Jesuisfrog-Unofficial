@@ -4,7 +4,7 @@ export class afmbeVehicleSheet extends ActorSheet {
     static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
             classes: ["afmbe-jesuisfrog", "sheet", "actor", `${game.settings.get("afmbe-jesuisfrog", "light-mode") ? "light-mode" : ""}`],
-            template: "systems/afmbe/templates/vehicle-sheet.html",
+            template: "systems/afmbe-jesuisfrog/templates/vehicle-sheet.html",
             width: 700,
             height: 780,
             tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "core" }],

@@ -98,8 +98,8 @@ export class afmbeActorSheet extends ActorSheet {
     }
 
     get template() {
-        const path = "systems/afmbe/templates";
-        if (!game.user.isGM && this.actor.limited) return "systems/afmbe/templates/limited-character-sheet.html";
+        const path = "systems/afmbe-jesuisfrog/templates";
+        if (!game.user.isGM && this.actor.limited) return "systems/afmbe-jesuisfrog/templates/limited-character-sheet.html";
         return `${path}/${this.actor.type}-sheet.html`;
     }
 
