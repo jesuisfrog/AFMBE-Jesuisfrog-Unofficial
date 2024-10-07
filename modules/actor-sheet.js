@@ -2,7 +2,7 @@ export class afmbeActorSheet extends ActorSheet {
 
     /** @override */
     static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
+        return foundry.utils.mergeObject(super.defaultOptions, {
             classes: ["afmbe-jesuisfrog", "sheet", "actor", `${game.settings.get("afmbe-jesuisfrog", "light-mode") ? "light-mode" : ""}`],
             width: 700,
             height: 820,
@@ -292,7 +292,7 @@ export class afmbeActorSheet extends ActorSheet {
                 },
                 two: {
                     label: 'Roll',
-                    callback: html => {
+                    callback: async html => {
                         // Grab the selected options
                         let attributeTestSelect = html[0].querySelector('#attributeTestSelect').value
                         let userInputModifier = Number(html[0].querySelector('#inputModifier').value)
@@ -311,8 +311,7 @@ export class afmbeActorSheet extends ActorSheet {
                         let rollMod = (attributeValue + skillValue + qualityValue + userInputModifier) - drawbackValue + statusPenalties
 
                         // Roll Dice
-                        let roll = new Roll('1d10')
-                        roll.roll({ async: false })
+                        let roll = await new Roll('1d10').evaluate()
 
                         // Calculate total result after modifiers
                         let totalResult = Number(roll.result) + rollMod
@@ -380,11 +379,11 @@ export class afmbeActorSheet extends ActorSheet {
         d.render(true)
     }
 
-    _onDamageRoll(event) {
+    async _onDamageRoll(event) {
         event.preventDefault()
         let element = event.currentTarget
         let weapon = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
-
+        console.log(weapon)
         // Create Classes for Dialog Box
         let mode = game.settings.get("afmbe-jesuisfrog", "light-mode") ? "light-mode" : ""
         let dialogOptions = { classes: ["dialog", "afmbe-jesuisfrog", mode] }
@@ -434,23 +433,21 @@ export class afmbeActorSheet extends ActorSheet {
                 },
                 two: {
                     label: 'Roll',
-                    callback: html => {
+                    callback: async html => {
                         // Grab Values from Dialog
                         let shotNumber = html[0].querySelector('#shotNumber').value
                         let firingMode = html[0].querySelector('#firingMode').value
 
-                        let roll = new Roll(weapon.system.damage_string)
-                        roll.roll({ async: false })
+                        const roll = await new Roll(weapon.system.damage_string).evaluate()
 
                         let tags = [`<div>Damage Roll</div>`]
                         if (firingMode != 'None/Melee') { tags.push(`<div>${firingMode}: ${shotNumber}</div>`) }
-                        if (weapon.system.damage_types[weapon.system.damage_type] != 'None') { tags.push(`<div>${weapon.system.damage_types[weapon.system.damage_type]}</div>`) }
 
                         // Reduce Fired shots from current load chamber
                         if (shotNumber > 0) {
                             switch (weapon.system.capacity.value - shotNumber >= 0) {
                                 case true:
-                                    weapon.update({ 'data.capacity.value': weapon.system.capacity.value - shotNumber })
+                                    weapon.update({ 'system.capacity.value': weapon.system.capacity.value - shotNumber })
                                     break
 
                                 case false:
@@ -466,12 +463,14 @@ export class afmbeActorSheet extends ActorSheet {
                                                     <thead>
                                                         <tr>
                                                             <th>Damage</th>
+                                                            <th>Type</th>
                                                             <th>Detail</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr>
                                                             <td>[[${roll.result}]]</td>
+                                                            <td>${weapon.system.damage_types[weapon.system.damage_type]}</td>
                                                             <td>${weapon.system.damage_string}</td>
                                                         </tr>
                                                     </tbody>
@@ -496,13 +495,12 @@ export class afmbeActorSheet extends ActorSheet {
         d.render(true)
     }
 
-    _onArmorRoll(event) {
+    async _onArmorRoll(event) {
         event.preventDefault()
         let element = event.currentTarget
         let equippedItem = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
 
-        let roll = new Roll(equippedItem.system.armor_value)
-        roll.roll({ async: false })
+        let roll = await new Roll(equippedItem.system.armor_value).evaluate()
 
         let tags = [`<div>Armor Roll</div>`]
 

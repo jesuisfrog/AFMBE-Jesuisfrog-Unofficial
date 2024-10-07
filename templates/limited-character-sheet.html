@@ -15,11 +15,8 @@
                             <a class="item" data-tab="equipment">Equipment</a>
                         </nav>
                         <select id="characterTypeSelect" name="system.characterType" data-type="String">
-                            {{#select actor.system.characterType}}
-                            {{#each actor.system.characterTypes as |characterTypes key|}}
-                            <option value="{{key}}">{{characterTypes}}</option>
-                            {{/each}}
-                            {{/select}}
+                            {{#selectOptions actor.system.characterTypes selected=actor.system.characterType}}
+                            {{/selectOptions}}
                         </select>
                     </div>
 

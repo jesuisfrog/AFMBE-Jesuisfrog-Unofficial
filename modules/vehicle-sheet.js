@@ -2,7 +2,7 @@ export class afmbeVehicleSheet extends ActorSheet {
 
     /** @override */
     static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
+        return foundry.utils.mergeObject(super.defaultOptions, {
             classes: ["afmbe-jesuisfrog", "sheet", "actor", `${game.settings.get("afmbe-jesuisfrog", "light-mode") ? "light-mode" : ""}`],
             template: "systems/afmbe-jesuisfrog/templates/vehicle-sheet.html",
             width: 700,
@@ -119,13 +119,12 @@ export class afmbeVehicleSheet extends ActorSheet {
         return Item.create(itemData, { parent: this.actor })
     }
 
-    _onDamageRoll(event) {
+    async _onDamageRoll(event) {
         event.preventDefault()
         let element = event.currentTarget
         let weapon = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
 
-        let roll = new Roll(weapon.system.damage)
-        roll.roll({ async: false })
+        let roll = await new Roll(weapon.system.damage).evaluate()
 
         // Create Chat Content
         let chatContent = `<div>
@@ -156,13 +155,12 @@ export class afmbeVehicleSheet extends ActorSheet {
         })
     }
 
-    _onArmorRoll(event) {
+    async _onArmorRoll(event) {
         event.preventDefault()
         let element = event.currentTarget
         let equippedItem = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
 
-        let roll = new Roll(equippedItem.system.armor_value)
-        roll.roll({ async: false })
+        let roll = await new Roll(equippedItem.system.armor_value).evaluate()
 
         // Create Chat Content
         let chatContent = `<div>

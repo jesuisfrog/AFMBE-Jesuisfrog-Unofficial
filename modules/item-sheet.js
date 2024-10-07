@@ -2,7 +2,7 @@ export class afmbeItemSheet extends ItemSheet {
 
     /** @override */
     static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
+        return foundry.utils.mergeObject(super.defaultOptions, {
             classes: ["afmbe-jesuisfrog", "sheet", "item", `${game.settings.get("afmbe-jesuisfrog", "light-mode") ? "light-mode" : ""}`],
             width: 600,
             height: 450,
@@ -11,6 +11,7 @@ export class afmbeItemSheet extends ItemSheet {
     }
 
     /* -------------------------------------------- */
+
 
     /** @override */
     get template() {
@@ -25,7 +26,6 @@ export class afmbeItemSheet extends ItemSheet {
         data.editable = data.options.editable;
         const itemData = data.system;
         data.data = itemData;
-
         return data;
     }
 

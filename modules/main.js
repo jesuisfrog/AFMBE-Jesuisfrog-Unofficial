@@ -80,14 +80,13 @@ Hooks.on("renderChatMessage", (app, html, data) => {
     let chatButton = html[0].querySelector("[data-roll='roll-again']")
 
     if (chatButton != undefined && chatButton != null) {
-        chatButton.addEventListener('click', () => {
+        chatButton.addEventListener('click', async () => {
             let ruleTag = ''
 
             if (html[0].querySelector("[data-roll='dice-result']").textContent == 10) { ruleTag = 'Rule of Ten Re-Roll' }
             if (html[0].querySelector("[data-roll='dice-result']").textContent == 1) { ruleTag = 'Rule of One Re-Roll' }
 
-            let roll = new Roll('1d10')
-            roll.roll({ async: false })
+            let roll = await new Roll('1d10').evaluate()
 
             // Grab and Set Values from Previous Roll
             let attributeLabel = html[0].querySelector('h2').outerHTML

@@ -26,24 +26,23 @@
                             <th>Damage Multiplier</th>
                             <td>
                                 <select id="damage_cha_multiplier" name="system.damage_cha_multiplier">
-                                    {{#select item.system.damage_cha_multiplier}}
-                                            <option value="none">None</option>
-                                        {{#each item.system.damage_characteristics as |damage_characteristic value|}}
-                                            <option value="{{value}}">{{damage_characteristic}}</option>
-                                        {{/each}}
-                                    {{/select}}
+                                    {{#selectOptions item.system.damage_characteristics selected=item.system.damage_cha_multiplier}}
+                                    {{/selectOptions}}
                                 </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Damage Multiplier Modifier</th>
+                            <td>
+                                <input type="number" id="damage_cha_multiplier_modifier" name="system.damage_cha_multiplier_modifier" value="{{item.system.damage_cha_multiplier_modifier}}" min="-5" max="5" step="1" data-type="Number">
                             </td>
                         </tr>
                         <tr>
                             <th>Damage Type</th>
                             <td>
                                 <select id="damageTypeSelect" name="system.damage_type" data-type="String">
-                                    {{#select item.system.damage_type}}
-                                        {{#each item.system.damage_types as |damage_types key|}}
-                                            <option value="{{key}}">{{damage_types}}</option>
-                                        {{/each}}
-                                    {{/select}}
+                                    {{#selectOptions item.system.damage_types selected=item.system.damage_type}}
+                                    {{/selectOptions}}
                                 </select>
                             </td>
                         </tr>

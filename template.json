@@ -175,6 +175,7 @@
                 "range": "",
                 "damage": 0,
                 "damage_cha_multiplier": "none",
+                "damage_cha_multiplier_modifier": 0,
                 "damage_string": "",
                 "ammo_type": "",
                 "damage_type": "",
@@ -193,6 +194,7 @@
                     "corrosive": "Corrosive"
                 },
                 "damage_characteristics": {
+                    "none": "None",
                     "strength": "Strength",
                     "dexterity": "Dexterity",
                     "constitution": "Constitution",
