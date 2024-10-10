@@ -23,6 +23,6 @@
     "bugs": "https://github.com/jesuisfrog/AFMBE-Jesuisfrog-Unofficial/issues",
     "changelog": "https://github.com/jesuisfrog/AFMBE-Jesuisfrog-Unofficial/CHANGELOG.md",
     "manifest": "https://raw.githubusercontent.com/jesuisfrog/AFMBE-Jesuisfrog-Unofficial/main/system.json",
-    "download": "https://github.com/jesuisfrog/AFMBE-Jesuisfrog-Unofficial/afmbe-jesuisfrog.zip",
+    "download": "https://github.com/jesuisfrog/AFMBE-Jesuisfrog-Unofficial/raw/main/afmbe-jesuisfrog.zip",
     "license": "LICENSE.txt"
 }
