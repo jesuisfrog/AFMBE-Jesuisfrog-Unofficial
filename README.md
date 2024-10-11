@@ -16,3 +16,5 @@ You can purchase the rulebooks from their website https://www.edenstudios.net/ o
     <img src="images/afmbe-light-mode.png">
     <figcaption>Light Mode (Enabled through System Settings)</figcaption>
 </figure>
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/B0B15MGC4)
