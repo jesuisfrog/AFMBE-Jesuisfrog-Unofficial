@@ -541,11 +541,11 @@ export class afmbeActorSheet extends ActorSheet {
 
         switch (equippedItem.system.equipped) {
             case true:
-                equippedItem.update({ 'data.equipped': false })
+                equippedItem.update({ 'system.equipped': false })
                 break
 
             case false:
-                equippedItem.update({ 'data.equipped': true })
+                equippedItem.update({ 'system.equipped': true })
                 break
         }
     }
