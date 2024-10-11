@@ -488,9 +488,9 @@ export class afmbeCreatureSheet extends ActorSheet {
 
     _onResetResource(event) {
         event.preventDefault()
-        let element = event.currentTarget
-        let dataPath = `data.${element.dataset.resource}.value`
-
+        const element = event.currentTarget
+        const dataPath = `system.${element.dataset.resource}.value`
+        
         this.actor.update({ [dataPath]: this.actor.system[element.dataset.resource].max })
     }
 

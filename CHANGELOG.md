@@ -3,6 +3,7 @@
 ## Bug Fixes
 
 - Fix equipment checkboxes' logic
+- Fix Reset buttons for secondary attribute pools
 
 ## 1.0
 

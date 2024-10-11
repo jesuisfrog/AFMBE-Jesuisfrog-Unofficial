@@ -552,11 +552,11 @@ export class afmbeActorSheet extends ActorSheet {
 
     _onResetResource(event) {
         event.preventDefault()
-        let actorData = this.actor.system
-        let element = event.currentTarget
-        let dataPath = `data.${element.dataset.resource}.value`
-
-        this.actor.update({ [dataPath]: actorData[element.dataset.resource].max })
+        const actorData = this.actor.system
+        const element = event.currentTarget
+        const dataPath = `system.${element.dataset.resource}.value`
+        const resetResourceValue = actorData[element.dataset.resource].max
+        this.actor.update({ [dataPath]: resetResourceValue })
     }
 
     _createStatusTags() {
