@@ -60,9 +60,9 @@ Hooks.once("init", async function () {
     // Game Settings
     function delayedReload() { window.setTimeout(() => location.reload(), 500) }
 
-    game.settings.register("afmbe-jesuisfrog", "light-mode", {
-        name: "Light Mode",
-        hint: "Checking this option enables Light Mode, stripping away the dark mode aesthetics from the sheets.",
+    game.settings.register("afmbe-jesuisfrog", "dark-mode", {
+        name: "Dark Mode",
+        hint: "Checking this option enables Dark Mode for the different sheets and items.",
         scope: "world",
         config: true,
         default: false,

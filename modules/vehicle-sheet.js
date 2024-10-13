@@ -3,7 +3,7 @@ export class afmbeVehicleSheet extends ActorSheet {
     /** @override */
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
-            classes: ["afmbe-jesuisfrog", "sheet", "actor", `${game.settings.get("afmbe-jesuisfrog", "light-mode") ? "light-mode" : ""}`],
+            classes: ["afmbe-jesuisfrog", "sheet", "actor", `${game.settings.get("afmbe-jesuisfrog", "dark-mode") ? "dark-mode" : ""}`],
             template: "systems/afmbe-jesuisfrog/templates/vehicle-sheet.html",
             width: 700,
             height: 780,

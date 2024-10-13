@@ -3,7 +3,7 @@ export class afmbeActorSheet extends ActorSheet {
     /** @override */
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
-            classes: ["afmbe-jesuisfrog", "sheet", "actor", `${game.settings.get("afmbe-jesuisfrog", "light-mode") ? "light-mode" : ""}`],
+            classes: ["afmbe-jesuisfrog", "sheet", "actor", `${game.settings.get("afmbe-jesuisfrog", "dark-mode") ? "dark-mode" : ""}`],
             width: 700,
             height: 820,
             tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "core" }],
@@ -215,7 +215,7 @@ export class afmbeActorSheet extends ActorSheet {
         if (actorData.essence.loss_toggle) { penaltyTags.push(`<div>Essence Loss ${actorData.essence.loss_penalty}</div>`) }
 
         // Create Classes for Dialog Box
-        let mode = game.settings.get("afmbe-jesuisfrog", "light-mode") ? "light-mode" : ""
+        let mode = game.settings.get("afmbe-jesuisfrog", "dark-mode") ? "dark-mode" : ""
         let dialogOptions = { classes: ["dialog", "afmbe-jesuisfrog", mode] }
 
         // Create Dialog Prompt
@@ -385,7 +385,7 @@ export class afmbeActorSheet extends ActorSheet {
         let weapon = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
         console.log(weapon)
         // Create Classes for Dialog Box
-        let mode = game.settings.get("afmbe-jesuisfrog", "light-mode") ? "light-mode" : ""
+        let mode = game.settings.get("afmbe-jesuisfrog", "dark-mode") ? "dark-mode" : ""
         let dialogOptions = { classes: ["dialog", "afmbe-jesuisfrog", mode] }
 
         // Create Dialog Box

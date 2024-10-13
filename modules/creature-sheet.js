@@ -3,7 +3,7 @@ export class afmbeCreatureSheet extends ActorSheet {
     /** @override */
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
-            classes: ["afmbe-jesuisfrog", "sheet", "actor", `${game.settings.get("afmbe-jesuisfrog", "light-mode") ? "light-mode" : ""}`],
+            classes: ["afmbe-jesuisfrog", "sheet", "actor", `${game.settings.get("afmbe-jesuisfrog", "dark-mode") ? "dark-mode" : ""}`],
             width: 700,
             height: 820,
             tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "core" }],
@@ -172,7 +172,7 @@ export class afmbeCreatureSheet extends ActorSheet {
         }
 
         // Create Classes for Dialog Box
-        let mode = game.settings.get("afmbe-jesuisfrog", "light-mode") ? "light-mode" : ""
+        let mode = game.settings.get("afmbe-jesuisfrog", "dark-mode") ? "dark-mode" : ""
         let dialogOptions = { classes: ["dialog", "afmbe-jesuisfrog", mode] }
 
         // Create Dialog Prompt
@@ -325,7 +325,7 @@ export class afmbeCreatureSheet extends ActorSheet {
         let weapon = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
 
         // Create Classes for Dialog Box
-        let mode = game.settings.get("afmbe-jesuisfrog", "light-mode") ? "light-mode" : ""
+        let mode = game.settings.get("afmbe-jesuisfrog", "dark-mode") ? "dark-mode" : ""
         let dialogOptions = { classes: ["dialog", "afmbe-jesuisfrog", mode] }
 
         // Create Dialog Prompt
@@ -490,7 +490,7 @@ export class afmbeCreatureSheet extends ActorSheet {
         event.preventDefault()
         const element = event.currentTarget
         const dataPath = `system.${element.dataset.resource}.value`
-        
+
         this.actor.update({ [dataPath]: this.actor.system[element.dataset.resource].max })
     }
 
