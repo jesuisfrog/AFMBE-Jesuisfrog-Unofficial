@@ -87,8 +87,8 @@ export class afmbeCreatureSheet extends ActorSheet {
 
     get template() {
         const path = "systems/afmbe-jesuisfrog/templates";
-        if (!game.user.isGM && this.actor.limited) return "systems/afmbe-jesuisfrog/templates/limited-creature-sheet.html";
-        return `${path}/${this.actor.type}-sheet.html`;
+        if (!game.user.isGM && this.actor.limited) return "systems/afmbe-jesuisfrog/templates/limited-creature-sheet.hbs";
+        return `${path}/${this.actor.type}-sheet.hbs`;
     }
 
     /** @override */
@@ -147,7 +147,7 @@ export class afmbeCreatureSheet extends ActorSheet {
         let characterTypePath = this.actor.system.characterTypes[this.actor.system.characterType]
 
         // Construct and assign div elements to the headers
-        if (characterTypePath != undefined) {
+        if (characterTypePath != undefined && !this.actor.limited) {
             powerDiv.innerHTML = `- [${this.actor.system.power}]`
             this.form.querySelector('#aspect-header').append(powerDiv)
         }

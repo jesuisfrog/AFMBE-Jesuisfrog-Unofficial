@@ -16,7 +16,7 @@ export class afmbeItemSheet extends ItemSheet {
     /** @override */
     get template() {
         const path = "systems/afmbe-jesuisfrog/templates";
-        return `${path}/${this.item.type}-sheet.html`;
+        return `${path}/${this.item.type}-sheet.hbs`;
     }
 
     getData() {

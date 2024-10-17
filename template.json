@@ -1,10 +1,28 @@
 {
     "Actor": {
-        "types": ["character", "creature", "vehicle"],
+        "types": [
+            "character",
+            "creature",
+            "vehicle"
+        ],
         "templates": {
             "attributes": {
+                "bio": {
+                    "gender": "",
+                    "age": 0,
+                    "height": "",
+                    "weight": 0,
+                    "hair": "",
+                    "eyes": "",
+                    "biography": "",
+                    "contacts": ""
+                },
                 "characterType": 0,
-                "characterTypes": ["Norm", "Survivor", "Inspired"],
+                "characterTypes": [
+                    "Norm",
+                    "Survivor",
+                    "Inspired"
+                ],
                 "characterTypeValues": {
                     "Norm": {
                         "attributePoints": {
@@ -135,27 +153,21 @@
                     "lifting_capacity": 0,
                     "level": 0
                 }
-            },
-            "bio": {
-                "sex": "",
-                "age": 0,
-                "height": "",
-                "weight": 0,
-                "hair": "",
-                "eyes": "",
-                "biography": "",
-                "contacts": ""
             }
         },
         "character": {
-            "templates": ["attributes", "bio"]
+            "templates": [
+                "attributes"
+            ]
         },
         "creature": {
-            "templates": ["attributes", "bio"],
+            "templates": [
+                "attributes"
+            ],
             "power": 0
         },
         "vehicle": {
-            "weight":  0,
+            "weight": 0,
             "speed": 0,
             "acceleration": 0,
             "range": 0,
@@ -163,13 +175,22 @@
             "handling": 0,
             "accuracy": 0,
             "cost": 0,
+            "availabilityOptions":["Common", "Uncommon", "Rare"],
             "availability": "",
             "damage_capacity": 0,
             "armor_value": 0
         }
     },
     "Item": {
-        "types": ["quality", "drawback", "skill", "power", "weapon", "item", "aspect"],
+        "types": [
+            "quality",
+            "drawback",
+            "skill",
+            "power",
+            "weapon",
+            "item",
+            "aspect"
+        ],
         "templates": {
             "weapon": {
                 "range": "",
@@ -179,7 +200,19 @@
                 "damage_string": "",
                 "ammo_type": "",
                 "damage_type": "",
-                "damage_types": ["None", "Two-Handed", "Slashing", "Stabbing", "Normal Bullet", "Hollow Point", "Armor Piercing", "Shotgun", "Explosive", "Poison", "Corrosive"],
+                "damage_types": [
+                    "None",
+                    "Two-Handed",
+                    "Slashing",
+                    "Stabbing",
+                    "Normal Bullet",
+                    "Hollow Point",
+                    "Armor Piercing",
+                    "Shotgun",
+                    "Explosive",
+                    "Poison",
+                    "Corrosive"
+                ],
                 "damage_types_obj": {
                     "none": "None",
                     "twoHanded": "Two-Handed",
@@ -211,7 +244,11 @@
                 "encumbrance": 0,
                 "cost": 0,
                 "availability": "",
-                "availabilityOptions": ["Common", "Uncommon", "Rare"],
+                "availabilityOptions": [
+                    "Common",
+                    "Uncommon",
+                    "Rare"
+                ],
                 "description": "",
                 "resource_bonus": {
                     "hp": 0,
@@ -223,30 +260,45 @@
             }
         },
         "quality": {
-            "templates": ["common"]
+            "templates": [
+                "common"
+            ]
         },
         "drawback": {
-            "templates": ["common"]
+            "templates": [
+                "common"
+            ]
         },
         "skill": {
-            "templates": ["common"],
+            "templates": [
+                "common"
+            ],
             "level": 0
         },
         "power": {
-            "templates": ["common"],
+            "templates": [
+                "common"
+            ],
             "level": 0
         },
         "weapon": {
-            "templates": ["common", "weapon"]
+            "templates": [
+                "common",
+                "weapon"
+            ]
         },
         "item": {
-            "templates": ["common"],
+            "templates": [
+                "common"
+            ],
             "equipped": false,
             "armor_value": 0,
             "qty": 1
         },
         "aspect": {
-            "templates": ["common"],
+            "templates": [
+                "common"
+            ],
             "power": 0
         }
     }

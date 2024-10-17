@@ -99,8 +99,8 @@ export class afmbeActorSheet extends ActorSheet {
 
     get template() {
         const path = "systems/afmbe-jesuisfrog/templates";
-        if (!game.user.isGM && this.actor.limited) return "systems/afmbe-jesuisfrog/templates/limited-character-sheet.html";
-        return `${path}/${this.actor.type}-sheet.html`;
+        if (!game.user.isGM && this.actor.limited) return "systems/afmbe-jesuisfrog/templates/limited-character-sheet.hbs";
+        return `${path}/${this.actor.type}-sheet.hbs`;
     }
 
     /** @override */
@@ -166,7 +166,7 @@ export class afmbeActorSheet extends ActorSheet {
         let characterTypePath = actorData.characterTypes[actorData.characterType]
 
         // Construct and assign div elements to the headers
-        if (characterTypePath != undefined) {
+        if (characterTypePath != undefined && !this.actor.limited) {
             attributesDiv.innerHTML = `- [${actorData.characterTypeValues[characterTypePath].attributePoints.value} / ${actorData.characterTypeValues[characterTypePath].attributePoints.max}]`
             this.form.querySelector('#attributes-header').append(attributesDiv)
 
@@ -244,7 +244,7 @@ export class afmbeActorSheet extends ActorSheet {
                                 <tbody>
                                     <tr>
                                         <td class="table-bold-text">Attribute Test</td>
-                                        <td class="table-center-align">
+                                        <td>
                                             <select id="attributeTestSelect" name="attributeTest">
                                                 <option value="Simple">Simple</option>
                                                 <option value="Difficult">Difficult</option>
@@ -253,11 +253,11 @@ export class afmbeActorSheet extends ActorSheet {
                                     </tr>
                                     <tr>
                                         <td class="table-bold-text">Roll Modifier</td>
-                                        <td class="table-center-align"><input class="attribute-input" type="number" value="0" name="inputModifier" id="inputModifier"></td>
+                                        <td><input class="attribute-input" type="number" value="0" name="inputModifier" id="inputModifier"></td>
                                     </tr>
                                     <tr>
                                         <td class="table-bold-text">Skills</td>
-                                        <td class="table-center-align">
+                                        <td>
                                             <select id="skillSelect" name="skills">
                                                 <option value="None">None</option>
                                                 ${skillOptions.join('')}
@@ -266,7 +266,7 @@ export class afmbeActorSheet extends ActorSheet {
                                     </tr>
                                     <tr>
                                         <td class="table-bold-text">Qualities</td>
-                                        <td class="table-center-align">
+                                        <td>
                                             <select id="qualitySelect" name="qualities">
                                                 <option value="None">None</option>
                                                 ${qualityOptions.join('')}
@@ -275,7 +275,7 @@ export class afmbeActorSheet extends ActorSheet {
                                     </tr>
                                     <tr>
                                         <td class="table-bold-text">Drawbacks</td>
-                                        <td class="table-center-align">
+                                        <td>
                                             <select id="drawbackSelect" name="drawbacks">
                                                 <option value="None">None</option>
                                                 ${drawbackOptions.join('')}

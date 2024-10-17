@@ -1,10 +1,10 @@
-export class afmbeVehicleSheet extends ActorSheet {
+export class afmbevehicleSheet extends ActorSheet {
 
     /** @override */
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
             classes: ["afmbe-jesuisfrog", "sheet", "actor", `${game.settings.get("afmbe-jesuisfrog", "dark-mode") ? "dark-mode" : ""}`],
-            template: "systems/afmbe-jesuisfrog/templates/vehicle-sheet.html",
+            // template: "systems/afmbe-jesuisfrog/templates/vehicle-sheet.hbs",
             width: 700,
             height: 780,
             tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "core" }],
@@ -72,6 +72,12 @@ export class afmbeVehicleSheet extends ActorSheet {
         actorData.item = item
         actorData.equippedItem = equippedItem
         actorData.weapon = weapon
+    }
+
+    get template() {
+        const path = "systems/afmbe-jesuisfrog/templates";
+        if (!game.user.isGM && this.actor.limited) return "systems/afmbe-jesuisfrog/templates/limited-vehicle-sheet.hbs";
+        return `${path}/${this.actor.type}-sheet.hbs`;
     }
 
     /** @override */

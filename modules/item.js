@@ -28,22 +28,22 @@ export class afmbeItem extends Item {
         }
     }
 
-    _prepareQualityDrawback(actorData, itemData) {}
+    _prepareQualityDrawback(actorData, itemData) { }
 
-    _prepareSkillPower(actorData, itemData) {}
+    _prepareSkillPower(actorData, itemData) { }
 
     _prepareWeaponItem(actorData, itemData) {
         // Build Damage String by combining Damage Entry with Damage Multiplier Entry (Looks at Actor to grab Multiplier Value)
         // This does not apply to weapons on vehicles
         if (itemData.damage_cha_multiplier != "none" && this.isEmbedded && this.actor.type != 'vehicle') {
-            if (typeof (itemData.damage_cha_multiplier_modifier) == "number"){
+            if (typeof (itemData.damage_cha_multiplier_modifier) == "number") {
                 itemData.damage_string = `${itemData.damage}*${(actorData[itemData.damage_cha_multiplier].value) + itemData.damage_cha_multiplier_modifier + (itemData.damage_type == 1 ? 1 : 0)}`
-            }else{
+            } else {
                 itemData.damage_string = `${itemData.damage}*${actorData[itemData.damage_cha_multiplier].value + (itemData.damage_type == 1 ? 1 : 0)}`
             }
-            
+
         }
-        else  {
+        else {
             itemData.damage_string = itemData.damage
         }
     }

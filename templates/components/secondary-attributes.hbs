@@ -1,0 +1,44 @@
+<div class="attribute-container">
+    <h2>Secondary Attributes</h2>
+    <div class="resource-container">
+        <div class="resource">
+            <button type="button" class="reset-resource" data-resource="hp">Life Points</button>
+            <div class="resource-values secondaryAttribute">
+                <input type="number" name="system.hp.value" value="{{actor.system.hp.value}}">
+                /
+                <div>{{actor.system.hp.max}}</div>
+            </div>
+        </div>
+        <div class="resource">
+            <button type="button" class="reset-resource" data-resource="endurance_points">Endurance</button>
+            <div class="resource-values secondaryAttribute">
+                <input type="number" name="system.endurance_points.value"
+                    value="{{actor.system.endurance_points.value}}">
+                /
+                <div>{{actor.system.endurance_points.max}}</div>
+            </div>
+        </div>
+        <div class="resource">
+            <button type="button" class="reset-resource" data-resource="essence">Essence
+                Pool</button>
+            <div class="resource-values secondaryAttribute">
+                <input type="number" name="system.essence.value" value="{{actor.system.essence.value}}">
+                /
+                <div>{{actor.system.essence.max}}</div>
+            </div>
+        </div>
+        <div class="resource">
+            <button type="button" class="no-focus">Speed</button>
+            <div class="resource-values secondaryAttribute">
+                <div>{{actor.system.speed.value}}mph</div>
+                <div>[{{actor.system.speed.halfValue}}m/sec]</div>
+            </div>
+        </div>
+        <div class="resource">
+            <button type="button" class="no-focus">Initiative</button>
+            <div class="resource-values secondaryAttribute">
+                <div>{{actor.system.initiative.value}}</div>
+            </div>
+        </div>
+    </div>
+</div>

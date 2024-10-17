@@ -4,7 +4,9 @@ import { afmbeActor } from "./actor.js";
 import { afmbeItem } from "./item.js";
 import { afmbeItemSheet } from "./item-sheet.js";
 import { afmbeCreatureSheet } from "./creature-sheet.js"
-import { afmbeVehicleSheet } from "./vehicle-sheet.js"
+import { afmbevehicleSheet } from "./vehicle-sheet.js"
+import { registerTemplates } from "./register-templates.js";
+import { registerHandlebarsHelpers } from "./handlebars.js";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -26,6 +28,10 @@ Hooks.once("init", async function () {
     CONFIG.Actor.documentClass = afmbeActor
     CONFIG.Item.documentClass = afmbeItem
 
+    // Register Partial Templates
+    registerTemplates();
+    registerHandlebarsHelpers();
+
     // Register sheet application classes
     Actors.unregisterSheet("core", ActorSheet)
 
@@ -43,11 +49,11 @@ Hooks.once("init", async function () {
             label: "Default AFMBE Creature Sheet"
         })
 
-    Actors.registerSheet("afmbe-jesuisfrog", afmbeVehicleSheet,
+    Actors.registerSheet("afmbe-jesuisfrog", afmbevehicleSheet,
         {
             types: ["vehicle"],
             makeDefault: true,
-            label: "Default AFMBE Vehicle Sheet"
+            label: "Default AFMBE vehicle Sheet"
         })
 
     Items.registerSheet("afmbe-jesuisfrog", afmbeItemSheet,

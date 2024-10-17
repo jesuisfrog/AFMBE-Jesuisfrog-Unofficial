@@ -139,6 +139,14 @@
     background: rgb(41, 50, 59);
 }
 
+.afmbe-dialog-menu table tbody td {
+    width: 50%;
+}
+
+.afmbe-dialog-menu table tbody td * {
+    width: 100%;
+}
+
 .afmbe-jesuisfrog-tags-flex-container,
 .afmbe-jesuisfrog-tags-flex-container-item {
     color: black;
@@ -197,7 +205,7 @@
 
 .afmbe-jesuisfrog .item-name:hover {
     font-weight: bold;
-    color: rgb(255, 255, 255);
+    text-shadow: 0 0 10px var(--color-shadow-primary);
 }
 
 .afmbe-jesuisfrog .item-name-flex-container {
@@ -267,7 +275,8 @@
     font-family: "Jolly Roger";
 }
 
-.afmbe-jesuisfrog .bio-container .editor {
+.afmbe-jesuisfrog .bio-container .editor,
+.afmbe-jesuisfrog .contacts-container .editor {
     height: 200px;
     width: 100%;
 }
@@ -371,7 +380,7 @@
     position: absolute;
     bottom: 0;
     right: 0;
-    background: rgba(114, 114, 114, 0.616);
+    background: rgba(114, 114, 114, 0.5);
     z-index: 5;
     font-family: "Jolly Roger";
     font-size: x-large;
@@ -430,6 +439,10 @@
     justify-content: center;
 }
 
+.afmbe-jesuisfrog .xp-flex-container input {
+    margin-top: 2px
+}
+
 .afmbe-jesuisfrog .charname {
     width: 100%;
 }
@@ -484,6 +497,11 @@
     border: 1px solid black;
 }
 
+.afmbe-jesuisfrog .resource button.no-focus {
+    box-shadow: none;
+    cursor: default;
+}
+
 .afmbe-jesuisfrog #characterTypeSelect {
     font-family: "Jolly Roger";
     font-size: x-large;
@@ -502,23 +520,31 @@
         Character Body Content
  ---------------------------------------------*/
 
-.afmbe-jesuisfrog .bio-container {
+.afmbe-jesuisfrog .bio-container,
+.afmbe-jesuisfrog .contacts-container .editor {
     display: flex;
     flex-direction: column;
     border-bottom: 1px solid;
 }
 
-.afmbe-jesuisfrog .skill-item-container {
+.afmbe-jesuisfrog .core-item-container {
     display: flex;
     flex-direction: row;
     align-items: top;
     gap: 10px;
 }
 
+.afmbe-jesuisfrog .character-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 .afmbe-jesuisfrog .qualities-container,
 .afmbe-jesuisfrog .drawbacks-container,
 .afmbe-jesuisfrog .skills-container,
-.afmbe-jesuisfrog .powers-container {
+.afmbe-jesuisfrog .powers-container,
+.afmbe-jesuisfrog .aspects-container {
     width: 50%;
     border-radius: 3px;
 }
@@ -530,6 +556,7 @@
     justify-content: space-between;
     padding: 5px;
     margin: 0 0 5px 0;
+    background: rgba(114, 114, 114, 0.2);
 }
 
 .afmbe-jesuisfrog .encumbrance-resource {
@@ -647,12 +674,17 @@
     filter: blur(5px);
 }
 
+.afmbe-jesuisfrog .limited .editor {
+    height: auto;
+}
+
 /* ------------------------------------------- 
         Dark Mode Settings
  ---------------------------------------------*/
 
 .afmbe-jesuisfrog.sheet.actor.dark-mode .window-content,
-.afmbe-jesuisfrog.sheet.item.dark-mode .window-content {
+.afmbe-jesuisfrog.sheet.item.dark-mode .window-content,
+.afmbe-jesuisfrog.dark-mode .window-content {
     background: rgb(22, 22, 22);
     color: rgb(220, 220, 220);
 }
@@ -730,26 +762,20 @@
 }
 
 .afmbe-jesuisfrog.dark-mode .sheet-nav-container {
-    background: rgba(41, 0, 0, 0.616);
+    background: rgba(41, 0, 0, 0.5);
 }
 
 .afmbe-jesuisfrog.dark-mode .item-description-sidebar {
     border-left: 1px solid rgb(0, 0, 0);
 }
 
-.app.window-app.dialog.dark-mode .window-content {
+/* .app.window-app.dialog.dark-mode .window-content {
     background: url('../images/parchment.jpg');
-}
+} */
 
-.app.window-app.dialog.dark-mode .dialog-content {
+/* .app.window-app.dialog.dark-mode .dialog-content {
     color: black;
     background: none;
-}
-
-/* .app.window-app.dialog.dark-mode .dialog-buttons button {
-    color: black;
-    background: none;
-    border: 1px solid black;
 } */
 
 .afmbe-jesuisfrog.window-app.dialog.dark-mode .afmbe-jesuisfrog-dialog-menu {
@@ -763,10 +789,9 @@
 
 .afmbe-jesuisfrog.window-app.dialog.dark-mode input,
 .afmbe-jesuisfrog.window-app.dialog.dark-mode select {
-    color: black;
+    color: rgb(231, 231, 231);
 }
 
 .afmbe-jesuisfrog.dark-mode .item-name:hover {
     font-weight: bold;
-    color: rgb(0, 0, 0);
 }
