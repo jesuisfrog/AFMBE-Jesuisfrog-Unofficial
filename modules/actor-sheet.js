@@ -382,7 +382,7 @@ export class afmbeActorSheet extends ActorSheet {
         event.preventDefault()
         let element = event.currentTarget
         let weapon = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
-        console.log(weapon)
+        
         // Create Classes for Dialog Box
         let mode = game.settings.get("afmbe-jesuisfrog", "dark-mode") ? "dark-mode" : ""
         let dialogOptions = { classes: ["dialog", "afmbe-jesuisfrog", mode] }
