@@ -17,6 +17,7 @@ export function registerTemplates() {
         "systems/afmbe-jesuisfrog/templates/components/qualities.hbs",
         "systems/afmbe-jesuisfrog/templates/components/item-attribute-sidebar.hbs",
         "systems/afmbe-jesuisfrog/templates/components/item-sheet-header.hbs",
+        "systems/afmbe-jesuisfrog/templates/components/vehicle-attributes.hbs",
         "systems/afmbe-jesuisfrog/templates/components/character-details.hbs"
     ];
 

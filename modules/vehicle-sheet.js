@@ -85,7 +85,7 @@ export class afmbevehicleSheet extends ActorSheet {
         super.activateListeners(html);
 
         // Buttons and Event Listeners
-        html.find('.damage-roll').click(this._onDamageRoll.bind(this))
+        if (this.actor.isOwner) html.find('.damage-roll').click(this._onDamageRoll.bind(this))
         html.find('.toggleEquipped').click(this._onToggleEquipped.bind(this))
         html.find('.armor-button-cell button').click(this._onArmorRoll.bind(this))
 

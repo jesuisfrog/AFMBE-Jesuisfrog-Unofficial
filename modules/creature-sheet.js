@@ -101,7 +101,7 @@ export class afmbeCreatureSheet extends ActorSheet {
 
         // Buttons and Event Listeners
         html.find('.attribute-roll').click(this._onAttributeRoll.bind(this))
-        html.find('.damage-roll').click(this._onDamageRoll.bind(this))
+        if (this.actor.isOwner) html.find('.damage-roll').click(this._onDamageRoll.bind(this))
         html.find('.toggleEquipped').click(this._onToggleEquipped.bind(this))
         html.find('.armor-button-cell button').click(this._onArmorRoll.bind(this))
         html.find('.reset-resource').click(this._onResetResource.bind(this))

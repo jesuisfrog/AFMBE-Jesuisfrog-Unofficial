@@ -113,7 +113,7 @@ export class afmbeActorSheet extends ActorSheet {
 
         // Buttons and Event Listeners
         html.find('.attribute-roll').click(this._onAttributeRoll.bind(this))
-        html.find('.damage-roll').click(this._onDamageRoll.bind(this))
+        if(this.actor.isOwner) html.find('.damage-roll').click(this._onDamageRoll.bind(this))
         html.find('.toggleEquipped').click(this._onToggleEquipped.bind(this))
         html.find('.armor-button-cell button').click(this._onArmorRoll.bind(this))
         html.find('.reset-resource').click(this._onResetResource.bind(this))
@@ -158,7 +158,7 @@ export class afmbeActorSheet extends ActorSheet {
 
     _createCharacterPointDivs() {
         let actorData = this.actor.system
-        let attributesDiv = document.createElement('div')
+        let attributesHeader = this.form.querySelector('#attributes-header')
         let qualityDiv = document.createElement('div')
         let drawbackDiv = document.createElement('div')
         let skillDiv = document.createElement('div')
@@ -167,8 +167,7 @@ export class afmbeActorSheet extends ActorSheet {
 
         // Construct and assign div elements to the headers
         if (characterTypePath != undefined && !this.actor.limited) {
-            attributesDiv.innerHTML = `- [${actorData.characterTypeValues[characterTypePath].attributePoints.value} / ${actorData.characterTypeValues[characterTypePath].attributePoints.max}]`
-            this.form.querySelector('#attributes-header').append(attributesDiv)
+            attributesHeader.innerHTML += ` - [${actorData.characterTypeValues[characterTypePath].attributePoints.value} / ${actorData.characterTypeValues[characterTypePath].attributePoints.max}]`
 
             qualityDiv.innerHTML = `- [${actorData.characterTypeValues[characterTypePath].qualityPoints.value} / ${actorData.characterTypeValues[characterTypePath].qualityPoints.max}]`
             this.form.querySelector('#quality-header').append(qualityDiv)
