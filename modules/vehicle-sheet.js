@@ -134,19 +134,21 @@ export class afmbevehicleSheet extends ActorSheet {
 
         // Create Chat Content
         let chatContent = `<div>
-                                <h2>${weapon.name}</h2>
+                                <h2>Damage Roll: ${weapon.name}</h2>
 
                                 <table class="afmbe-chat-roll-table">
                                     <thead>
                                         <tr>
-                                            <th>Damage</th>
-                                            <th>Detail</th>
+                                            <th class="table-center-align">Damage</th>
+                                            <th class="table-center-align">Type</th>
+                                            <th class="table-center-align">Detail</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>[[${roll.result}]]</td>
-                                            <td>${weapon.system.damage}</td>
+                                            <td class="table-center-align">[[${roll.result}]]</td>
+                                            <td class="table-center-align">${weapon.system.damage_types[weapon.system.damage_type]}</td>
+                                            <td class="table-center-align">${weapon.system.damage}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -170,19 +172,19 @@ export class afmbevehicleSheet extends ActorSheet {
 
         // Create Chat Content
         let chatContent = `<div>
-                                <h2>${equippedItem.name}</h2>
+                                <h2>Armor Roll: ${equippedItem.name}</h2>
 
                                 <table class="afmbe-chat-roll-table">
                                     <thead>
                                         <tr>
-                                            <th>Result</th>
-                                            <th>Detail</th>
+                                            <th class="table-center-align">Result</th>
+                                            <th class="table-center-align">Detail</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>[[${roll.result}]]</td>
-                                            <td>${equippedItem.system.armor_value}</td>
+                                            <td class="table-center-align">[[${roll.result}]]</td>
+                                            <td class="table-center-align">${equippedItem.system.armor_value}</td>
                                         </tr>
                                     </tbody>
                                 </table>

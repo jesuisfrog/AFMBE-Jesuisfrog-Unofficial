@@ -2,7 +2,6 @@
 
     {{!-- Sheet Header --}}
     {{> "systems/afmbe-jesuisfrog/templates/components/item-sheet-header.hbs"}}
-
     <section>
         <div class="description-container">
             <div class="item-attribute-sidebar">
@@ -17,6 +16,7 @@
                             <th>Damage</th>
                             <td><input type="text" name="system.damage" value="{{item.system.damage}}"></td>
                         </tr>
+                        {{#unless (isVehicle)}}
                         <tr>
                             <th>Damage Multiplier</th>
                             <td>
@@ -32,6 +32,7 @@
                                 <input type="number" id="damage_cha_multiplier_modifier" name="system.damage_cha_multiplier_modifier" value="{{item.system.damage_cha_multiplier_modifier}}" min="-5" max="5" step="1" data-type="Number">
                             </td>
                         </tr>
+                        {{/unless}}
                         <tr>
                             <th>Damage Type</th>
                             <td>
@@ -54,10 +55,12 @@
                                 </div>
                             </td>
                         </tr>
+                        {{# unless (isVehicle)}}
                         <tr>
                             <th>EV</th>
                             <td><input type="number" name="system.encumbrance" value="{{item.system.encumbrance}}"></td>
                         </tr>
+                        {{/unless}}
                         <tr>
                             <th>Cost</th>
                             <td><input type="number" name="system.cost" value="{{item.system.cost}}"></td>

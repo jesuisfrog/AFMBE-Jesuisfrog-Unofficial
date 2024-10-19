@@ -7,7 +7,7 @@
         <thead>
             <tr>
                 <th class="table-left-align">Name</th>
-                <th>Points</th>
+                <th>Bonus</th>
                 <th></th>
             </tr>
         </thead>
@@ -15,7 +15,7 @@
             {{#each actor.quality as |item id|}}
             <tr class="item" data-item-id="{{item._id}}">
                 <td class="item-name">{{item.name}}</td>
-                <td class="table-center-align">{{item.system.cost}}</td>
+                <td class="table-center-align">{{item.system.bonus}}</td>
                 <td class="table-center-align"><a class="item-control item-delete" title="Delete Item"><i
                             class="fas fa-trash"></i></a></td>
             </tr>

@@ -45,29 +45,29 @@ export class afmbeActor extends Actor {
     data.encumbrance.level = this._calculateEncumbranceLevel(data)
 
     // Determine Secondary Attribute Maximum Values
-    data.hp.max = this._calcLifePoints(data)
-    data.endurance_points.max = this._calcEndurancePoints(data)
+    data.secondaryAttributes.hp.max = this._calcLifePoints(data)
+    data.secondaryAttributes.endurance_points.max = this._calcEndurancePoints(data)
     this._calcSpeed(data)
-    data.essence.max = this._calcEssencePool(data)
-    data.initiative.value = this._calcInitiative(data)
+    data.secondaryAttributes.essence.max = this._calcEssencePool(data)
+    data.secondaryAttributes.initiative.value = this._calcInitiative(data)
 
     // Determine Secondary Attribute Loss Penalties
-    if (data.endurance_points.value <= 5) {
-      data.endurance_points.loss_toggle = true
-      data.endurance_points.loss_penalty = -2
+    if (data.secondaryAttributes.endurance_points.value <= 5) {
+      data.secondaryAttributes.endurance_points.loss_toggle = true
+      data.secondaryAttributes.endurance_points.loss_penalty = -2
     }
     else {
-      data.endurance_points.loss_toggle = false
-      data.endurance_points.loss_penalty = 0
+      data.secondaryAttributes.endurance_points.loss_toggle = false
+      data.secondaryAttributes.endurance_points.loss_penalty = 0
     }
 
-    if (data.essence.value <= 1) {
-      data.essence.loss_toggle = true
-      data.essence.loss_penalty = -3
+    if (data.secondaryAttributes.essence.value <= 1) {
+      data.secondaryAttributes.essence.loss_toggle = true
+      data.secondaryAttributes.essence.loss_penalty = -3
     }
     else {
-      data.essence.loss_toggle = false
-      data.essence.loss_penalty = 0
+      data.secondaryAttributes.essence.loss_toggle = false
+      data.secondaryAttributes.essence.loss_penalty = 0
     }
 
   }
@@ -82,11 +82,11 @@ export class afmbeActor extends Actor {
     data.encumbrance.level = this._calculateEncumbranceLevel(data)
 
     // Determine Secondary Attribute Maximum Values
-    data.hp.max = this._calcLifePoints(data)
-    data.endurance_points.max = this._calcEndurancePoints(data)
+    data.secondaryAttributes.hp.max = this._calcLifePoints(data)
+    data.secondaryAttributes.endurance_points.max = this._calcEndurancePoints(data)
     this._calcSpeed(data)
-    data.essence.max = this._calcEssencePool(data)
-    data.initiative.value = this._calcInitiative(data)
+    data.secondaryAttributes.essence.max = this._calcEssencePool(data)
+    data.secondaryAttributes.initiative.value = this._calcInitiative(data)
 
     // Calculate Power Total
     data.power = this._calculatePowerTotal(data)
@@ -106,14 +106,14 @@ export class afmbeActor extends Actor {
     }
 
     // Set return values depending on attribute values
-    switch (data.constitution.value > 0 && data.strength.value > 0) {
+    switch (data.primaryAttributes.constitution.value > 0 && data.primaryAttributes.strength.value > 0) {
       case true:
-        return (4 * (data.constitution.value + data.strength.value)) + 10 + itemBonus
+        return (4 * (data.primaryAttributes.constitution.value + data.primaryAttributes.strength.value)) + 10 + itemBonus
 
       case false:
-        let strengthVal = data.strength.value <= 0 ? 1 : data.strength.value
-        let constitutionVal = data.constitution.value <= 0 ? 1 : data.constitution.value
-        return (4 * (strengthVal + constitutionVal)) + 10 + (data.constitution.value < 0 ? data.constitution.value : 0) + (data.strength.value < 0 ? data.strength.value : 0) + itemBonus
+        let strengthVal = data.primaryAttributes.strength.value <= 0 ? 1 : data.primaryAttributes.strength.value
+        let constitutionVal = data.primaryAttributes.constitution.value <= 0 ? 1 : data.primaryAttributes.constitution.value
+        return (4 * (strengthVal + constitutionVal)) + 10 + (data.primaryAttributes.constitution.value < 0 ? data.primaryAttributes.constitution.value : 0) + (data.primaryAttributes.strength.value < 0 ? data.primaryAttributes.strength.value : 0) + itemBonus
     }
   }
 
@@ -125,7 +125,7 @@ export class afmbeActor extends Actor {
       itemBonus = itemBonus + item.system.resource_bonus.endurance_points
     }
 
-    return (3 * (data.constitution.value + data.strength.value + data.willpower.value)) + 5 + itemBonus
+    return (3 * (data.primaryAttributes.constitution.value + data.primaryAttributes.strength.value + data.primaryAttributes.willpower.value)) + 5 + itemBonus
   }
 
   _calcSpeed(data) {
@@ -136,8 +136,8 @@ export class afmbeActor extends Actor {
       itemBonus = itemBonus + item.system.resource_bonus.speed
     }
 
-    data.speed.value = 2 * (data.constitution.value + data.dexterity.value) + itemBonus - data.encumbrance.level
-    data.speed.halfValue = (data.speed.value / 2).toFixed(0)
+    data.secondaryAttributes.speed.value = 2 * (data.primaryAttributes.constitution.value + data.primaryAttributes.dexterity.value) + itemBonus - data.encumbrance.level
+    data.secondaryAttributes.speed.halfValue = (data.secondaryAttributes.speed.value / 2).toFixed(0)
   }
 
   _calcEssencePool(data) {
@@ -148,7 +148,7 @@ export class afmbeActor extends Actor {
       itemBonus = itemBonus + item.system.resource_bonus.essence
     }
 
-    return data.strength.value + data.dexterity.value + data.constitution.value + data.intelligence.value + data.perception.value + data.willpower.value + itemBonus
+    return data.primaryAttributes.strength.value + data.primaryAttributes.dexterity.value + data.primaryAttributes.constitution.value + data.primaryAttributes.intelligence.value + data.primaryAttributes.perception.value + data.primaryAttributes.willpower.value + itemBonus
   }
 
   _calcInitiative(data) {
@@ -159,7 +159,7 @@ export class afmbeActor extends Actor {
       itemBonus = itemBonus + item.system.resource_bonus.initiative
     }
 
-    return data.dexterity.value + itemBonus
+    return data.primaryAttributes.dexterity.value + itemBonus
   }
 
   _calculateQualityPoints(data) {
@@ -195,7 +195,7 @@ export class afmbeActor extends Actor {
   }
 
   _calculateAttributePoints(data) {
-    let attributeArray = [data.strength.value, data.dexterity.value, data.constitution.value, data.intelligence.value, data.perception.value, data.willpower.value]
+    let attributeArray = [data.primaryAttributes.strength.value, data.primaryAttributes.dexterity.value, data.primaryAttributes.constitution.value, data.primaryAttributes.intelligence.value, data.primaryAttributes.perception.value, data.primaryAttributes.willpower.value]
     let superTotal = 0
 
     // Return adjusted total for values over 5
@@ -214,10 +214,10 @@ export class afmbeActor extends Actor {
   }
 
   _calculateLiftingCapacity(data) {
-    if (data.strength.value <= 5) { return 50 * data.strength.value }
-    else if (data.strength.value <= 10 && data.strength.value >= 6) { return (200 * (data.strength.value - 1) + 250) }
-    else if (data.strength.value <= 15 && data.strength.value >= 11) { return (500 * (data.strength.value - 10) + 1250) }
-    else if (data.strength.value <= 20 && data.strength.value >= 16) { return (1000 * (data.strength.value - 15) + 5000) }
+    if (data.primaryAttributes.strength.value <= 5) { return 50 * data.primaryAttributes.strength.value }
+    else if (data.primaryAttributes.strength.value <= 10 && data.primaryAttributes.strength.value >= 6) { return (200 * (data.primaryAttributes.strength.value - 1) + 250) }
+    else if (data.primaryAttributes.strength.value <= 15 && data.primaryAttributes.strength.value >= 11) { return (500 * (data.primaryAttributes.strength.value - 10) + 1250) }
+    else if (data.primaryAttributes.strength.value <= 20 && data.primaryAttributes.strength.value >= 16) { return (1000 * (data.primaryAttributes.strength.value - 15) + 5000) }
   }
 
   _calculateEncumbrance(data) {

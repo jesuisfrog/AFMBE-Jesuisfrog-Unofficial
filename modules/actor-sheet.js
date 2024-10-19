@@ -198,20 +198,20 @@ export class afmbeActorSheet extends ActorSheet {
 
         let qualityOptions = []
         for (let quality of this.actor.items.filter(item => item.type === 'quality')) {
-            let option = `<option value="${quality.id}">${quality.name} ${quality.system.cost}</option>`
+            let option = `<option value="${quality.id}">${quality.name} ${quality.system.bonus}</option>`
             qualityOptions.push(option)
         }
 
         let drawbackOptions = []
         for (let drawback of this.actor.items.filter(item => item.type === 'drawback')) {
-            let option = `<option value="${drawback.id}">${drawback.name} ${drawback.system.cost}</option>`
+            let option = `<option value="${drawback.id}">${drawback.name} ${drawback.system.bonus}</option>`
             drawbackOptions.push(option)
         }
 
         // Create penalty tags from Resource Loss Status
         let penaltyTags = []
-        if (actorData.endurance_points.loss_toggle) { penaltyTags.push(`<div>Endurance Loss ${actorData.endurance_points.loss_penalty}</div>`) }
-        if (actorData.essence.loss_toggle) { penaltyTags.push(`<div>Essence Loss ${actorData.essence.loss_penalty}</div>`) }
+        if (actorData.secondaryAttributes.endurance_points.loss_toggle) { penaltyTags.push(`<span class="penaltyColorClass">Endurance Loss ${actorData.secondaryAttributes.endurance_points.loss_penalty}</span>`) }
+        if (actorData.secondaryAttributes.essence.loss_toggle) { penaltyTags.push(`<span class="penaltyColorClass">Essence Loss ${actorData.secondaryAttributes.essence.loss_penalty}</span>`) }
 
         // Create Classes for Dialog Box
         let mode = game.settings.get("afmbe-jesuisfrog", "dark-mode") ? "dark-mode" : ""
@@ -235,7 +235,7 @@ export class afmbeActorSheet extends ActorSheet {
                             </div>
 
                             <div class="afmbe-tags-flex-container">
-                                ${penaltyTags.join('')}
+                                <b>Penalties</b>: ${penaltyTags.join(' | ')}
                             </div>
 
 
@@ -300,14 +300,14 @@ export class afmbeActorSheet extends ActorSheet {
                         let selectedDrawback = this.actor.getEmbeddedDocument("Item", html[0].querySelector('#drawbackSelect').value)
 
                         // Set values for options
-                        let attributeValue = attributeTestSelect === 'Simple' ? actorData[attributeLabel.toLowerCase()].value * 2 : actorData[attributeLabel.toLowerCase()].value
+                        let attributeValue = attributeTestSelect === 'Simple' ? actorData.primaryAttributes[attributeLabel.toLowerCase()].value * 2 : actorData.primaryAttributes[attributeLabel.toLowerCase()].value
                         let skillValue = selectedSkill != undefined ? selectedSkill.system.level : 0
-                        let qualityValue = selectedQuality != undefined ? selectedQuality.system.cost : 0
-                        let drawbackValue = selectedDrawback != undefined ? selectedDrawback.system.cost : 0
-                        let statusPenalties = actorData.endurance_points.loss_penalty + actorData.essence.loss_penalty
+                        let qualityValue = selectedQuality != undefined ? selectedQuality.system.bonus : 0
+                        let drawbackValue = selectedDrawback != undefined ? selectedDrawback.system.bonus : 0
+                        let statusPenalties = actorData.secondaryAttributes.endurance_points.loss_penalty + actorData.secondaryAttributes.essence.loss_penalty
 
                         // Calculate total modifier to roll
-                        let rollMod = (attributeValue + skillValue + qualityValue + userInputModifier) - drawbackValue + statusPenalties
+                        let rollMod = (attributeValue + skillValue + qualityValue + userInputModifier) - Math.abs(drawbackValue) + statusPenalties
 
                         // Roll Dice
                         let roll = await new Roll('1d10').evaluate()
@@ -316,12 +316,25 @@ export class afmbeActorSheet extends ActorSheet {
                         let totalResult = Number(roll.result) + rollMod
 
                         // Create Chat Message Content
-                        let tags = [`<div>${attributeTestSelect} Test</div>`]
+
+                        // let tags = [`<div>${attributeTestSelect} Test</div>`]
+                        let tags = [];
                         let ruleOfDiv = ``
-                        if (userInputModifier != 0) { tags.push(`<div>User Modifier ${userInputModifier >= 0 ? "+" : ''}${userInputModifier}</div>`) }
-                        if (selectedSkill != undefined) { tags.push(`<div>${selectedSkill.name} ${selectedSkill.system.level >= 0 ? '+' : ''}${selectedSkill.system.level}</div>`) }
-                        if (selectedQuality != undefined) { tags.push(`<div>${selectedQuality.name} ${selectedQuality.system.cost >= 0 ? '+' : ''}${selectedQuality.system.cost}</div>`) }
-                        if (selectedDrawback != undefined) { tags.push(`<div>${selectedDrawback.name} ${selectedQuality.system.cost >= 0 ? '-' : '+'}${Math.abs(selectedDrawback.system.cost)}</div>`) }
+                        if (userInputModifier != 0) { 
+                            tags.push(`<span class="${userInputModifier >= 0 ? "bonusColorClass" : 'penaltyColorClass'}">User Modifier ${userInputModifier >= 0 ? "+" : ''}${userInputModifier}</span>`) 
+                        }
+                        if (selectedSkill != undefined) { 
+                            const skillLevel = selectedSkill.system.level;
+                            tags.push(`<span class="${skillLevel >= 0 ? 'bonusColorClass' : 'penaltyColorClass'}">${selectedSkill.name} ${skillLevel >= 0 ? '+' : ''}${skillLevel}</span>`) 
+                        }
+                        if (selectedQuality != undefined) { 
+                            const qualityBonus = selectedQuality.system.bonus;
+                            tags.push(`<span class="${qualityBonus >= 0 ? 'bonusColorClass' : 'penaltyColorClass'}">${selectedQuality.name} ${qualityBonus >= 0 ? '+' : ''}${qualityBonus}</span>`) 
+                        }
+                        if (selectedDrawback != undefined) { 
+                            const drawbackPenalty = selectedDrawback.system.bonus;
+                            tags.push(`<span class="penaltyColorClass">${selectedDrawback.name} ${drawbackPenalty >= 0 ? '-' : ''}${drawbackPenalty}</span>`) 
+                        }
 
                         if (roll.result == 10) {
                             ruleOfDiv = `<h2 class="rule-of-chat-text">Rule of 10!</h2>
@@ -331,25 +344,25 @@ export class afmbeActorSheet extends ActorSheet {
                         if (roll.result == 1) {
                             ruleOfDiv = `<h2 class="rule-of-chat-text">Rule of 1!</h2>
                                         <button type="button" data-roll="roll-again" class="rule-of-one">Roll Again</button>`
-                            totalResult = 0
+                            totalResult = 1
                         }
 
                         let chatContent = `<form>
-                                                <h2>${attributeLabel} Roll [${actorData[attributeLabel.toLowerCase()].value}]</h2>
+                                                <h2>${attributeLabel} Roll [ ${actorData.primaryAttributes[attributeLabel.toLowerCase()].value} ] - ${attributeTestSelect} Test</h2>
 
                                                 <table class="afmbe-chat-roll-table">
                                                     <thead>
                                                         <tr>
-                                                            <th>Roll</th>
-                                                            <th>Modifier</th>
-                                                            <th>Result</th>
+                                                            <th class="table-center-align">Roll</th>
+                                                            <th class="table-center-align">Modifier</th>
+                                                            <th class="table-center-align">Result</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td data-roll="dice-result">[[${roll.result}]]</td>
-                                                            <td data-roll="modifier">${rollMod}</td>
-                                                            <td data-roll="dice-total">${totalResult}</td>
+                                                            <td class="table-center-align" data-roll="dice-result">[[${roll.result}]]</td>
+                                                            <td class="table-center-align" data-roll="modifier">${rollMod}</td>
+                                                            <td class="table-center-align" data-roll="dice-total" data-roll-value="${totalResult}">${totalResult + rollMod}</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -363,7 +376,7 @@ export class afmbeActorSheet extends ActorSheet {
                             type: CONST.CHAT_MESSAGE_TYPES.ROLL,
                             user: game.user.id,
                             speaker: ChatMessage.getSpeaker(),
-                            flavor: `<div class="afmbe-tags-flex-container">${tags.join('')} ${penaltyTags.join('')}</div>`,
+                            flavor: `<div class="afmbe-tags-flex-container"><b>Modifiers</b>: ${tags.join(' | ')} ${penaltyTags.length > 0 ? " | " + penaltyTags.join(' | ') : ""}</div>`,
                             content: chatContent,
                             roll: roll
                         })
@@ -439,8 +452,8 @@ export class afmbeActorSheet extends ActorSheet {
 
                         const roll = await new Roll(weapon.system.damage_string).evaluate()
 
-                        let tags = [`<div>Damage Roll</div>`]
-                        if (firingMode != 'None/Melee') { tags.push(`<div>${firingMode}: ${shotNumber}</div>`) }
+                        let tags = []
+                        if (firingMode != 'None/Melee') { tags.push(`<div><b>${firingMode}</b>: ${shotNumber == 1 ? shotNumber + " shot" : shotNumber + " shots"}</div>`) }
 
                         // Reduce Fired shots from current load chamber
                         if (shotNumber > 0) {
@@ -456,21 +469,21 @@ export class afmbeActorSheet extends ActorSheet {
 
                         // Create Chat Content
                         let chatContent = `<div>
-                                                <h2>${weapon.name}</h2>
+                                                <h2>Damage Roll: ${weapon.name}</h2>
 
                                                 <table class="afmbe-chat-roll-table">
                                                     <thead>
                                                         <tr>
-                                                            <th>Damage</th>
-                                                            <th>Type</th>
-                                                            <th>Detail</th>
+                                                            <th class="table-center-align">Damage</th>
+                                                            <th class="table-center-align">Type</th>
+                                                            <th class="table-center-align">Detail</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td>[[${roll.result}]]</td>
-                                                            <td>${weapon.system.damage_types[weapon.system.damage_type]}</td>
-                                                            <td>${weapon.system.damage_string}</td>
+                                                            <td class="table-center-align">[[${roll.result}]]</td>
+                                                            <td class="table-center-align">${weapon.system.damage_types[weapon.system.damage_type]}</td>
+                                                            <td class="table-center-align">${weapon.system.damage_string}</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -501,23 +514,21 @@ export class afmbeActorSheet extends ActorSheet {
 
         let roll = await new Roll(equippedItem.system.armor_value).evaluate()
 
-        let tags = [`<div>Armor Roll</div>`]
-
         // Create Chat Content
         let chatContent = `<div>
-                                <h2>${equippedItem.name}</h2>
+                                <h2>Armor Roll: ${equippedItem.name}</h2>
 
                                 <table class="afmbe-chat-roll-table">
                                     <thead>
                                         <tr>
-                                            <th>Result</th>
-                                            <th>Detail</th>
+                                            <th class="table-center-align">Result</th>
+                                            <th class="table-center-align">Detail</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>[[${roll.result}]]</td>
-                                            <td>${equippedItem.system.armor_value}</td>
+                                            <td class="table-center-align">[[${roll.result}]]</td>
+                                            <td class="table-center-align">${equippedItem.system.armor_value}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -527,7 +538,6 @@ export class afmbeActorSheet extends ActorSheet {
             type: CONST.CHAT_MESSAGE_TYPES.ROLL,
             user: game.user.id,
             speaker: ChatMessage.getSpeaker(),
-            flavor: `<div class="afmbe-tags-flex-container-item">${tags.join('')}</div>`,
             content: chatContent,
             roll: roll
         })
@@ -553,8 +563,8 @@ export class afmbeActorSheet extends ActorSheet {
         event.preventDefault()
         const actorData = this.actor.system
         const element = event.currentTarget
-        const dataPath = `system.${element.dataset.resource}.value`
-        const resetResourceValue = actorData[element.dataset.resource].max
+        const dataPath = `system.secondaryAttributes.${element.dataset.resource}.value`
+        const resetResourceValue = actorData.secondaryAttributes[element.dataset.resource].max
         this.actor.update({ [dataPath]: resetResourceValue })
     }
 
@@ -567,13 +577,13 @@ export class afmbeActorSheet extends ActorSheet {
         let actorData = this.actor.system
 
         // Create Essence Tag and & Append
-        if (actorData.essence.value <= 1) {
+        if (actorData.secondaryAttributes.essence.value <= 1) {
             essenceTag.innerHTML = `<div>Hopeless</div>`
             essenceTag.title = 'All Tests suffer -3 penalty'
             essenceTag.classList.add('tag')
             tagContainer.append(essenceTag)
         }
-        else if (actorData.essence.value <= (actorData.essence.max / 2)) {
+        else if (actorData.secondaryAttributes.essence.value <= (actorData.secondaryAttributes.essence.max / 2)) {
             essenceTag.innerHTML = `<div>Forlorn</div>`
             essenceTag.title = 'Mental tests suffer a -1 penalty'
             essenceTag.classList.add('tag')
@@ -581,7 +591,7 @@ export class afmbeActorSheet extends ActorSheet {
         }
 
         // Create Endurance Tag and & Append
-        if (actorData.endurance_points.value <= 5) {
+        if (actorData.secondaryAttributes.endurance_points.value <= 5) {
             enduranceTag.innerHTML = `<div>Exhausted</div>`
             enduranceTag.title = 'All Tests suffer -2 penalty'
             enduranceTag.classList.add('tag')
@@ -589,19 +599,19 @@ export class afmbeActorSheet extends ActorSheet {
         }
 
         // Create Injury Tag and & Append
-        if (actorData.hp.value <= -10) {
+        if (actorData.secondaryAttributes.hp.value <= -10) {
             injuryTag.innerHTML = `<div>Dying</div>`
             injuryTag.classList.add('tag')
             injuryTag.title = 'Survival Test required to avoid instant death'
             tagContainer.append(injuryTag)
         }
-        else if (actorData.hp.value <= 0) {
+        else if (actorData.secondaryAttributes.hp.value <= 0) {
             injuryTag.innerHTML = `<div>Semi-Conscious</div>`
             injuryTag.classList.add('tag')
             injuryTag.title = 'Willpower test required to regain consciousness, penalized by the number their HP is below 0'
             tagContainer.append(injuryTag)
         }
-        else if (actorData.hp.value <= 5) {
+        else if (actorData.secondaryAttributes.hp.value <= 5) {
             injuryTag.innerHTML = `<div>Severely Injured</div>`
             injuryTag.classList.add('tag')
             injuryTag.title = 'Most actions suffer -1 through -5 penalty'

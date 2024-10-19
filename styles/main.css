@@ -106,6 +106,13 @@
     width: 100%;
 }
 
+.chat-message .bonusColorClass{
+    color: green;
+}
+.chat-message .penaltyColorClass{
+    color: red;
+}
+
 
 
 .afmbe-jesuisfrog-dialog-menu .menu-flex-container-row {
@@ -247,7 +254,8 @@
     color: darkred;
 }
 
-.afmbe-jesuisfrog .table-center-align {
+.afmbe-jesuisfrog .table-center-align,
+.afmbe-chat-roll-table .table-center-align{
     text-align: center;
 }
 
@@ -572,6 +580,11 @@
     gap: 10px;
 }
 
+.afmbe-jesuisfrog .core-item-container table td:first-child,
+.afmbe-jesuisfrog .weapon-table table td:first-child{
+    padding-left: 10px;
+}
+
 .afmbe-jesuisfrog .character-details {
     display: flex;
     flex-direction: row;
@@ -623,6 +636,8 @@
 .afmbe-jesuisfrog .aspects-container {
     margin: 10px 0 0 0;
 }
+
+
 
 .afmbe-jesuisfrog .item-table,
 .afmbe-jesuisfrog .item-table table,

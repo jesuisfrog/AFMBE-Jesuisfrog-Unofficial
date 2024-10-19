@@ -87,51 +87,56 @@ Hooks.on("renderChatMessage", (app, html, data) => {
 
     if (chatButton != undefined && chatButton != null) {
         chatButton.addEventListener('click', async () => {
-            let ruleTag = ''
+            let ruleTag = '';
+            const diceResult = Number(html[0].querySelector("[data-roll='dice-result']").textContent);
 
-            if (html[0].querySelector("[data-roll='dice-result']").textContent == 10) { ruleTag = 'Rule of Ten Re-Roll' }
-            if (html[0].querySelector("[data-roll='dice-result']").textContent == 1) { ruleTag = 'Rule of One Re-Roll' }
+            if (diceResult == 10) { ruleTag = 'Rule of Ten Re-Roll' }
+            if (diceResult == 1) { ruleTag = '<b>Rule of One Re-Roll</b>: If the first reroll is a negative value (1d10-5), it replaces the original die roll. </br><b>Exception</b>: Rolling a 1 again replaces the original roll with -5; each subsequent 1 rolled subtracts 5 from the result.' }
 
             let roll = await new Roll('1d10').evaluate()
 
             // Grab and Set Values from Previous Roll
             let attributeLabel = html[0].querySelector('h2').outerHTML
-            let diceTotal = Number(html[0].querySelector("[data-roll='dice-total']").textContent)
             let rollMod = Number(html[0].querySelector("[data-roll='modifier']").textContent)
+            
+            let diceTotal = Number(html[0].querySelector("[data-roll-value]").getAttribute('data-roll-value'))
             let ruleOfMod = ruleTag === 'Rule of Ten Re-Roll' ? Number(roll.result) > 5 ? Number(roll.result) - 5 : 0 : Number(roll.result) > 5 ? 0 : Number(roll.result) - 5
+            
             let ruleOfDiv = ''
+            
+            if (ruleTag.includes('Rule of One Re-Roll') && (diceTotal == 1) && (roll.result < 5)){
+                diceTotal = 0;                          
+            }
 
-            if (roll.result == 10) {
+            if (roll.result == 10 && !ruleTag.includes('Rule of One Re-Roll')) {
                 ruleOfDiv = `<h2 class="rule-of-chat-text">Rule of 10!</h2>
                             <button type="button" data-roll="roll-again" class="rule-of-ten">Roll Again</button>`
                 ruleOfMod = 5
             }
-            if (roll.result == 1) {
+            if (roll.result == 1 && ruleTag != 'Rule of Ten Re-Roll') {
                 ruleOfDiv = `<h2 class="rule-of-chat-text">Rule of 1!</h2>
                             <button type="button" data-roll="roll-again" class="rule-of-one">Roll Again</button>`
                 ruleOfMod = -5
             }
 
             // Create Chat Content
-            let tags = [`<div>${ruleTag}</div>`]
+            let tags = []
             let chatContent = `<form>
-                                    ${attributeLabel}
+                                    ${attributeLabel} - ${ruleTag}
 
                                     <table class="afmbe-chat-roll-table">
                                         <thead>
                                             <tr>
-                                                <th>Roll</th>
-                                                <th>Modifier</th>
-                                                <th>+</th>
-                                                <th>Result</th>
+                                                <th class="table-center-align">Roll</th>
+                                                <th class="table-center-align">Reroll Modifier</th>
+                                                <th class="table-center-align">New Result</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td data-roll="dice-result">[[${roll.result}]]</td>
-                                                <td data-roll="modifier">${rollMod}</td>
-                                                <td>+</td>
-                                                <td data-roll="dice-total">${diceTotal + ruleOfMod}</td>
+                                                <td class="table-center-align" data-roll="dice-result">[[${roll.result}]]</td>
+                                                <td class="table-center-align" data-roll="modifier">${ruleOfMod}</td>
+                                                <td class="table-center-align" data-roll="dice-total" data-roll-value="${diceTotal + ruleOfMod}">${diceTotal + ruleOfMod + rollMod}</td>
                                             </tr>
                                         </tbody>
                                     </table>

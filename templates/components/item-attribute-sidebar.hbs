@@ -2,10 +2,23 @@
     <h2>Attributes</h2>
     <table>
         <tbody>
-            <tr>
-                <th>Power</th>
-                <td><input type="number" name="system.power" value="{{item.system.power}}"></td>
-            </tr>
+            {{#if notAspect}}
+                <tr>
+                    <th>Cost</th>
+                    <td><input type="number" name="system.cost" value="{{item.system.cost}}"></td>
+                </tr>
+                <tr>
+                    <th>Test Bonus</th>
+                    <td><input type="number" name="system.bonus" value="{{item.system.bonus}}"></td>
+                </tr>
+            
+            {{/if}}
+            {{#unless notAspect}}
+                <tr>
+                    <th>Power</th>
+                    <td><input type="number" name="system.power" value="{{item.system.power}}"></td>
+                </tr>
+            {{/unless}}
             <tr>
                 <th>HP+</th>
                 <td><input type="number" name="system.resource_bonus.hp" value="{{item.system.resource_bonus.hp}}"></td>
