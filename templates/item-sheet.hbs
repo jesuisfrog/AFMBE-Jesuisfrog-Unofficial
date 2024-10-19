@@ -1,12 +1,7 @@
 <form class="{{cssClass}}" autocomplete="off">
 
     {{!-- Sheet Header --}}
-    <div class="item-sheet-header">
-        <h1 class="item-header-container">
-            <img class="item-img" src="{{item.img}}" data-edit="img">
-            <input type="text" name="name" value="{{item.name}}" placeholder="Name">
-        </h1>
-    </div>
+    {{> "systems/afmbe-jesuisfrog/templates/components/item-sheet-header.hbs"}}
 
     <section>
         <div class="description-container">
@@ -38,13 +33,19 @@
                             <th>Cost</th>
                             <td><input type="number" name="system.cost" value="{{item.system.cost}}"></td>
                         </tr>
+                        <tr>
+                            <th>Availability</th>
+                            <td>
+                                <select name="system.availability" data-type="String">
+                                    {{#selectOptions item.system.availabilityOptions selected=item.system.availability}}
+                                    {{/selectOptions}}
+                                </select>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="item-description-sidebar">
-                <h2 class="item-desc">Description</h2>
-                {{editor item.system.description target="system.description" button=true owner=owner editable=editable}}
-            </div>
+            {{> "systems/afmbe-jesuisfrog/templates/components/item-description-sidebar.hbs"}}
         </div>
     </section>
 </form>

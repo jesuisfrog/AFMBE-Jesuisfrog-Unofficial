@@ -3,7 +3,7 @@ export class afmbeCreatureSheet extends ActorSheet {
     /** @override */
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
-            classes: ["afmbe-jesuisfrog", "sheet", "actor", `${game.settings.get("afmbe-jesuisfrog", "light-mode") ? "light-mode" : ""}`],
+            classes: ["afmbe-jesuisfrog", "sheet", "actor", `${game.settings.get("afmbe-jesuisfrog", "dark-mode") ? "dark-mode" : ""}`],
             width: 700,
             height: 820,
             tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "core" }],
@@ -87,8 +87,8 @@ export class afmbeCreatureSheet extends ActorSheet {
 
     get template() {
         const path = "systems/afmbe-jesuisfrog/templates";
-        if (!game.user.isGM && this.actor.limited) return "systems/afmbe-jesuisfrog/templates/limited-creature-sheet.html";
-        return `${path}/${this.actor.type}-sheet.html`;
+        if (!game.user.isGM && this.actor.limited) return "systems/afmbe-jesuisfrog/templates/limited-creature-sheet.hbs";
+        return `${path}/${this.actor.type}-sheet.hbs`;
     }
 
     /** @override */
@@ -96,12 +96,12 @@ export class afmbeCreatureSheet extends ActorSheet {
         super.activateListeners(html);
 
         // Run non-event functions
-        this._createCharacterPointDivs()
+        // this._createCharacterPointDivs()
         this._createStatusTags()
 
         // Buttons and Event Listeners
         html.find('.attribute-roll').click(this._onAttributeRoll.bind(this))
-        html.find('.damage-roll').click(this._onDamageRoll.bind(this))
+        if (this.actor.isOwner) html.find('.damage-roll').click(this._onDamageRoll.bind(this))
         html.find('.toggleEquipped').click(this._onToggleEquipped.bind(this))
         html.find('.armor-button-cell button').click(this._onArmorRoll.bind(this))
         html.find('.reset-resource').click(this._onResetResource.bind(this))
@@ -142,17 +142,6 @@ export class afmbeCreatureSheet extends ActorSheet {
         return Item.create(itemData, { parent: this.actor })
     }
 
-    _createCharacterPointDivs() {
-        let powerDiv = document.createElement('div')
-        let characterTypePath = this.actor.system.characterTypes[this.actor.system.characterType]
-
-        // Construct and assign div elements to the headers
-        if (characterTypePath != undefined) {
-            powerDiv.innerHTML = `- [${this.actor.system.power}]`
-            this.form.querySelector('#aspect-header').append(powerDiv)
-        }
-    }
-
     _onAttributeRoll(event) {
         event.preventDefault()
         let element = event.currentTarget
@@ -172,7 +161,7 @@ export class afmbeCreatureSheet extends ActorSheet {
         }
 
         // Create Classes for Dialog Box
-        let mode = game.settings.get("afmbe-jesuisfrog", "light-mode") ? "light-mode" : ""
+        let mode = game.settings.get("afmbe-jesuisfrog", "dark-mode") ? "dark-mode" : ""
         let dialogOptions = { classes: ["dialog", "afmbe-jesuisfrog", mode] }
 
         // Create Dialog Prompt
@@ -183,7 +172,7 @@ export class afmbeCreatureSheet extends ActorSheet {
 
                             <div class="afmbe-dialog-menu-text-box">
                                 <div>
-                                    <p>Apply modifiers from the creature's Skills & Aspects.</p>
+                                    <p>Apply modifiers from the creature's Skills.</p>
                                     
                                     <ul>
                                         <li>Simple Test: 2x Attribute</li>
@@ -217,15 +206,6 @@ export class afmbeCreatureSheet extends ActorSheet {
                                             </select>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td class="table-bold-text">Aspects</td>
-                                        <td class="table-center-align">
-                                            <select id="aspectSelect" name="aspects">
-                                                <option value="None">None</option>
-                                                ${aspectOptions.join('')}
-                                            </select>
-                                        </td>
-                                    </tr>
                                 </tbody>
                             </table>
                     </div>`,
@@ -241,15 +221,13 @@ export class afmbeCreatureSheet extends ActorSheet {
                         let attributeTestSelect = html[0].querySelector('#attributeTestSelect').value
                         let userInputModifier = Number(html[0].querySelector('#inputModifier').value)
                         let selectedSkill = this.actor.getEmbeddedDocument("Item", html[0].querySelector('#skillSelect').value)
-                        let selectedAspect = this.actor.getEmbeddedDocument("Item", html[0].querySelector('#aspectSelect').value)
 
                         // Set values for options
-                        let attributeValue = attributeTestSelect === 'Simple' ? this.actor.system[attributeLabel.toLowerCase()].value * 2 : this.actor.system[attributeLabel.toLowerCase()].value
+                        let attributeValue = attributeTestSelect === 'Simple' ? this.actor.system.primaryAttributes[attributeLabel.toLowerCase()].value * 2 : this.actor.system.primaryAttributes[attributeLabel.toLowerCase()].value
                         let skillValue = selectedSkill != undefined ? selectedSkill.system.level : 0
-                        let aspectValue = selectedAspect != undefined ? selectedAspect.system.power : 0
 
                         // Calculate total modifier to roll
-                        let rollMod = (attributeValue + skillValue + aspectValue + userInputModifier)
+                        let rollMod = (attributeValue + skillValue + userInputModifier)
 
                         // Roll Dice
                         let roll = await new Roll('1d10').evaluate()
@@ -258,11 +236,13 @@ export class afmbeCreatureSheet extends ActorSheet {
                         let totalResult = Number(roll.result) + rollMod
 
                         // Create Chat Message Content
-                        let tags = [`<div>${attributeTestSelect} Test</div>`]
+                        let tags = []
                         let ruleOfDiv = ``
-                        if (userInputModifier != 0) { tags.push(`<div>User Modifier ${userInputModifier >= 0 ? '+' : ''}${userInputModifier}</div>`) }
-                        if (selectedSkill != undefined) { tags.push(`<div>${selectedSkill.name} ${selectedSkill.system.level >= 0 ? '+' : ''}${selectedSkill.system.level}</div>`) }
-                        if (selectedAspect != undefined) { tags.push(`<div>${selectedAspect.name} ${selectedAspect.system.power >= 0 ? '+' : ''}${selectedAspect.system.power}</div>`) }
+                        if (userInputModifier != 0) { tags.push(`<span class="${userInputModifier >= 0 ? "bonusColorClass" : 'penaltyColorClass'}">User Modifier ${userInputModifier >= 0 ? "+" : ''}${userInputModifier}</span>`) }
+                        if (selectedSkill != undefined) {
+                            const skillLevel = selectedSkill.system.level;
+                            tags.push(`<span class="${skillLevel >= 0 ? 'bonusColorClass' : 'penaltyColorClass'}">${selectedSkill.name} ${skillLevel >= 0 ? '+' : ''}${skillLevel}</span>`)
+                        }
 
                         if (roll.result == 10) {
                             ruleOfDiv = `<h2 class="rule-of-chat-text">Rule of 10!</h2>
@@ -272,25 +252,25 @@ export class afmbeCreatureSheet extends ActorSheet {
                         if (roll.result == 1) {
                             ruleOfDiv = `<h2 class="rule-of-chat-text">Rule of 1!</h2>
                                         <button type="button" data-roll="roll-again" class="rule-of-one">Roll Again</button>`
-                            totalResult = 0
+                            totalResult = 1
                         }
 
                         let chatContent = `<form>
-                                                <h2>${attributeLabel} Roll [${this.actor.system[attributeLabel.toLowerCase()].value}]</h2>
-
+                                                <h2>${attributeLabel} Roll [ ${this.actor.system.primaryAttributes[attributeLabel.toLowerCase()].value} ] - ${attributeTestSelect} Test</h2>
+                                                <div class="afmbe-tags-flex-container"><b>Modifiers</b>: ${tags.join(' | ')}</div>
                                                 <table class="afmbe-chat-roll-table">
                                                     <thead>
                                                         <tr>
-                                                            <th>Roll</th>
-                                                            <th>Modifier</th>
-                                                            <th>Result</th>
+                                                            <th class="table-center-align">Roll</th>
+                                                            <th class="table-center-align">Modifier</th>
+                                                            <th class="table-center-align">Result</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td data-roll="dice-result">[[${roll.result}]]</td>
-                                                            <td data-roll="modifier">${rollMod}</td>
-                                                            <td data-roll="dice-total">${totalResult}</td>
+                                                            <td class="table-center-align" data-roll="dice-result">[[${roll.result}]]</td>
+                                                            <td class="table-center-align" data-roll="modifier">${rollMod}</td>
+                                                            <td class="table-center-align" data-roll="dice-total" data-roll-value="${totalResult}">${totalResult + rollMod}</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -304,7 +284,6 @@ export class afmbeCreatureSheet extends ActorSheet {
                             type: CONST.CHAT_MESSAGE_TYPES.ROLL,
                             user: game.user.id,
                             speaker: ChatMessage.getSpeaker(),
-                            flavor: `<div class="afmbe-tags-flex-container">${tags.join('')}</div>`,
                             content: chatContent,
                             roll: roll
                         })
@@ -325,7 +304,7 @@ export class afmbeCreatureSheet extends ActorSheet {
         let weapon = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
 
         // Create Classes for Dialog Box
-        let mode = game.settings.get("afmbe-jesuisfrog", "light-mode") ? "light-mode" : ""
+        let mode = game.settings.get("afmbe-jesuisfrog", "dark-mode") ? "dark-mode" : ""
         let dialogOptions = { classes: ["dialog", "afmbe-jesuisfrog", mode] }
 
         // Create Dialog Prompt
@@ -380,15 +359,14 @@ export class afmbeCreatureSheet extends ActorSheet {
 
                         let roll = await new Roll(weapon.system.damage_string).evaluate()
 
-                        let tags = [`<div>Damage Roll</div>`]
-                        if (firingMode != 'None/Melee') { tags.push(`<div>${firingMode}: ${shotNumber}</div>`) }
-                        if (weapon.system.damage_types[weapon.system.damage_type] != 'None') { tags.push(`<div>${weapon.system.damage_types[weapon.system.damage_type]}</div>`) }
+                        let tags = []
+                        if (firingMode != 'None/Melee') { tags.push(`<div><b>${firingMode}</b>: ${shotNumber == 1 ? shotNumber + " shot" : shotNumber + " shots"}</div>`) }
 
                         // Reduce Fired shots from current load chamber
                         if (shotNumber > 0) {
                             switch (weapon.system.capacity.value - shotNumber >= 0) {
                                 case true:
-                                    weapon.update({ 'data.capacity.value': weapon.system.capacity.value - shotNumber })
+                                    weapon.update({ 'system.capacity.value': weapon.system.capacity.value - shotNumber })
                                     break
 
                                 case false:
@@ -398,19 +376,21 @@ export class afmbeCreatureSheet extends ActorSheet {
 
                         // Create Chat Content
                         let chatContent = `<div>
-                                                <h2>${weapon.name}</h2>
+                                                <h2>Damage Roll: ${weapon.name}</h2>
 
                                                 <table class="afmbe-chat-roll-table">
                                                     <thead>
                                                         <tr>
-                                                            <th>Damage</th>
-                                                            <th>Detail</th>
+                                                            <th class="table-center-align">Damage</th>
+                                                            <th class="table-center-align">Type</th>
+                                                            <th class="table-center-align">Detail</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td>[[${roll.result}]]</td>
-                                                            <td>${weapon.system.damage_string}</td>
+                                                            <td class="table-center-align">[[${roll.result}]]</td>
+                                                            <td class="table-center-align">${weapon.system.damage_types[weapon.system.damage_type]}</td>
+                                                            <td class="table-center-align">${weapon.system.damage_string}</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -443,19 +423,19 @@ export class afmbeCreatureSheet extends ActorSheet {
 
         // Create Chat Content
         let chatContent = `<div>
-                                <h2>${equippedItem.name}</h2>
+                                <h2>Armor Roll: ${equippedItem.name}</h2>
 
                                 <table class="afmbe-chat-roll-table">
                                     <thead>
                                         <tr>
-                                            <th>Result</th>
-                                            <th>Detail</th>
+                                            <th class="table-center-align">Result</th>
+                                            <th class="table-center-align">Detail</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>[[${roll.result}]]</td>
-                                            <td>${equippedItem.system.armor_value}</td>
+                                            <td class="table-center-align">[[${roll.result}]]</td>
+                                            <td class="table-center-align">${equippedItem.system.armor_value}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -489,9 +469,9 @@ export class afmbeCreatureSheet extends ActorSheet {
     _onResetResource(event) {
         event.preventDefault()
         const element = event.currentTarget
-        const dataPath = `system.${element.dataset.resource}.value`
-        
-        this.actor.update({ [dataPath]: this.actor.system[element.dataset.resource].max })
+        const dataPath = `system.secondaryAttributes.${element.dataset.resource}.value`
+
+        this.actor.update({ [dataPath]: this.actor.system.secondaryAttributes[element.dataset.resource].max })
     }
 
     _createStatusTags() {
