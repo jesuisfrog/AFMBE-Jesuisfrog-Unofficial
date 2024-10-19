@@ -350,6 +350,7 @@ export class afmbeActorSheet extends ActorSheet {
                         let chatContent = `<form>
                                                 <h2>${attributeLabel} Roll [ ${actorData.primaryAttributes[attributeLabel.toLowerCase()].value} ] - ${attributeTestSelect} Test</h2>
 
+                                                <div class="afmbe-tags-flex-container" > <b>Modifiers</b>: ${ tags.join(' | ') } ${ penaltyTags.length > 0 ? " | " + penaltyTags.join(' | ') : "" }</div>
                                                 <table class="afmbe-chat-roll-table">
                                                     <thead>
                                                         <tr>
@@ -376,7 +377,6 @@ export class afmbeActorSheet extends ActorSheet {
                             type: CONST.CHAT_MESSAGE_TYPES.ROLL,
                             user: game.user.id,
                             speaker: ChatMessage.getSpeaker(),
-                            flavor: `<div class="afmbe-tags-flex-container"><b>Modifiers</b>: ${tags.join(' | ')} ${penaltyTags.length > 0 ? " | " + penaltyTags.join(' | ') : ""}</div>`,
                             content: chatContent,
                             roll: roll
                         })

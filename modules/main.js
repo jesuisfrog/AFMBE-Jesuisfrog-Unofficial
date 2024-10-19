@@ -90,13 +90,13 @@ Hooks.on("renderChatMessage", (app, html, data) => {
             let ruleTag = '';
             const diceResult = Number(html[0].querySelector("[data-roll='dice-result']").textContent);
 
-            if (diceResult == 10) { ruleTag = 'Rule of Ten Re-Roll' }
+            if (diceResult == 10) { ruleTag = '<b>Rule of Ten Re-Roll</b>' }
             if (diceResult == 1) { ruleTag = '<b>Rule of One Re-Roll</b>: If the first reroll is a negative value (1d10-5), it replaces the original die roll. </br><b>Exception</b>: Rolling a 1 again replaces the original roll with -5; each subsequent 1 rolled subtracts 5 from the result.' }
 
             let roll = await new Roll('1d10').evaluate()
 
             // Grab and Set Values from Previous Roll
-            let attributeLabel = html[0].querySelector('h2').outerHTML
+            let attributeLabel = html[0].querySelector('h2').outerHTML + `${ruleTag}`
             let rollMod = Number(html[0].querySelector("[data-roll='modifier']").textContent)
             
             let diceTotal = Number(html[0].querySelector("[data-roll-value]").getAttribute('data-roll-value'))
@@ -122,7 +122,7 @@ Hooks.on("renderChatMessage", (app, html, data) => {
             // Create Chat Content
             let tags = []
             let chatContent = `<form>
-                                    ${attributeLabel} - ${ruleTag}
+                                    ${attributeLabel}
 
                                     <table class="afmbe-chat-roll-table">
                                         <thead>

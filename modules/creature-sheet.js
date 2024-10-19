@@ -238,8 +238,11 @@ export class afmbeCreatureSheet extends ActorSheet {
                         // Create Chat Message Content
                         let tags = []
                         let ruleOfDiv = ``
-                        if (userInputModifier != 0) { tags.push(`<div>User Modifier ${userInputModifier >= 0 ? '+' : ''}${userInputModifier}</div>`) }
-                        if (selectedSkill != undefined) { tags.push(`<div>${selectedSkill.name} ${selectedSkill.system.level >= 0 ? '+' : ''}${selectedSkill.system.level}</div>`) }
+                        if (userInputModifier != 0) { tags.push(`<span class="${userInputModifier >= 0 ? "bonusColorClass" : 'penaltyColorClass'}">User Modifier ${userInputModifier >= 0 ? "+" : ''}${userInputModifier}</span>`) }
+                        if (selectedSkill != undefined) {
+                            const skillLevel = selectedSkill.system.level;
+                            tags.push(`<span class="${skillLevel >= 0 ? 'bonusColorClass' : 'penaltyColorClass'}">${selectedSkill.name} ${skillLevel >= 0 ? '+' : ''}${skillLevel}</span>`)
+                        }
 
                         if (roll.result == 10) {
                             ruleOfDiv = `<h2 class="rule-of-chat-text">Rule of 10!</h2>
@@ -254,7 +257,7 @@ export class afmbeCreatureSheet extends ActorSheet {
 
                         let chatContent = `<form>
                                                 <h2>${attributeLabel} Roll [ ${this.actor.system.primaryAttributes[attributeLabel.toLowerCase()].value} ] - ${attributeTestSelect} Test</h2>
-
+                                                <div class="afmbe-tags-flex-container"><b>Modifiers</b>: ${tags.join(' | ')}</div>
                                                 <table class="afmbe-chat-roll-table">
                                                     <thead>
                                                         <tr>
@@ -281,7 +284,6 @@ export class afmbeCreatureSheet extends ActorSheet {
                             type: CONST.CHAT_MESSAGE_TYPES.ROLL,
                             user: game.user.id,
                             speaker: ChatMessage.getSpeaker(),
-                            flavor: `<div class="afmbe-tags-flex-container">${tags.join('')}</div>`,
                             content: chatContent,
                             roll: roll
                         })
