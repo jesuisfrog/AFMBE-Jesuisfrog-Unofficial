@@ -9,12 +9,12 @@ You can purchase the rulebooks from their website https://www.edenstudios.net/ o
 
 <figure>
     <figcaption>Light Mode (Default Setting)</figcaption>
-    <img src="images/afmbe-light-mode.png">
+    <img src="images/afmbe-lightmode.png">
 </figure>
 
 <figure>
     <figcaption>Dark Mode (Enabled through System Settings)</figcaption>
-    <img src="images/afmbe-dark-mode.png">
+    <img src="images/afmbe-darkmode.png">
 </figure>
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/B0B15MGC4)
