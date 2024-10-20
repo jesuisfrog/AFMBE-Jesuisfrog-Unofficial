@@ -113,6 +113,10 @@
     color: red;
 }
 
+.afmbe-jesuisfrog .description-container .tox-tinymce{
+    min-height: 200px;
+}
+
 
 
 .afmbe-jesuisfrog-dialog-menu .menu-flex-container-row {
