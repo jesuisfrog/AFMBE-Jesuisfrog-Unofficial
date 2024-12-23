@@ -5,7 +5,7 @@ export function registerHandlebarsHelpers(){
     });
 
     Handlebars.registerHelper("isVehicle", function () {
-        const bool = this.item.parent.type == "vehicle"
+        const bool = this.item.parent && this.item.parent.type == "vehicle"
         return bool;
     });
 }
