@@ -155,7 +155,6 @@ export class afmbevehicleSheet extends ActorSheet {
                             </div>`
 
         ChatMessage.create({
-            type: CONST.CHAT_MESSAGE_TYPES.ROLL,
             user: game.user.id,
             speaker: ChatMessage.getSpeaker(),
             content: chatContent,
@@ -191,7 +190,6 @@ export class afmbevehicleSheet extends ActorSheet {
                             </div>`
 
         ChatMessage.create({
-            type: CONST.CHAT_MESSAGE_TYPES.ROLL,
             user: game.user.id,
             speaker: ChatMessage.getSpeaker(),
             content: chatContent,

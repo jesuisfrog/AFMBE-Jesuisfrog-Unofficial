@@ -247,12 +247,10 @@ export class afmbeCreatureSheet extends ActorSheet {
                         if (roll.result == 10) {
                             ruleOfDiv = `<h2 class="rule-of-chat-text">Rule of 10!</h2>
                                         <button type="button" data-roll="roll-again" class="rule-of-ten">Roll Again</button>`
-                            totalResult = 10
                         }
                         if (roll.result == 1) {
                             ruleOfDiv = `<h2 class="rule-of-chat-text">Rule of 1!</h2>
                                         <button type="button" data-roll="roll-again" class="rule-of-one">Roll Again</button>`
-                            totalResult = 1
                         }
 
                         let chatContent = `<form>
@@ -270,7 +268,7 @@ export class afmbeCreatureSheet extends ActorSheet {
                                                         <tr>
                                                             <td class="table-center-align" data-roll="dice-result">[[${roll.result}]]</td>
                                                             <td class="table-center-align" data-roll="modifier">${rollMod}</td>
-                                                            <td class="table-center-align" data-roll="dice-total" data-roll-value="${totalResult}">${totalResult + rollMod}</td>
+                                                            <td class="table-center-align" data-roll="dice-total" data-roll-value="${totalResult}">${totalResult}</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -281,7 +279,6 @@ export class afmbeCreatureSheet extends ActorSheet {
                                             </form>`
 
                         ChatMessage.create({
-                            type: CONST.CHAT_MESSAGE_TYPES.ROLL,
                             user: game.user.id,
                             speaker: ChatMessage.getSpeaker(),
                             content: chatContent,
@@ -397,7 +394,6 @@ export class afmbeCreatureSheet extends ActorSheet {
                                             </div>`
 
                         ChatMessage.create({
-                            type: CONST.CHAT_MESSAGE_TYPES.ROLL,
                             user: game.user.id,
                             speaker: ChatMessage.getSpeaker(),
                             flavor: `<div class="afmbe-tags-flex-container-item">${tags.join('')}</div>`,
@@ -442,7 +438,6 @@ export class afmbeCreatureSheet extends ActorSheet {
                             </div>`
 
         ChatMessage.create({
-            type: CONST.CHAT_MESSAGE_TYPES.ROLL,
             user: game.user.id,
             speaker: ChatMessage.getSpeaker(),
             content: chatContent,

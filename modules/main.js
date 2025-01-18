@@ -88,7 +88,8 @@ Hooks.on("renderChatMessage", (app, html, data) => {
     if (chatButton != undefined && chatButton != null) {
         chatButton.addEventListener('click', async () => {
             let ruleTag = '';
-            const diceResult = Number(html[0].querySelector("[data-roll='dice-result']").textContent);
+            
+            let diceResult = Number(html[0].querySelector("[data-roll='dice-result']").textContent);
 
             if (diceResult == 10) { ruleTag = '<b>Rule of Ten Re-Roll</b>' }
             if (diceResult == 1) { ruleTag = '<b>Rule of One Re-Roll</b>: If the first reroll is a negative value (1d10-5), it replaces the original die roll. </br><b>Exception</b>: Rolling a 1 again replaces the original roll with -5; each subsequent 1 rolled subtracts 5 from the result.' }
@@ -96,27 +97,34 @@ Hooks.on("renderChatMessage", (app, html, data) => {
             let roll = await new Roll('1d10').evaluate()
 
             // Grab and Set Values from Previous Roll
+            let ruleOfMod = 0;
             let attributeLabel = html[0].querySelector('h2').outerHTML + `${ruleTag}`
-            let rollMod = Number(html[0].querySelector("[data-roll='modifier']").textContent)
             
             let diceTotal = Number(html[0].querySelector("[data-roll-value]").getAttribute('data-roll-value'))
-            let ruleOfMod = ruleTag === 'Rule of Ten Re-Roll' ? Number(roll.result) > 5 ? Number(roll.result) - 5 : 0 : Number(roll.result) > 5 ? 0 : Number(roll.result) - 5
-            
-            let ruleOfDiv = ''
-            
-            if (ruleTag.includes('Rule of One Re-Roll') && (diceTotal == 1) && (roll.result < 5)){
-                diceTotal = 0;                          
+            if (ruleTag.includes('Rule of One Re-Roll')){
+                if (roll.result == 1) {
+                    ruleOfMod = -5
+                }else{
+                    ruleOfMod = Number(roll.result) > 5 ? 0 : Number(roll.result) - 5
+                }
+                diceTotal -= 1
+            }else if (ruleTag.includes('Rule of Ten Re-Roll')){
+                    ruleOfMod = Number(roll.result) > 5 ? Number(roll.result) - 5 : 0
             }
+            if ((ruleTag.includes('Rule of One Re-Roll') && (roll.result < 5)) || (ruleTag.includes('Rule of Ten Re-Roll'))) {
+                diceResult = 0
+            }
+            diceTotal += diceResult + ruleOfMod;
+
+            let ruleOfDiv = ''            
 
             if (roll.result == 10 && !ruleTag.includes('Rule of One Re-Roll')) {
                 ruleOfDiv = `<h2 class="rule-of-chat-text">Rule of 10!</h2>
                             <button type="button" data-roll="roll-again" class="rule-of-ten">Roll Again</button>`
-                ruleOfMod = 5
             }
-            if (roll.result == 1 && ruleTag != 'Rule of Ten Re-Roll') {
+            if (roll.result == 1 && !ruleTag.includes('Rule of Ten Re-Roll')) {
                 ruleOfDiv = `<h2 class="rule-of-chat-text">Rule of 1!</h2>
                             <button type="button" data-roll="roll-again" class="rule-of-one">Roll Again</button>`
-                ruleOfMod = -5
             }
 
             // Create Chat Content
@@ -135,8 +143,8 @@ Hooks.on("renderChatMessage", (app, html, data) => {
                                         <tbody>
                                             <tr>
                                                 <td class="table-center-align" data-roll="dice-result">[[${roll.result}]]</td>
-                                                <td class="table-center-align" data-roll="modifier">${ruleOfMod}</td>
-                                                <td class="table-center-align" data-roll="dice-total" data-roll-value="${diceTotal + ruleOfMod}">${diceTotal + ruleOfMod + rollMod}</td>
+                                                <td class="table-center-align" data-roll="modifier" data-mod="${ruleOfMod}">${ruleOfMod}</td>
+                                                <td class="table-center-align" data-roll="dice-total" data-roll-value="${diceTotal}">${diceTotal}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -147,7 +155,6 @@ Hooks.on("renderChatMessage", (app, html, data) => {
                                 </form>`
 
             ChatMessage.create({
-                type: CONST.CHAT_MESSAGE_TYPES.ROLL,
                 user: game.user.id,
                 speaker: ChatMessage.getSpeaker(),
                 flavor: `<div class="afmbe-tags-flex-container">${tags.join('')}</div>`,
