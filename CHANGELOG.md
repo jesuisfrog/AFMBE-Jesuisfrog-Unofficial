@@ -1,3 +1,7 @@
+### 1.1.3
+- Bugfix - Refactored rule of one/ten logic to account for consecutive rerolls
+- Add - Dice so Nice compatibility
+
 ### 1.1.2
 
 - Bugfix - Weapon cannot be created in the item tab: Error came from a helper that would check if the weapon was created on a vehicle in order to change what options were available on the weapon sheet, added logic to the helper so that it checks if the parent sheet exists before checking if it is a vehicle.

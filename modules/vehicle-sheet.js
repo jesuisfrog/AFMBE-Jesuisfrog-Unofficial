@@ -158,7 +158,7 @@ export class afmbevehicleSheet extends ActorSheet {
             user: game.user.id,
             speaker: ChatMessage.getSpeaker(),
             content: chatContent,
-            roll: roll
+            rolls: [roll]
         })
     }
 
@@ -193,7 +193,7 @@ export class afmbevehicleSheet extends ActorSheet {
             user: game.user.id,
             speaker: ChatMessage.getSpeaker(),
             content: chatContent,
-            roll: roll
+            rolls: [roll]
         })
     }
 

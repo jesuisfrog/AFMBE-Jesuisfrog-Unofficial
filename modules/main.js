@@ -88,7 +88,7 @@ Hooks.on("renderChatMessage", (app, html, data) => {
     if (chatButton != undefined && chatButton != null) {
         chatButton.addEventListener('click', async () => {
             let ruleTag = '';
-            
+
             let diceResult = Number(html[0].querySelector("[data-roll='dice-result']").textContent);
 
             if (diceResult == 10) { ruleTag = '<b>Rule of Ten Re-Roll</b>' }
@@ -99,24 +99,24 @@ Hooks.on("renderChatMessage", (app, html, data) => {
             // Grab and Set Values from Previous Roll
             let ruleOfMod = 0;
             let attributeLabel = html[0].querySelector('h2').outerHTML + `${ruleTag}`
-            
+
             let diceTotal = Number(html[0].querySelector("[data-roll-value]").getAttribute('data-roll-value'))
-            if (ruleTag.includes('Rule of One Re-Roll')){
+            if (ruleTag.includes('Rule of One Re-Roll')) {
                 if (roll.result == 1) {
                     ruleOfMod = -5
-                }else{
+                } else {
                     ruleOfMod = Number(roll.result) > 5 ? 0 : Number(roll.result) - 5
                 }
                 diceTotal -= 1
-            }else if (ruleTag.includes('Rule of Ten Re-Roll')){
-                    ruleOfMod = Number(roll.result) > 5 ? Number(roll.result) - 5 : 0
+            } else if (ruleTag.includes('Rule of Ten Re-Roll')) {
+                ruleOfMod = Number(roll.result) > 5 ? Number(roll.result) - 5 : 0
             }
             if ((ruleTag.includes('Rule of One Re-Roll') && (roll.result < 5)) || (ruleTag.includes('Rule of Ten Re-Roll'))) {
                 diceResult = 0
             }
             diceTotal += diceResult + ruleOfMod;
 
-            let ruleOfDiv = ''            
+            let ruleOfDiv = ''
 
             if (roll.result == 10 && !ruleTag.includes('Rule of One Re-Roll')) {
                 ruleOfDiv = `<h2 class="rule-of-chat-text">Rule of 10!</h2>
@@ -159,7 +159,7 @@ Hooks.on("renderChatMessage", (app, html, data) => {
                 speaker: ChatMessage.getSpeaker(),
                 flavor: `<div class="afmbe-tags-flex-container">${tags.join('')}</div>`,
                 content: chatContent,
-                roll: roll
+                rolls: [roll]
             })
         })
     }

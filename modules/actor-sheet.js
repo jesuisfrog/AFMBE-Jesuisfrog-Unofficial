@@ -113,7 +113,7 @@ export class afmbeActorSheet extends ActorSheet {
 
         // Buttons and Event Listeners
         html.find('.attribute-roll').click(this._onAttributeRoll.bind(this))
-        if(this.actor.isOwner) html.find('.damage-roll').click(this._onDamageRoll.bind(this))
+        if (this.actor.isOwner) html.find('.damage-roll').click(this._onDamageRoll.bind(this))
         html.find('.toggleEquipped').click(this._onToggleEquipped.bind(this))
         html.find('.armor-button-cell button').click(this._onArmorRoll.bind(this))
         html.find('.reset-resource').click(this._onResetResource.bind(this))
@@ -320,20 +320,20 @@ export class afmbeActorSheet extends ActorSheet {
                         // let tags = [`<div>${attributeTestSelect} Test</div>`]
                         let tags = [];
                         let ruleOfDiv = ``
-                        if (userInputModifier != 0) { 
-                            tags.push(`<span class="${userInputModifier >= 0 ? "bonusColorClass" : 'penaltyColorClass'}">User Modifier ${userInputModifier >= 0 ? "+" : ''}${userInputModifier}</span>`) 
+                        if (userInputModifier != 0) {
+                            tags.push(`<span class="${userInputModifier >= 0 ? "bonusColorClass" : 'penaltyColorClass'}">User Modifier ${userInputModifier >= 0 ? "+" : ''}${userInputModifier}</span>`)
                         }
-                        if (selectedSkill != undefined) { 
+                        if (selectedSkill != undefined) {
                             const skillLevel = selectedSkill.system.level;
-                            tags.push(`<span class="${skillLevel >= 0 ? 'bonusColorClass' : 'penaltyColorClass'}">${selectedSkill.name} ${skillLevel >= 0 ? '+' : ''}${skillLevel}</span>`) 
+                            tags.push(`<span class="${skillLevel >= 0 ? 'bonusColorClass' : 'penaltyColorClass'}">${selectedSkill.name} ${skillLevel >= 0 ? '+' : ''}${skillLevel}</span>`)
                         }
-                        if (selectedQuality != undefined) { 
+                        if (selectedQuality != undefined) {
                             const qualityBonus = selectedQuality.system.bonus;
-                            tags.push(`<span class="${qualityBonus >= 0 ? 'bonusColorClass' : 'penaltyColorClass'}">${selectedQuality.name} ${qualityBonus >= 0 ? '+' : ''}${qualityBonus}</span>`) 
+                            tags.push(`<span class="${qualityBonus >= 0 ? 'bonusColorClass' : 'penaltyColorClass'}">${selectedQuality.name} ${qualityBonus >= 0 ? '+' : ''}${qualityBonus}</span>`)
                         }
-                        if (selectedDrawback != undefined) { 
+                        if (selectedDrawback != undefined) {
                             const drawbackPenalty = selectedDrawback.system.bonus;
-                            tags.push(`<span class="penaltyColorClass">${selectedDrawback.name} ${drawbackPenalty >= 0 ? '-' : ''}${drawbackPenalty}</span>`) 
+                            tags.push(`<span class="penaltyColorClass">${selectedDrawback.name} ${drawbackPenalty >= 0 ? '-' : ''}${drawbackPenalty}</span>`)
                         }
 
                         if (roll.result == 10) {
@@ -348,7 +348,7 @@ export class afmbeActorSheet extends ActorSheet {
                         let chatContent = `<form>
                                                 <h2>${attributeLabel} Roll [ ${actorData.primaryAttributes[attributeLabel.toLowerCase()].value} ] - ${attributeTestSelect} Test</h2>
 
-                                                <div class="afmbe-tags-flex-container" > <b>Modifiers</b>: ${ tags.join(' | ') } ${ penaltyTags.length > 0 ? " | " + penaltyTags.join(' | ') : "" }</div>
+                                                <div class="afmbe-tags-flex-container" > <b>Modifiers</b>: ${tags.join(' | ')} ${penaltyTags.length > 0 ? " | " + penaltyTags.join(' | ') : ""}</div>
                                                 <table class="afmbe-chat-roll-table">
                                                     <thead>
                                                         <tr>
@@ -375,7 +375,7 @@ export class afmbeActorSheet extends ActorSheet {
                             user: game.user.id,
                             speaker: ChatMessage.getSpeaker(),
                             content: chatContent,
-                            roll: roll
+                            rolls: [roll]
                         })
 
                     }
@@ -392,7 +392,7 @@ export class afmbeActorSheet extends ActorSheet {
         event.preventDefault()
         let element = event.currentTarget
         let weapon = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
-        
+
         // Create Classes for Dialog Box
         let mode = game.settings.get("afmbe-jesuisfrog", "dark-mode") ? "dark-mode" : ""
         let dialogOptions = { classes: ["dialog", "afmbe-jesuisfrog", mode] }
@@ -491,7 +491,7 @@ export class afmbeActorSheet extends ActorSheet {
                             speaker: ChatMessage.getSpeaker(),
                             flavor: `<div class="afmbe-tags-flex-container-item">${tags.join('')}</div>`,
                             content: chatContent,
-                            roll: roll
+                            rolls: [roll]
                         })
                     }
                 }
@@ -534,7 +534,7 @@ export class afmbeActorSheet extends ActorSheet {
             user: game.user.id,
             speaker: ChatMessage.getSpeaker(),
             content: chatContent,
-            roll: roll
+            rolls: [roll]
         })
     }
 

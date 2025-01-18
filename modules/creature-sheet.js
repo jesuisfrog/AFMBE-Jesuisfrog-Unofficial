@@ -282,7 +282,7 @@ export class afmbeCreatureSheet extends ActorSheet {
                             user: game.user.id,
                             speaker: ChatMessage.getSpeaker(),
                             content: chatContent,
-                            roll: roll
+                            rolls: [roll]
                         })
 
                     }
@@ -398,7 +398,7 @@ export class afmbeCreatureSheet extends ActorSheet {
                             speaker: ChatMessage.getSpeaker(),
                             flavor: `<div class="afmbe-tags-flex-container-item">${tags.join('')}</div>`,
                             content: chatContent,
-                            roll: roll
+                            rolls: [roll]
                         })
                     }
                 }
@@ -441,7 +441,7 @@ export class afmbeCreatureSheet extends ActorSheet {
             user: game.user.id,
             speaker: ChatMessage.getSpeaker(),
             content: chatContent,
-            roll: roll
+            rolls: [roll]
         })
     }
 
