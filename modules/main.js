@@ -39,27 +39,27 @@ Hooks.once("init", async function () {
         {
             types: ["character"],
             makeDefault: true,
-            label: "Default AFMBE Character Sheet"
+            label: game.i18n.localize("AFMBE.Sheets.Character")
         })
 
     Actors.registerSheet("afmbe-jesuisfrog", afmbeCreatureSheet,
         {
             types: ["creature"],
             makeDefault: true,
-            label: "Default AFMBE Creature Sheet"
+            label: game.i18n.localize("AFMBE.Sheets.Creature")
         })
 
     Actors.registerSheet("afmbe-jesuisfrog", afmbevehicleSheet,
         {
             types: ["vehicle"],
             makeDefault: true,
-            label: "Default AFMBE vehicle Sheet"
+            label: game.i18n.localize("AFMBE.Sheets.Vehicle")
         })
 
     Items.registerSheet("afmbe-jesuisfrog", afmbeItemSheet,
         {
             makeDefault: true,
-            label: "Default AFMBE Item Sheet"
+            label: game.i18n.localize("AFMBE.Sheets.Item")
         })
 
 
@@ -67,8 +67,8 @@ Hooks.once("init", async function () {
     function delayedReload() { window.setTimeout(() => location.reload(), 500) }
 
     game.settings.register("afmbe-jesuisfrog", "dark-mode", {
-        name: "Dark Mode",
-        hint: "Checking this option enables Dark Mode for the different sheets and items.",
+        name: game.i18n.localize("AFMBE.Settings.DarkMode.Name"),
+        hint: game.i18n.localize("AFMBE.Settings.DarkMode.Hint"),
         scope: "world",
         config: true,
         default: false,
@@ -90,9 +90,19 @@ Hooks.on("renderChatMessage", (app, html, data) => {
             let ruleTag = '';
 
             let diceResult = Number(html[0].querySelector("[data-roll='dice-result']").textContent);
+            const ruleOfTenReroll = game.i18n.localize("AFMBE.Chat.RuleOfTenReroll")
+            const ruleOfOneReroll = game.i18n.localize("AFMBE.Chat.RuleOfOneReroll")
+            const ruleOfTenTitle = game.i18n.localize("AFMBE.Chat.RuleOfTenTitle")
+            const ruleOfOneTitle = game.i18n.localize("AFMBE.Chat.RuleOfOneTitle")
+            const rollAgainLabel = game.i18n.localize("AFMBE.Chat.RollAgain")
+            const rerollModifierLabel = game.i18n.localize("AFMBE.Chat.RerollModifier")
+            const newResultLabel = game.i18n.localize("AFMBE.Chat.NewResult")
+            const rollLabel = game.i18n.localize("AFMBE.Chat.Roll")
 
-            if (diceResult == 10) { ruleTag = '<b>Rule of Ten Re-Roll</b>' }
-            if (diceResult == 1) { ruleTag = '<b>Rule of One Re-Roll</b>: If the first reroll is a negative value (1d10-5), it replaces the original die roll. </br><b>Exception</b>: Rolling a 1 again replaces the original roll with -5; each subsequent 1 rolled subtracts 5 from the result.' }
+            const triggeredRule = diceResult == 1 ? "one" : diceResult == 10 ? "ten" : null
+
+            if (triggeredRule === "ten") { ruleTag = ruleOfTenReroll }
+            if (triggeredRule === "one") { ruleTag = ruleOfOneReroll }
 
             let roll = await new Roll('1d10').evaluate()
 
@@ -101,30 +111,30 @@ Hooks.on("renderChatMessage", (app, html, data) => {
             let attributeLabel = html[0].querySelector('h2').outerHTML + `${ruleTag}`
 
             let diceTotal = Number(html[0].querySelector("[data-roll-value]").getAttribute('data-roll-value'))
-            if (ruleTag.includes('Rule of One Re-Roll')) {
+            if (triggeredRule === "one") {
                 if (roll.result == 1) {
                     ruleOfMod = -5
                 } else {
                     ruleOfMod = Number(roll.result) > 5 ? 0 : Number(roll.result) - 5
                 }
                 diceTotal -= 1
-            } else if (ruleTag.includes('Rule of Ten Re-Roll')) {
+            } else if (triggeredRule === "ten") {
                 ruleOfMod = Number(roll.result) > 5 ? Number(roll.result) - 5 : 0
             }
-            if ((ruleTag.includes('Rule of One Re-Roll') && (roll.result < 5)) || (ruleTag.includes('Rule of Ten Re-Roll'))) {
+            if ((triggeredRule === "one" && (roll.result < 5)) || (triggeredRule === "ten")) {
                 diceResult = 0
             }
             diceTotal += diceResult + ruleOfMod;
 
             let ruleOfDiv = ''
 
-            if (roll.result == 10 && !ruleTag.includes('Rule of One Re-Roll')) {
-                ruleOfDiv = `<h2 class="rule-of-chat-text">Rule of 10!</h2>
-                            <button type="button" data-roll="roll-again" class="rule-of-ten">Roll Again</button>`
+            if (roll.result == 10 && triggeredRule !== "one") {
+                ruleOfDiv = `<h2 class="rule-of-chat-text">${ruleOfTenTitle}</h2>
+                            <button type="button" data-roll="roll-again" class="rule-of-ten">${rollAgainLabel}</button>`
             }
-            if (roll.result == 1 && !ruleTag.includes('Rule of Ten Re-Roll')) {
-                ruleOfDiv = `<h2 class="rule-of-chat-text">Rule of 1!</h2>
-                            <button type="button" data-roll="roll-again" class="rule-of-one">Roll Again</button>`
+            if (roll.result == 1 && triggeredRule !== "ten") {
+                ruleOfDiv = `<h2 class="rule-of-chat-text">${ruleOfOneTitle}</h2>
+                            <button type="button" data-roll="roll-again" class="rule-of-one">${rollAgainLabel}</button>`
             }
 
             // Create Chat Content
@@ -135,9 +145,9 @@ Hooks.on("renderChatMessage", (app, html, data) => {
                                     <table class="afmbe-chat-roll-table">
                                         <thead>
                                             <tr>
-                                                <th class="table-center-align">Roll</th>
-                                                <th class="table-center-align">Reroll Modifier</th>
-                                                <th class="table-center-align">New Result</th>
+                                                <th class="table-center-align">${rollLabel}</th>
+                                                <th class="table-center-align">${rerollModifierLabel}</th>
+                                                <th class="table-center-align">${newResultLabel}</th>
                                             </tr>
                                         </thead>
                                         <tbody>

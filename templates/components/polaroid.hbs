@@ -3,12 +3,13 @@
     <img class="profile-img" data-edit="img" src="{{actor.img}}">
     <div class="sheet-nav-container">
         <nav class="sheet-nav sheet-tabs tabs" data-group="primary">
-            <a class="item" data-tab="core">Core</a>
-            <a class="item" data-tab="equipment">Equipment</a>
+            <a class="item" data-tab="core">{{localize 'AFMBE.Sheet.Tab.Core'}}</a>
+            <a class="item" data-tab="equipment">{{localize 'AFMBE.Sheet.Tab.Equipment'}}</a>
         </nav>
         <select id="characterTypeSelect" name="system.characterType" data-type="String">
-            {{#selectOptions actor.system.characterTypes selected=actor.system.characterType}}
-            {{/selectOptions}}
+            {{#each actor.system.characterTypes as |type idx|}}
+                <option value="{{idx}}" {{#if (eq ../actor.system.characterType idx)}}selected{{/if}}>{{localizeCharacterType type}}</option>
+            {{/each}}
         </select>
     </div>
     <div class="profile-tags-container">
@@ -16,7 +17,7 @@
     </div>
     <div class="xp-container">
         <div class="xp-flex-container">
-            <h2>XP</h2>
+            <h2>{{localize 'AFMBE.Common.XP'}}</h2>
             <input type="number" name="system.xp" value="{{actor.system.xp}}">
         </div>
     </div>

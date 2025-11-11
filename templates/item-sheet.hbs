@@ -6,11 +6,11 @@
     <section>
         <div class="description-container">
             <div class="item-attribute-sidebar">
-                <h2>Attributes</h2>
+                <h2>{{localize 'AFMBE.Item.Attributes.Title'}}</h2>
                 <table>
                     <tbody>
                         <tr>
-                            <th>Equipped</th>
+                            <th>{{localize 'AFMBE.Item.Attributes.Equipped'}}</th>
                             <td>
                                 <div class="item-attribute-flex-container">
                                     <input type="checkbox" name="system.equipped" {{checked item.system.equipped}}>
@@ -18,23 +18,23 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>Quantity</th>
+                            <th>{{localize 'AFMBE.Common.Quantity'}}</th>
                             <td><input type="text" name="system.qty" value="{{item.system.qty}}"></td>
                         </tr>
                         <tr>
-                            <th>Armor Value</th>
+                            <th>{{localize 'AFMBE.Common.ArmorValue'}}</th>
                             <td><input type="text" name="system.armor_value" value="{{item.system.armor_value}}"></td>
                         </tr>
                         <tr>
-                            <th>EV</th>
+                            <th>{{localize 'AFMBE.Common.EV'}}</th>
                             <td><input type="number" name="system.encumbrance" value="{{item.system.encumbrance}}"></td>
                         </tr>
                         <tr>
-                            <th>Cost</th>
+                            <th>{{localize 'AFMBE.Common.Cost'}}</th>
                             <td><input type="number" name="system.cost" value="{{item.system.cost}}"></td>
                         </tr>
                         <tr>
-                            <th>Availability</th>
+                            <th>{{localize 'AFMBE.Common.Availability'}}</th>
                             <td>
                                 <select name="system.availability" data-type="String">
                                     {{#selectOptions item.system.availabilityOptions selected=item.system.availability}}

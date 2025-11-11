@@ -1,13 +1,13 @@
 <div class="aspects-container">
     <h2 id="aspect-header" class="header-with-button">
         <button type="button" class="create-item" data-create="aspect">+</button>
-        <span>Aspects - [{{this.actor.system.power}}]</span>
+        <span>{{localize 'AFMBE.Aspects.Title' power=this.actor.system.power}}</span>
     </h2>
     <table class="item-table">
         <thead>
             <tr>
-                <th class="table-left-align">Name</th>
-                <th>Power</th>
+                <th class="table-left-align">{{localize 'AFMBE.Common.Name'}}</th>
+                <th>{{localize 'AFMBE.Common.Power'}}</th>
                 <th></th>
             </tr>
         </thead>
@@ -16,7 +16,7 @@
             <tr class="item" data-item-id="{{item._id}}">
                 <td class="item-name">{{item.name}}</td>
                 <td class="table-center-align">{{item.system.power}}</td>
-                <td class="table-center-align"><a class="item-control item-delete" title="Delete Item"><i
+                <td class="table-center-align"><a class="item-control item-delete" title="{{localize 'AFMBE.Items.Delete'}}"><i
                             class="fas fa-trash"></i></a></td>
             </tr>
             {{/each}}

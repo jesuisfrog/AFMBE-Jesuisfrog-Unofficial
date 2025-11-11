@@ -1,15 +1,15 @@
 <div class="item-table">
     <h2 class="header-with-button">
         <button type="button" class="create-item" data-create="item">+</button>
-        <span>Equipped Items</span>
+        <span>{{localize 'AFMBE.Items.Equipped'}}</span>
     </h2>
     <table>
         <thead>
             <tr>
-                <th class="table-left-align">Name</th>
-                <th>Qty</th>
-                <th>Armor Value</th>
-                <th>EV</th>
+                <th class="table-left-align">{{localize 'AFMBE.Common.Name'}}</th>
+                <th>{{localize 'AFMBE.Common.Quantity'}}</th>
+                <th>{{localize 'AFMBE.Common.ArmorValue'}}</th>
+                <th>{{localize 'AFMBE.Common.EV'}}</th>
                 <th></th>
             </tr>
         </thead>
@@ -27,7 +27,7 @@
                     <button type="button">{{item.system.armor_value}}</button>
                 </td>
                 <td class="table-center-align">{{item.system.encumbrance}}</td>
-                <td class="table-center-align"><a class="item-control item-delete" title="Delete Item"><i
+                <td class="table-center-align"><a class="item-control item-delete" title="{{localize 'AFMBE.Items.Delete'}}"><i
                             class="fas fa-trash"></i></a></td>
             </tr>
             {{/each}}
@@ -38,14 +38,14 @@
 <div class="item-table">
     <h2 class="header-with-button">
         <button type="button" class="create-item" data-create="item">+</button>
-        <span>Items</span>
+        <span>{{localize 'AFMBE.Items.Title'}}</span>
     </h2>
     <table>
         <thead>
             <tr>
-                <th class="table-left-align">Name</th>
-                <th>Qty</th>
-                <th>EV</th>
+                <th class="table-left-align">{{localize 'AFMBE.Common.Name'}}</th>
+                <th>{{localize 'AFMBE.Common.Quantity'}}</th>
+                <th>{{localize 'AFMBE.Common.EV'}}</th>
                 <th></th>
             </tr>
         </thead>
@@ -60,7 +60,7 @@
                 </td>
                 <td class="table-center-align">{{item.system.qty}}</td>
                 <td class="table-center-align">{{item.system.encumbrance}}</td>
-                <td class="table-center-align"><a class="item-control item-delete" title="Delete Item"><i
+                <td class="table-center-align"><a class="item-control item-delete" title="{{localize 'AFMBE.Items.Delete'}}"><i
                             class="fas fa-trash"></i></a></td>
             </tr>
             {{/each}}
