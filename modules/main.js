@@ -14,13 +14,12 @@ import { registerHandlebarsHelpers } from "./handlebars.js";
 
 Hooks.once("init", async function () {
     console.log(`Initializing AFMBE System`);
-
     /**
      * Set an initiative formula for the system
      * @type {String}
      */
     CONFIG.Combat.initiative = {
-        formula: "1d10 + @initiative.value",
+        formula: "1d10 + @secondaryAttributes.initiative.value",
         decimals: 0
     };
 
@@ -33,30 +32,30 @@ Hooks.once("init", async function () {
     registerHandlebarsHelpers();
 
     // Register sheet application classes
-    Actors.unregisterSheet("core", ActorSheet)
+    foundry.documents.collections.Actors.unregisterSheet("core", foundry.appv1.sheets.ActorSheet)
 
-    Actors.registerSheet("afmbe-jesuisfrog", afmbeActorSheet,
+    foundry.documents.collections.Actors.registerSheet("afmbe-jesuisfrog", afmbeActorSheet,
         {
             types: ["character"],
             makeDefault: true,
             label: "Default AFMBE Character Sheet"
         })
 
-    Actors.registerSheet("afmbe-jesuisfrog", afmbeCreatureSheet,
+    foundry.documents.collections.Actors.registerSheet("afmbe-jesuisfrog", afmbeCreatureSheet,
         {
             types: ["creature"],
             makeDefault: true,
             label: "Default AFMBE Creature Sheet"
         })
 
-    Actors.registerSheet("afmbe-jesuisfrog", afmbevehicleSheet,
+    foundry.documents.collections.Actors.registerSheet("afmbe-jesuisfrog", afmbevehicleSheet,
         {
             types: ["vehicle"],
             makeDefault: true,
             label: "Default AFMBE vehicle Sheet"
         })
 
-    Items.registerSheet("afmbe-jesuisfrog", afmbeItemSheet,
+    foundry.documents.collections.Items.registerSheet("afmbe-jesuisfrog", afmbeItemSheet,
         {
             makeDefault: true,
             label: "Default AFMBE Item Sheet"

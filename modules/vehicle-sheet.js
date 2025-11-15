@@ -1,4 +1,4 @@
-export class afmbevehicleSheet extends ActorSheet {
+export class afmbevehicleSheet extends foundry.appv1.sheets.ActorSheet {
 
     /** @override */
     static get defaultOptions() {

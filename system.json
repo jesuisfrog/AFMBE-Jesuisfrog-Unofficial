@@ -1,28 +1,29 @@
 {
-    "id": "afmbe-jesuisfrog",
-    "title": "All Flesh Must Be Eaten by Jesuisfrog",
-    "description": "A digital system for playing AFMBE (All Flesh Must Be Eaten) by Eden Studios",
-    "version": "1.1.3",
-    "minimumCoreVersion": "12",
-    "compatibleCoreVersion": "12.331",
-    "templateVersion": 2,
-    "author": "Jesuisfrog",
-    "esmodules": [
-        "modules/main.js"
-    ],
-    "styles": [
-        "styles/main.css"
-    ],
-    "languages": [],
-    "gridDistance": 5,
-    "gridUnits": "ft",
-    "primaryTokenAttribute": "hp",
-    "secondaryTokenAttribute": "endurance_points",
-    "packs": [],
-    "url": "https://github.com/jesuisfrog/AFMBE-Jesuisfrog-Unofficial/",
-    "bugs": "https://github.com/jesuisfrog/AFMBE-Jesuisfrog-Unofficial/issues",
-    "changelog": "https://github.com/jesuisfrog/AFMBE-Jesuisfrog-Unofficial/CHANGELOG.md",
-    "manifest": "https://raw.githubusercontent.com/jesuisfrog/AFMBE-Jesuisfrog-Unofficial/main/system.json",
-    "download": "https://github.com/jesuisfrog/AFMBE-Jesuisfrog-Unofficial/raw/main/afmbe-jesuisfrog.zip",
-    "license": "LICENSE.txt"
+  "id": "afmbe-jesuisfrog",
+  "title": "All Flesh Must Be Eaten by Jesuisfrog",
+  "description": "A digital system for playing AFMBE (All Flesh Must Be Eaten) by Eden Studios",
+  "version": "1.1.3",
+  "esmodules": [
+    "modules/main.js"
+  ],
+  "styles": [
+    {
+      "src": "styles/main.css"
+    }
+  ],
+  "primaryTokenAttribute": "hp",
+  "secondaryTokenAttribute": "endurance_points",
+  "url": "https://github.com/jesuisfrog/AFMBE-Jesuisfrog-Unofficial/",
+  "bugs": "https://github.com/jesuisfrog/AFMBE-Jesuisfrog-Unofficial/issues",
+  "changelog": "https://github.com/jesuisfrog/AFMBE-Jesuisfrog-Unofficial/CHANGELOG.md",
+  "manifest": "https://raw.githubusercontent.com/jesuisfrog/AFMBE-Jesuisfrog-Unofficial/main/system.json",
+  "download": "https://github.com/jesuisfrog/AFMBE-Jesuisfrog-Unofficial/raw/main/afmbe-jesuisfrog.zip",
+  "license": "LICENSE.txt",
+  "grid": {
+    "distance": 5,
+    "units": "ft"
+  },
+  "compatibility": {
+    "minimum": "12"
+  }
 }

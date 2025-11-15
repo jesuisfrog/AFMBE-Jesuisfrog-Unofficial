@@ -1,4 +1,4 @@
-export class afmbeCreatureSheet extends ActorSheet {
+export class afmbeCreatureSheet extends foundry.appv1.sheets.ActorSheet {
 
     /** @override */
     static get defaultOptions() {
