@@ -1,3 +1,6 @@
+### 1.1.4
+- Bugfix - Fixed Initiative value not being added when rolling initiative.
+
 ### 1.1.3
 - Bugfix - Refactored rule of one/ten logic to account for consecutive rerolls
 - Add - Dice so Nice compatibility
