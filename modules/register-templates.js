@@ -21,5 +21,5 @@ export function registerTemplates() {
         "systems/afmbe-jesuisfrog/templates/components/character-details.hbs"
     ];
 
-    loadTemplates(templatePaths);
+    foundry.applications.handlebars.loadTemplates(templatePaths);
 }

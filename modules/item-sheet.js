@@ -1,4 +1,4 @@
-export class afmbeItemSheet extends ItemSheet {
+export class afmbeItemSheet extends foundry.appv1.sheets.ItemSheet {
 
     /** @override */
     static get defaultOptions() {
