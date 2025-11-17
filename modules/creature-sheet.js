@@ -134,7 +134,7 @@ export class afmbeCreatureSheet extends foundry.appv1.sheets.ActorSheet {
         const element = event.currentTarget
 
         let itemData = {
-            name: `New ${element.dataset.create}`,
+            name: game.i18n.format("AFMBE.Items.New", { type: game.i18n.localize(`AFMBE.ItemType.${element.dataset.create}`) }),
             type: element.dataset.create,
             cost: 0,
             level: 0
@@ -142,126 +142,136 @@ export class afmbeCreatureSheet extends foundry.appv1.sheets.ActorSheet {
         return Item.create(itemData, { parent: this.actor })
     }
 
+
     _onAttributeRoll(event) {
         event.preventDefault()
-        let element = event.currentTarget
-        let attributeLabel = element.dataset.attributeName
+        const element = event.currentTarget
+        const attributeKey = element.dataset.attributeKey || element.dataset.attributeName?.toLowerCase()
+        if (!attributeKey) { return }
+        const attributeLabel = element.dataset.attributeLabel || attributeKey
 
-        // Create options for Qualities/Drawbacks/Skills
-        let skillOptions = []
-        for (let skill of this.actor.items.filter(item => item.type === 'skill')) {
-            let option = `<option value="${skill.id}">${skill.name} ${skill.system.level}</option>`
-            skillOptions.push(option)
-        }
+        const dialogTitle = game.i18n.localize("AFMBE.Dialog.AttributeRoll.Title")
+        const dialogHeader = game.i18n.format("AFMBE.Dialog.AttributeRoll.Header", { attribute: attributeLabel })
+        const dialogInstructions = game.i18n.localize("AFMBE.Dialog.CreatureAttributeRoll.Help")
+        const simpleDescription = game.i18n.localize("AFMBE.Dialog.AttributeRoll.SimpleDescription")
+        const difficultDescription = game.i18n.localize("AFMBE.Dialog.AttributeRoll.DifficultDescription")
+        const attributeTestLabel = game.i18n.localize("AFMBE.Dialog.AttributeRoll.AttributeTest")
+        const rollModifierLabel = game.i18n.localize("AFMBE.Dialog.AttributeRoll.RollModifier")
+        const skillsLabel = game.i18n.localize("AFMBE.Dialog.AttributeRoll.Skills")
+        const cancelLabel = game.i18n.localize("AFMBE.Dialog.Button.Cancel")
+        const rollLabel = game.i18n.localize("AFMBE.Dialog.Button.Roll")
+        const modifiersLabel = game.i18n.localize("AFMBE.Chat.Modifiers")
+        const userModifierLabel = game.i18n.localize("AFMBE.Chat.UserModifier")
+        const noneLabel = game.i18n.localize("AFMBE.Common.None")
+        const ruleOfTenLabel = game.i18n.localize("AFMBE.Chat.RuleOfTenTitle")
+        const ruleOfOneLabel = game.i18n.localize("AFMBE.Chat.RuleOfOneTitle")
+        const rollAgainLabel = game.i18n.localize("AFMBE.Chat.RollAgain")
+        const attributeTestOptions = [
+            { value: "simple", label: game.i18n.localize("AFMBE.AttributeTest.Simple") },
+            { value: "difficult", label: game.i18n.localize("AFMBE.AttributeTest.Difficult") }
+        ]
+        const attributeTestNames = Object.fromEntries(attributeTestOptions.map(opt => [opt.value, opt.label]))
+        const attributeValueBase = this.actor.system.primaryAttributes[attributeKey]?.value ?? 0
 
-        let aspectOptions = []
-        for (let aspect of this.actor.items.filter(item => item.type === 'aspect')) {
-            let option = `<option value="${aspect.id}">${aspect.name} ${aspect.system.power}</option>`
-            aspectOptions.push(option)
-        }
+        const skillOptions = this.actor.items
+            .filter(item => item.type === 'skill')
+            .map(skill => `
+                                                <option value="${skill.id}">${skill.name} ${skill.system.level}</option>`)
+            .join("")
 
-        // Create Classes for Dialog Box
         let mode = game.settings.get("afmbe-jesuisfrog", "dark-mode") ? "dark-mode" : ""
         let dialogOptions = { classes: ["dialog", "afmbe-jesuisfrog", mode] }
 
-        // Create Dialog Prompt
-        let d = new Dialog({
-            title: 'Attribute Roll',
-            content: `<div class="afmbe-dialog-menu">
-                            <h2>${attributeLabel} Roll</h2>
+        const content = `<div class="afmbe-dialog-menu">
+                            <h2>${dialogHeader}</h2>
 
                             <div class="afmbe-dialog-menu-text-box">
                                 <div>
-                                    <p>Apply modifiers from the creature's Skills.</p>
-                                    
+                                    <p>${dialogInstructions}</p>
                                     <ul>
-                                        <li>Simple Test: 2x Attribute</li>
-                                        <li>Difficult Test: 1x Attribute</li>
+                                        <li>${simpleDescription}</li>
+                                        <li>${difficultDescription}</li>
                                     </ul>
                                 </div>
                             </div>
 
-
                             <table>
                                 <tbody>
                                     <tr>
-                                        <td class="table-bold-text">Attribute Test</td>
+                                        <td class="table-bold-text">${attributeTestLabel}</td>
                                         <td class="table-center-align">
                                             <select id="attributeTestSelect" name="attributeTest">
-                                                <option value="Simple">Simple</option>
-                                                <option value="Difficult">Difficult</option>
+                                                ${attributeTestOptions.map(option => `<option value="${option.value}">${option.label}</option>`).join("")}
                                             </select>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="table-bold-text">Roll Modifier</td>
+                                        <td class="table-bold-text">${rollModifierLabel}</td>
                                         <td class="table-center-align"><input class="attribute-input" type="number" value="0" name="inputModifier" id="inputModifier"></td>
                                     </tr>
                                     <tr>
-                                        <td class="table-bold-text">Skills</td>
+                                        <td class="table-bold-text">${skillsLabel}</td>
                                         <td class="table-center-align">
                                             <select id="skillSelect" name="skills">
-                                                <option value="None">None</option>
-                                                ${skillOptions.join('')}
+                                                <option value="">${noneLabel}</option>${skillOptions}
                                             </select>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
-                    </div>`,
+                    </div>`
+
+        let d = new Dialog({
+            title: dialogTitle,
+            content,
             buttons: {
                 one: {
-                    label: 'Cancel',
+                    label: cancelLabel,
                     callback: html => console.log('Cancelled')
                 },
                 two: {
-                    label: 'Roll',
+                    label: rollLabel,
                     callback: async html => {
-                        // Grab the selected options
-                        let attributeTestSelect = html[0].querySelector('#attributeTestSelect').value
-                        let userInputModifier = Number(html[0].querySelector('#inputModifier').value)
-                        let selectedSkill = this.actor.getEmbeddedDocument("Item", html[0].querySelector('#skillSelect').value)
+                        const attributeTestSelect = html[0].querySelector('#attributeTestSelect').value
+                        const userInputModifier = Number(html[0].querySelector('#inputModifier').value)
+                        const selectedSkill = this.actor.getEmbeddedDocument("Item", html[0].querySelector('#skillSelect').value)
 
-                        // Set values for options
-                        let attributeValue = attributeTestSelect === 'Simple' ? this.actor.system.primaryAttributes[attributeLabel.toLowerCase()].value * 2 : this.actor.system.primaryAttributes[attributeLabel.toLowerCase()].value
-                        let skillValue = selectedSkill != undefined ? selectedSkill.system.level : 0
+                        const attributeValue = attributeTestSelect === 'simple' ? attributeValueBase * 2 : attributeValueBase
+                        const skillValue = selectedSkill ? selectedSkill.system.level : 0
 
-                        // Calculate total modifier to roll
-                        let rollMod = (attributeValue + skillValue + userInputModifier)
-
-                        // Roll Dice
-                        let roll = await new Roll('1d10').evaluate()
-
-                        // Calculate total result after modifiers
-                        let totalResult = Number(roll.result) + rollMod
-
-                        // Create Chat Message Content
                         let tags = []
-                        let ruleOfDiv = ``
-                        if (userInputModifier != 0) { tags.push(`<span class="${userInputModifier >= 0 ? "bonusColorClass" : 'penaltyColorClass'}">User Modifier ${userInputModifier >= 0 ? "+" : ''}${userInputModifier}</span>`) }
-                        if (selectedSkill != undefined) {
+                        if (userInputModifier !== 0) { tags.push(`<span class="${userInputModifier >= 0 ? "bonusColorClass" : 'penaltyColorClass'}">${userModifierLabel} ${userInputModifier >= 0 ? "+" : ''}${userInputModifier}</span>`) }
+                        if (selectedSkill) {
                             const skillLevel = selectedSkill.system.level;
                             tags.push(`<span class="${skillLevel >= 0 ? 'bonusColorClass' : 'penaltyColorClass'}">${selectedSkill.name} ${skillLevel >= 0 ? '+' : ''}${skillLevel}</span>`)
                         }
 
+                        const rollMod = (attributeValue + skillValue + userInputModifier)
+                        let roll = await new Roll('1d10').evaluate()
+                        let totalResult = Number(roll.result) + rollMod
+
+                        let ruleOfDiv = ``
                         if (roll.result == 10) {
-                            ruleOfDiv = `<h2 class="rule-of-chat-text">Rule of 10!</h2>
-                                        <button type="button" data-roll="roll-again" class="rule-of-ten">Roll Again</button>`
+                            ruleOfDiv = `<h2 class="rule-of-chat-text">${ruleOfTenLabel}</h2>
+                                        <button type="button" data-roll="roll-again" class="rule-of-ten">${rollAgainLabel}</button>`
                         }
                         if (roll.result == 1) {
-                            ruleOfDiv = `<h2 class="rule-of-chat-text">Rule of 1!</h2>
-                                        <button type="button" data-roll="roll-again" class="rule-of-one">Roll Again</button>`
+                            ruleOfDiv = `<h2 class="rule-of-chat-text">${ruleOfOneLabel}</h2>
+                                        <button type="button" data-roll="roll-again" class="rule-of-one">${rollAgainLabel}</button>`
                         }
 
+                        const modifiersHtml = tags.length ? tags.join(' | ') : noneLabel
+                        const attributeSummary = game.i18n.format("AFMBE.Chat.AttributeRollSummary", { attribute: attributeLabel, value: attributeValueBase, test: attributeTestNames[attributeTestSelect] || attributeTestSelect })
+
                         let chatContent = `<form>
-                                                <h2>${attributeLabel} Roll [ ${this.actor.system.primaryAttributes[attributeLabel.toLowerCase()].value} ] - ${attributeTestSelect} Test</h2>
-                                                <div class="afmbe-tags-flex-container"><b>Modifiers</b>: ${tags.join(' | ')}</div>
+                                                <h2>${attributeSummary}</h2>
+                                                <div class="afmbe-tags-flex-container"><b>${modifiersLabel}</b>: ${modifiersHtml}</div>
                                                 <table class="afmbe-chat-roll-table">
                                                     <thead>
                                                         <tr>
-                                                            <th class="table-center-align">Roll</th>
-                                                            <th class="table-center-align">Modifier</th>
-                                                            <th class="table-center-align">Result</th>
+                                                            <th class="table-center-align">${game.i18n.localize("AFMBE.Chat.Roll")}</th>
+                                                            <th class="table-center-align">${game.i18n.localize("AFMBE.Chat.Modifier")}</th>
+                                                            <th class="table-center-align">${game.i18n.localize("AFMBE.Chat.Result")}</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -284,82 +294,94 @@ export class afmbeCreatureSheet extends foundry.appv1.sheets.ActorSheet {
                             content: chatContent,
                             rolls: [roll]
                         })
-
                     }
                 }
             },
-            default: 'two',
+            default: "two",
             close: html => console.log()
         }, dialogOptions)
 
         d.render(true)
     }
 
-    _onDamageRoll(event) {
+
+
+    async _onDamageRoll(event) {
         event.preventDefault()
         let element = event.currentTarget
         let weapon = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
 
-        // Create Classes for Dialog Box
+        const dialogTitle = game.i18n.localize("AFMBE.Dialog.WeaponRoll.Title")
+        const rangedInfo = game.i18n.localize("AFMBE.Dialog.WeaponRoll.RangedInfo")
+        const meleeInfo = game.i18n.localize("AFMBE.Dialog.WeaponRoll.MeleeInfo")
+        const optionsLabel = game.i18n.localize("AFMBE.Dialog.WeaponRoll.Options")
+        const shotsLabel = game.i18n.localize("AFMBE.Dialog.WeaponRoll.Shots")
+        const firingModeLabel = game.i18n.localize("AFMBE.Dialog.WeaponRoll.FiringMode")
+        const cancelLabel = game.i18n.localize("AFMBE.Dialog.Button.Cancel")
+        const rollLabel = game.i18n.localize("AFMBE.Dialog.Button.Roll")
+        const firingModes = [
+            { value: "none", label: game.i18n.localize("AFMBE.Weapon.FiringMode.None") },
+            { value: "semi", label: game.i18n.localize("AFMBE.Weapon.FiringMode.Semi") },
+            { value: "burst", label: game.i18n.localize("AFMBE.Weapon.FiringMode.Burst") },
+            { value: "auto", label: game.i18n.localize("AFMBE.Weapon.FiringMode.Auto") }
+        ]
+        const firingModeLabels = Object.fromEntries(firingModes.map(mode => [mode.value, mode.label]))
+        const shotLabel = (count) => count === 1 ? game.i18n.format("AFMBE.Weapon.Shot.Single", { count }) : game.i18n.format("AFMBE.Weapon.Shot.Multiple", { count })
+
         let mode = game.settings.get("afmbe-jesuisfrog", "dark-mode") ? "dark-mode" : ""
         let dialogOptions = { classes: ["dialog", "afmbe-jesuisfrog", mode] }
 
-        // Create Dialog Prompt
-        let d = new Dialog({
-            title: 'Weapon Roll',
-            content: `<div class="afmbe-dialog-menu">
+        const content = `<div class="afmbe-dialog-menu">
 
                             <div class="afmbe-dialog-menu-text-box">
-                                <p><strong>If a ranged weapon</strong>, select how many shots to take and select weapon firing mode. The number of shots
-                                fired will be reduced from the weapon's current load capacity. Make sure you have enough ammo in the chamber!</p>
-
-                                <p>Otherwise, leave default and click roll.</p>
+                                <p>${rangedInfo}</p>
+                                <p>${meleeInfo}</p>
                             </div>
 
                             <div>
-                                <h2>Options</h2>
+                                <h2>${optionsLabel}</h2>
                                 <table>
                                     <tbody>
                                         <tr>
-                                            <th># of Shots</th>
+                                            <th>${shotsLabel}</th>
                                             <td>
                                                 <input type="number" id="shotNumber" name="shotNumber" value="0">
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th>Firing Mode</th>
+                                            <th>${firingModeLabel}</th>
                                             <td>
                                                 <select id="firingMode" name="firingMode">
-                                                    <option>None/Melee</option>
-                                                    <option>Semi-Auto</option>
-                                                    <option>Burst Fire</option>
-                                                    <option>Auto-Fire</option>
+                                                    ${firingModes.map(option => `<option value="${option.value}">${option.label}</option>`).join("")}
                                                 </select>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-                    <div>`,
+                    <div>`
 
+        let d = new Dialog({
+            title: dialogTitle,
+            content,
             buttons: {
                 one: {
-                    label: 'Cancel',
+                    label: cancelLabel,
                     callback: html => console.log('Cancelled')
                 },
                 two: {
-                    label: 'Roll',
+                    label: rollLabel,
                     callback: async html => {
-                        // Grab Values from Dialog
-                        let shotNumber = html[0].querySelector('#shotNumber').value
-                        let firingMode = html[0].querySelector('#firingMode').value
+                        const shotNumber = Number(html[0].querySelector('#shotNumber').value) || 0
+                        const firingMode = html[0].querySelector('#firingMode').value
 
-                        let roll = await new Roll(weapon.system.damage_string).evaluate()
+                        const roll = await new Roll(weapon.system.damage_string).evaluate()
 
                         let tags = []
-                        if (firingMode != 'None/Melee') { tags.push(`<div><b>${firingMode}</b>: ${shotNumber == 1 ? shotNumber + " shot" : shotNumber + " shots"}</div>`) }
+                        if (firingMode !== 'none' && shotNumber > 0) {
+                            tags.push(`<div><b>${firingModeLabels[firingMode]}</b>: ${shotLabel(shotNumber)}</div>`)
+                        }
 
-                        // Reduce Fired shots from current load chamber
                         if (shotNumber > 0) {
                             switch (weapon.system.capacity.value - shotNumber >= 0) {
                                 case true:
@@ -367,20 +389,24 @@ export class afmbeCreatureSheet extends foundry.appv1.sheets.ActorSheet {
                                     break
 
                                 case false:
-                                    return ui.notifications.info(`You do not have enough ammo loaded to fire ${shotNumber} rounds!`)
+                                    return ui.notifications.info(game.i18n.format("AFMBE.Notifications.NotEnoughAmmo", { shots: shotNumber }))
                             }
                         }
 
-                        // Create Chat Content
+                        const damageRollHeader = game.i18n.format("AFMBE.Chat.DamageRollFor", { weapon: weapon.name })
+                        const damageLabel = game.i18n.localize("AFMBE.Chat.Damage")
+                        const typeLabel = game.i18n.localize("AFMBE.Chat.Type")
+                        const detailLabel = game.i18n.localize("AFMBE.Chat.Detail")
+
                         let chatContent = `<div>
-                                                <h2>Damage Roll: ${weapon.name}</h2>
+                                                <h2>${damageRollHeader}</h2>
 
                                                 <table class="afmbe-chat-roll-table">
                                                     <thead>
                                                         <tr>
-                                                            <th class="table-center-align">Damage</th>
-                                                            <th class="table-center-align">Type</th>
-                                                            <th class="table-center-align">Detail</th>
+                                                            <th class="table-center-align">${damageLabel}</th>
+                                                            <th class="table-center-align">${typeLabel}</th>
+                                                            <th class="table-center-align">${detailLabel}</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -410,6 +436,7 @@ export class afmbeCreatureSheet extends foundry.appv1.sheets.ActorSheet {
         d.render(true)
     }
 
+
     async _onArmorRoll(event) {
         event.preventDefault()
         let element = event.currentTarget
@@ -419,13 +446,13 @@ export class afmbeCreatureSheet extends foundry.appv1.sheets.ActorSheet {
 
         // Create Chat Content
         let chatContent = `<div>
-                                <h2>Armor Roll: ${equippedItem.name}</h2>
+                                <h2>${game.i18n.format("AFMBE.Chat.ArmorRollFor", { armor: equippedItem.name })}</h2>
 
                                 <table class="afmbe-chat-roll-table">
                                     <thead>
                                         <tr>
-                                            <th class="table-center-align">Result</th>
-                                            <th class="table-center-align">Detail</th>
+                                            <th class="table-center-align">${game.i18n.localize("AFMBE.Chat.Result")}</th>
+                                            <th class="table-center-align">${game.i18n.localize("AFMBE.Chat.Detail")}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -476,19 +503,19 @@ export class afmbeCreatureSheet extends foundry.appv1.sheets.ActorSheet {
         // Create Encumbrance Tags & Append
         switch (this.actor.system.encumbrance.level) {
             case 1:
-                encTag.innerHTML = `<div>Lightly Encumbered</div>`
+                encTag.innerHTML = `<div>${game.i18n.localize("AFMBE.Status.Encumbrance.Light")}</div>`
                 encTag.classList.add('tag')
                 tagContainer.append(encTag)
                 break
 
             case 2:
-                encTag.innerHTML = `<div>Moderately Encumbered</div>`
+                encTag.innerHTML = `<div>${game.i18n.localize("AFMBE.Status.Encumbrance.Moderate")}</div>`
                 encTag.classList.add('tag')
                 tagContainer.append(encTag)
                 break
 
             case 3:
-                encTag.innerHTML = `<div>Heavily Encumbered</div>`
+                encTag.innerHTML = `<div>${game.i18n.localize("AFMBE.Status.Encumbrance.Heavy")}</div>`
                 encTag.classList.add('tag')
                 tagContainer.append(encTag)
                 break

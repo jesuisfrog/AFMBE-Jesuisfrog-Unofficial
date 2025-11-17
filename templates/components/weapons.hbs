@@ -1,15 +1,15 @@
 <div class="weapon-table">
     <h2 class="header-with-button">
         <button type="button" class="create-item" data-create="weapon">+</button>
-        <span>Weapons</span>
+        <span>{{localize 'AFMBE.Weapons.Title'}}</span>
     </h2>
     <table>
         <thead>
             <tr>
-                <th class="table-left-align">Name</th>
-                <th>Damage</th>
-                <th>Capacity</th>
-                <th>EV</th>
+                <th class="table-left-align">{{localize 'AFMBE.Common.Name'}}</th>
+                <th>{{localize 'AFMBE.Common.Damage'}}</th>
+                <th>{{localize 'AFMBE.Common.Capacity'}}</th>
+                <th>{{localize 'AFMBE.Common.EV'}}</th>
                 <th></th>
             </tr>
         </thead>
@@ -31,7 +31,7 @@
                     </div>
                 </td>
                 <td class="table-center-align">{{item.system.encumbrance}}</td>
-                <td class="table-center-align"><a class="item-control item-delete" title="Delete Item"><i
+                <td class="table-center-align"><a class="item-control item-delete" title="{{localize 'AFMBE.Items.Delete'}}"><i
                             class="fas fa-trash"></i></a></td>
             </tr>
             {{/each}}

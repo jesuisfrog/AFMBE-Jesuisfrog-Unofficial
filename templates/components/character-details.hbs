@@ -1,34 +1,34 @@
 <div class="contacts-container">
-    <h2>Contacts</h2>
+    <h2>{{localize 'AFMBE.Contacts.Title'}}</h2>
     {{editor actor.system.bio.contacts target="system.bio.contacts" button=true owner=owner
     editable=editable}}
 </div>
 
 <div class="character-details-container">
-    <h2>Details</h2>
+    <h2>{{localize 'AFMBE.Details.Title'}}</h2>
     <div class="character-details">
         <div class="character-detail">
-            <label class="detail-label">Age</label>
+            <label class="detail-label">{{localize 'AFMBE.Details.Age'}}</label>
             <input type="number" name="system.bio.age" value="{{actor.system.bio.age}}">
         </div>
         <div class="character-detail">
-            <label class="detail-label">Eyes</label>
+            <label class="detail-label">{{localize 'AFMBE.Details.Eyes'}}</label>
             <input type="text" name="system.bio.eyes" value="{{actor.system.bio.eyes}}">
         </div>
         <div class="character-detail">
-            <label class="detail-label">Gender</label>
+            <label class="detail-label">{{localize 'AFMBE.Details.Gender'}}</label>
             <input type="text" name="system.bio.gender" value="{{actor.system.bio.gender}}">
         </div>
         <div class="character-detail">
-            <label class="detail-label">Hair</label>
+            <label class="detail-label">{{localize 'AFMBE.Details.Hair'}}</label>
             <input type="text" name="system.bio.hair" value="{{actor.system.bio.hair}}">
         </div>
         <div class="character-detail">
-            <label class="detail-label">Height</label>
+            <label class="detail-label">{{localize 'AFMBE.Details.Height'}}</label>
             <input type="text" name="system.bio.height" value="{{actor.system.bio.height}}">
         </div>
         <div class="character-detail">
-            <label class="detail-label">Weight</label>
+            <label class="detail-label">{{localize 'AFMBE.Details.Weight'}}</label>
             <input type="text" name="system.bio.weight" value="{{actor.system.bio.weight}}">
         </div>
     </div>

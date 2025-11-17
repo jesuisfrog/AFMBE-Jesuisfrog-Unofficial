@@ -9,8 +9,8 @@
                     <img class="profile-img" data-edit="img" src="{{actor.img}}">
                     <div class="sheet-nav-container">
                         <nav class="sheet-nav sheet-tabs tabs" data-group="primary">
-                            <a class="item" data-tab="core">Core</a>
-                            <a class="item" data-tab="equipment">Equipment</a>
+                            <a class="item" data-tab="core">{{localize 'AFMBE.Sheet.Tab.Core'}}</a>
+                            <a class="item" data-tab="equipment">{{localize 'AFMBE.Sheet.Tab.Equipment'}}</a>
                         </nav>
                     </div>
                     <div class="profile-tags-container">
@@ -20,7 +20,7 @@
                 <div class="header-info-container">
                     <div class="info-container">
                         <h1>
-                            <input class="charname" type="text" name="name" value="{{actor.name}}" placeholder="Name">
+                            <input class="charname" type="text" name="name" value="{{actor.name}}" placeholder="{{localize 'AFMBE.Common.Name'}}">
                         </h1>
                         {{> "systems/afmbe-jesuisfrog/templates/components/primary-attributes.hbs"}}
                         {{> "systems/afmbe-jesuisfrog/templates/components/secondary-attributes.hbs"}}
