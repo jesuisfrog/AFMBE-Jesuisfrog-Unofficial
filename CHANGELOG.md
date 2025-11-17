@@ -1,3 +1,7 @@
+### 1.2
+Multilanguage support added by @HonzoNebro
+Currently available: English & Spanish
+
 ### 1.1.4
 - Bugfix - Fixed Initiative value not being added when rolling initiative.
 
