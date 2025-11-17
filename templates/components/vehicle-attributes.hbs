@@ -1,71 +1,71 @@
 <div class="attribute-container">
     <h2 id="attributes-header">
-        <div>Primary Attributes</div>
+        <div>{{localize 'AFMBE.Vehicle.Attributes.Title'}}</div>
     </h2>
     <div class="resource-container">
         <div class="resource">
-            <button type="button" class="no-focus">Weight</button>
+            <button type="button" class="no-focus">{{localize 'AFMBE.Vehicle.Attributes.Weight'}}</button>
             <div class="resource-values attribute">
                 <input type="number" name="system.weight" value="{{actor.system.weight}}">
             </div>
         </div>
         <div class="resource">
-            <button type="button" class="no-focus">Speed</button>
+            <button type="button" class="no-focus">{{localize 'AFMBE.Common.Speed'}}</button>
             <div class="resource-values attribute">
                 <input type="number" name="system.speed"
                     value="{{actor.system.speed}}">
             </div>
         </div>
         <div class="resource">
-            <button type="button" class="no-focus">Acceleration</button>
+            <button type="button" class="no-focus">{{localize 'AFMBE.Vehicle.Attributes.Acceleration'}}</button>
             <div class="resource-values attribute">
                 <input type="number" name="system.acceleration" value="{{actor.system.acceleration}}">
             </div>
         </div>
         <div class="resource">
-            <button type="button" class="no-focus">Range</button>
+            <button type="button" class="no-focus">{{localize 'AFMBE.Common.Range'}}</button>
             <div class="resource-values attribute">
                 <input type="number" name="system.range" value="{{actor.system.range}}">
             </div>
         </div>
         <div class="resource">
-            <button type="button" class="no-focus">Toughness</button>
+            <button type="button" class="no-focus">{{localize 'AFMBE.Vehicle.Attributes.Toughness'}}</button>
             <div class="resource-values attribute">
                 <input type="number" name="system.toughness" value="{{actor.system.toughness}}">
             </div>
         </div>
         <div class="resource">
-            <button type="button" class="no-focus">Handling</button>
+            <button type="button" class="no-focus">{{localize 'AFMBE.Vehicle.Attributes.Handling'}}</button>
             <div class="resource-values attribute">
                 <input type="number" name="system.handling" value="{{actor.system.handling}}">
             </div>
         </div>
         <div class="resource">
-            <button type="button" class="no-focus">Damage Cpty</button>
+            <button type="button" class="no-focus">{{localize 'AFMBE.Vehicle.Attributes.DamageCapacity'}}</button>
             <div class="resource-values attribute">
                 <input type="number" name="system.damage_capacity" value="{{actor.system.damage_capacity}}">
             </div>
         </div>
         <div class="resource">
-            <button type="button" class="no-focus">Armor Value</button>
+            <button type="button" class="no-focus">{{localize 'AFMBE.Common.ArmorValue'}}</button>
             <div class="resource-values attribute">
                 <input type="number" name="system.armor_value" value="{{actor.system.armor_value}}">
             </div>
         </div>
         <div class="resource">
-            <button type="button" class="no-focus">Accuracy</button>
+            <button type="button" class="no-focus">{{localize 'AFMBE.Vehicle.Attributes.Accuracy'}}</button>
             <div class="resource-values attribute">
                 <input type="number" name="system.accuracy" value="{{actor.system.accuracy}}">
             </div>
         </div>
         <div class="resource">
-            <button type="button" class="no-focus">Cost</button>
+            <button type="button" class="no-focus">{{localize 'AFMBE.Common.Cost'}}</button>
             <div class="resource-values attribute">
                 <input type="number" name="system.cost" value="{{actor.system.cost}}">
             </div>
         </div>
         <div class="resource">
-            <button type="button" class="no-focus">Availability</button>
+            <button type="button" class="no-focus">{{localize 'AFMBE.Common.Availability'}}</button>
             <div class="resource-values attribute">
                 <select name="system.availability" data-type="String">
                     {{#selectOptions actor.system.availabilityOptions selected=actor.system.availability}}

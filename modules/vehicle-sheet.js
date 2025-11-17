@@ -117,7 +117,7 @@ export class afmbevehicleSheet extends foundry.appv1.sheets.ActorSheet {
         const element = event.currentTarget
 
         let itemData = {
-            name: `New ${element.dataset.create}`,
+            name: game.i18n.format("AFMBE.Items.New", { type: game.i18n.localize(`AFMBE.ItemType.${element.dataset.create}`) }),
             type: element.dataset.create,
             cost: 0,
             level: 0
@@ -134,14 +134,14 @@ export class afmbevehicleSheet extends foundry.appv1.sheets.ActorSheet {
 
         // Create Chat Content
         let chatContent = `<div>
-                                <h2>Damage Roll: ${weapon.name}</h2>
+                                <h2>${game.i18n.format("AFMBE.Chat.DamageRollFor", { weapon: weapon.name })}</h2>
 
                                 <table class="afmbe-chat-roll-table">
                                     <thead>
                                         <tr>
-                                            <th class="table-center-align">Damage</th>
-                                            <th class="table-center-align">Type</th>
-                                            <th class="table-center-align">Detail</th>
+                                            <th class="table-center-align">${game.i18n.localize("AFMBE.Chat.Damage")}</th>
+                                            <th class="table-center-align">${game.i18n.localize("AFMBE.Chat.Type")}</th>
+                                            <th class="table-center-align">${game.i18n.localize("AFMBE.Chat.Detail")}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -171,13 +171,13 @@ export class afmbevehicleSheet extends foundry.appv1.sheets.ActorSheet {
 
         // Create Chat Content
         let chatContent = `<div>
-                                <h2>Armor Roll: ${equippedItem.name}</h2>
+                                <h2>${game.i18n.format("AFMBE.Chat.ArmorRollFor", { armor: equippedItem.name })}</h2>
 
                                 <table class="afmbe-chat-roll-table">
                                     <thead>
                                         <tr>
-                                            <th class="table-center-align">Result</th>
-                                            <th class="table-center-align">Detail</th>
+                                            <th class="table-center-align">${game.i18n.localize("AFMBE.Chat.Result")}</th>
+                                            <th class="table-center-align">${game.i18n.localize("AFMBE.Chat.Detail")}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
