@@ -11,6 +11,18 @@
       "src": "styles/main.css"
     }
   ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    },
+    {
+      "lang": "es",
+      "name": "Español",
+      "path": "lang/es.json"
+    }
+  ],
   "primaryTokenAttribute": "hp",
   "secondaryTokenAttribute": "endurance_points",
   "url": "https://github.com/jesuisfrog/AFMBE-Jesuisfrog-Unofficial/",
