@@ -1,4 +1,20 @@
 {
+    "TYPES": {
+        "Actor": {
+            "character": "Character",
+            "creature": "Creature",
+            "vehicle": "Vehicle"
+        },
+        "Item": {
+            "aspect": "Aspect",
+            "drawback": "Drawback",
+            "item": "Item",
+            "power": "Power",
+            "quality": "Quality",
+            "skill": "Skill",
+            "weapon": "Weapon"
+        }
+    },
     "AFMBE.Aspects.Title": "Aspects - [{{power}}]",
     "AFMBE.AttributeTest.Difficult": "Difficult",
     "AFMBE.AttributeTest.Simple": "Simple",
