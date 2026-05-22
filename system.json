@@ -7,9 +7,7 @@
     "modules/main.js"
   ],
   "styles": [
-    {
-      "src": "styles/main.css"
-    }
+      "styles/main.css"
   ],
   "languages": [
     {
