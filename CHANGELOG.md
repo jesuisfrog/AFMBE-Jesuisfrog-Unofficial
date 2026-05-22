@@ -1,3 +1,6 @@
+### 1.2.1
+Removed object syntax in system file to ensure backward compatibility with v12
+
 ### 1.2
 Multilanguage support added by @HonzoNebro
 Currently available: English & Spanish
