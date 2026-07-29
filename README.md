@@ -1,3 +1,6 @@
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/B0B15MGC4)
+
 # AFMBE
 
 This is a Fanmade FoundryVTT system to play All Flesh Must Be Eaten by Eden Studios updated to Foundry Version 12 and is based on Alex Hernandez's older version (https://gitlab.com/DogBoneZone/afmbe). This system is unaffiliated with Eden Studios and uses no trademarked content or media from any of the games or rulebooks. The system merely provides a framework to play the game. 
@@ -17,5 +20,3 @@ You can purchase the rulebooks from their website https://www.edenstudios.net/ o
     <figcaption>Dark Mode (Enabled through System Settings)</figcaption>
     <img src="images/afmbe-darkmode.png">
 </figure>
-
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/B0B15MGC4)
