@@ -54,7 +54,7 @@
             <tr class="item" data-item-id="{{item._id}}">
                 <td>
                     <div class="item-name-flex-container">
-                        <input type="checkbox" class="toggleEquipped" {{checked item.system.equipped}}>
+                        <input type="checkbox" class="toggleEquipped" data-action="toggleEquipped" {{checked item.system.equipped}}>
                         <div class="item-name" data-action="viewItem">{{item.name}}</div>
                     </div>
                 </td>
