@@ -17,9 +17,8 @@ export class afmbevehicleSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
     static TABS = {
         primary: {
             tabs: [
-                { id: "core", group: primary, label: "AFMBE.Sheet.Tab.Core" },
-                { id: "equipment", group: primary, label: "AFMBE.Sheet.Tab.Equipment" },
-            ],
+                { id: "core", group: primary, label: "AFMBE.Sheet.Tab.Core" }
+                ],
             initial: "core"
         }
     }

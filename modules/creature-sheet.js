@@ -282,9 +282,9 @@ export class afmbeCreatureSheet extends HandlebarsApplicationMixin(ActorSheetV2)
                 two: {
                     label: rollLabel,
                     callback: async html => {
-                        const attributeTestSelect = html[0].querySelector('#attributeTestSelect').value
-                        const userInputModifier = Number(html[0].querySelector('#inputModifier').value)
-                        const selectedSkill = this.actor.getEmbeddedDocument("Item", html[0].querySelector('#skillSelect').value)
+                        const attributeTestSelect = html.querySelector('#attributeTestSelect').value
+                        const userInputModifier = Number(html.querySelector('#inputModifier').value)
+                        const selectedSkill = this.actor.getEmbeddedDocument("Item", html.querySelector('#skillSelect').value)
 
                         const attributeValue = attributeTestSelect === 'simple' ? attributeValueBase * 2 : attributeValueBase
                         const skillValue = selectedSkill ? selectedSkill.system.level : 0
@@ -422,8 +422,8 @@ export class afmbeCreatureSheet extends HandlebarsApplicationMixin(ActorSheetV2)
                 two: {
                     label: rollLabel,
                     callback: async html => {
-                        const shotNumber = Number(html[0].querySelector('#shotNumber').value) || 0
-                        const firingMode = html[0].querySelector('#firingMode').value
+                        const shotNumber = Number(html.querySelector('#shotNumber').value) || 0
+                        const firingMode = html.querySelector('#firingMode').value
 
                         const roll = await new Roll(weapon.system.damage_string).evaluate()
 

@@ -1,5 +1,5 @@
-const {HandlebarsApplicationMixin} = foundry.applications.api;
-const {ActorSheetV2} = foundry.applications.sheets;
+const { HandlebarsApplicationMixin } = foundry.applications.api;
+const { ActorSheetV2 } = foundry.applications.sheets;
 
 export class afmbeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
@@ -7,10 +7,20 @@ export class afmbeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     static DEFAULT_OPTIONS = {
         classes: ["afmbe-jesuisfrog", "sheet", "actor"],
         position: { width: 700, height: 820 },
-        dragDrop: [{ dragSelector: ".item", dropSelector: null}],
+        dragDrop: [{ dragSelector: ".item", dropSelector: null }],
         tag: "form",
-        window: {rezisable : true},
+        window: { rezisable: true },
         form: { submitOnChange: true, closeOnSubmit: false },
+        actions: {
+            attributeRoll: afmbeActorSheet.#onAttributeRoll,
+            damageRoll: afmbeActorSheet.#onDamageRoll,
+            toggleEquipped: afmbeActorSheet.#onToggleEquipped,
+            armorRoll: afmbeActorSheet.#onArmorRoll,
+            resetResource: afmbeActorSheet.#onResetResource,
+            createItem: afmbeActorSheet.#onCreateItem,
+            viewItem: afmbeActorSheet.#onViewItem,
+            deleteItem: afmbeActorSheet.#onDeleteItem
+        }
     };
 
     /** @override */
@@ -27,6 +37,9 @@ export class afmbeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     _onRender(context, options) {
         super._onRender(context, options);
         this.element.classList.toggle("dark-mode", game.settings.get("afmbe-jesuisfrog", "dark-mode"));
+
+        this._createCharacterPointDivs();
+        this._createStatusTags();
     }
 
 
@@ -362,11 +375,11 @@ export class afmbeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
                 two: {
                     label: rollLabel,
                     callback: async html => {
-                        const attributeTestSelect = html[0].querySelector('#attributeTestSelect').value
-                        const userInputModifier = Number(html[0].querySelector('#inputModifier').value)
-                        const selectedSkill = this.actor.getEmbeddedDocument("Item", html[0].querySelector('#skillSelect').value)
-                        const selectedQuality = this.actor.getEmbeddedDocument("Item", html[0].querySelector('#qualitySelect').value)
-                        const selectedDrawback = this.actor.getEmbeddedDocument("Item", html[0].querySelector('#drawbackSelect').value)
+                        const attributeTestSelect = html.querySelector('#attributeTestSelect').value
+                        const userInputModifier = Number(html.querySelector('#inputModifier').value)
+                        const selectedSkill = this.actor.getEmbeddedDocument("Item", html.querySelector('#skillSelect').value)
+                        const selectedQuality = this.actor.getEmbeddedDocument("Item", html.querySelector('#qualitySelect').value)
+                        const selectedDrawback = this.actor.getEmbeddedDocument("Item", html.querySelector('#drawbackSelect').value)
 
                         const attributeValue = attributeTestSelect === 'simple' ? attributeValueBase * 2 : attributeValueBase
                         const skillValue = selectedSkill ? selectedSkill.system.level : 0
@@ -515,8 +528,8 @@ export class afmbeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
                 two: {
                     label: rollLabel,
                     callback: async html => {
-                        const shotNumber = Number(html[0].querySelector('#shotNumber').value) || 0
-                        const firingMode = html[0].querySelector('#firingMode').value
+                        const shotNumber = Number(html.querySelector('#shotNumber').value) || 0
+                        const firingMode = html.querySelector('#firingMode').value
 
                         const roll = await new Roll(weapon.system.damage_string).evaluate()
 
