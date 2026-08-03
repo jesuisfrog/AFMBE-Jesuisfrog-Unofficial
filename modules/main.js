@@ -81,14 +81,14 @@ Hooks.once("init", async function () {
 /* -------------------------------------------- */
 
 // Hook for Re-Rolls on Lucky/Unlucky Rolls
-Hooks.on("renderChatMessage", (app, html, data) => {
-    let chatButton = html[0].querySelector("[data-roll='roll-again']")
+Hooks.on("renderChatMessageHTML", (app, html, data) => {
+    let chatButton = html.querySelector("[data-roll='roll-again']")
 
     if (chatButton != undefined && chatButton != null) {
         chatButton.addEventListener('click', async () => {
             let ruleTag = '';
 
-            let diceResult = Number(html[0].querySelector("[data-roll='dice-result']").textContent);
+            let diceResult = Number(html.querySelector("[data-roll='dice-result']").textContent);
             const ruleOfTenReroll = game.i18n.localize("AFMBE.Chat.RuleOfTenReroll")
             const ruleOfOneReroll = game.i18n.localize("AFMBE.Chat.RuleOfOneReroll")
             const ruleOfTenTitle = game.i18n.localize("AFMBE.Chat.RuleOfTenTitle")
@@ -107,9 +107,9 @@ Hooks.on("renderChatMessage", (app, html, data) => {
 
             // Grab and Set Values from Previous Roll
             let ruleOfMod = 0;
-            let attributeLabel = html[0].querySelector('h2').outerHTML + `${ruleTag}`
+            let attributeLabel = html.querySelector('h2').outerHTML + `${ruleTag}`
 
-            let diceTotal = Number(html[0].querySelector("[data-roll-value]").getAttribute('data-roll-value'))
+            let diceTotal = Number(html.querySelector("[data-roll-value]").getAttribute('data-roll-value'))
             if (triggeredRule === "one") {
                 if (roll.result == 1) {
                     ruleOfMod = -5
