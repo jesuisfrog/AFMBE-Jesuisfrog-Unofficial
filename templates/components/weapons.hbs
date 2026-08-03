@@ -1,6 +1,6 @@
 <div class="weapon-table">
     <h2 class="header-with-button">
-        <button type="button" class="create-item" data-create="weapon">+</button>
+        <button type="button" class="create-item" data-action="createItem" data-create="weapon">+</button>
         <span>{{localize 'AFMBE.Weapons.Title'}}</span>
     </h2>
     <table>
@@ -19,7 +19,7 @@
                 <td>
                     <div class="item-name-flex-container">
                         <i class="fas fa-dice-d20 damage-roll"></i>
-                        <div class="item-name">{{item.name}}</div>
+                        <div class="item-name" data-action="viewItem">{{item.name}}</div>
                     </div>
                 </td>
                 <td class="table-center-align">{{item.system.damage_string}}</td>
@@ -31,7 +31,7 @@
                     </div>
                 </td>
                 <td class="table-center-align">{{item.system.encumbrance}}</td>
-                <td class="table-center-align"><a class="item-control item-delete" title="{{localize 'AFMBE.Items.Delete'}}"><i
+                <td class="table-center-align"><a class="item-control item-delete" data-action="deleteItem" title="{{localize 'AFMBE.Items.Delete'}}"><i
                             class="fas fa-trash"></i></a></td>
             </tr>
             {{/each}}

@@ -169,63 +169,59 @@ export class afmbeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     // }
 
     /** @override */
-    async activateListeners(html) {
-        super.activateListeners(html);
+    // async activateListeners(html) {
+    //     super.activateListeners(html);
 
-        // Run non-event functions
-        this._createCharacterPointDivs()
-        this._createStatusTags()
+    //     // Run non-event functions
+    //     this._createCharacterPointDivs()
+    //     this._createStatusTags()
 
-        // Buttons and Event Listeners
-        html.find('.attribute-roll').click(this._onAttributeRoll.bind(this))
-        if (this.actor.isOwner) html.find('.damage-roll').click(this._onDamageRoll.bind(this))
-        html.find('.toggleEquipped').click(this._onToggleEquipped.bind(this))
-        html.find('.armor-button-cell button').click(this._onArmorRoll.bind(this))
-        html.find('.reset-resource').click(this._onResetResource.bind(this))
+    //     // Buttons and Event Listeners
+    //     html.find('.attribute-roll').click(this._onAttributeRoll.bind(this))
+    //     if (this.actor.isOwner) html.find('.damage-roll').click(this._onDamageRoll.bind(this))
+    //     html.find('.toggleEquipped').click(this._onToggleEquipped.bind(this))
+    //     html.find('.armor-button-cell button').click(this._onArmorRoll.bind(this))
+    //     html.find('.reset-resource').click(this._onResetResource.bind(this))
 
-        // Update/Open Inventory Item
-        html.find('.create-item').click(this._createItem.bind(this))
+    //     // Update/Open Inventory Item
+    //     html.find('.create-item').click(this._createItem.bind(this))
 
-        html.find('.item-name').click((ev) => {
-            const li = ev.currentTarget.closest(".item")
-            const item = this.actor.items.get(li.dataset.itemId)
-            if (item.isOwner) {
-                item.sheet.render(true)
-            }
-            item.update({ "data.value": item.system.value })
-        })
+    //     html.find('.item-name').click((ev) => {
+    //         const li = ev.currentTarget.closest(".item")
+    //         const item = this.actor.items.get(li.dataset.itemId)
+    //         if (item.isOwner) {
+    //             item.sheet.render(true)
+    //         }
+    //         item.update({ "data.value": item.system.value })
+    //     })
 
-        // Delete Inventory Item
-        html.find('.item-delete').click(ev => {
-            const li = ev.currentTarget.closest(".item");
-            this.actor.deleteEmbeddedDocuments("Item", [li.dataset.itemId]);
-        });
-    }
+    //     // Delete Inventory Item
+    //     html.find('.item-delete').click(ev => {
+    //         const li = ev.currentTarget.closest(".item");
+    //         this.actor.deleteEmbeddedDocuments("Item", [li.dataset.itemId]);
+    //     });
+    // }
 
-    /**
-   * Handle clickable rolls.
-   * @param event   The originating click event
-   * @private
-   */
+    /* -------------------------------------------- */
+    /*  Action Handlers                              */
+    /* -------------------------------------------- */
 
-    _createItem(event) {
-        event.preventDefault()
-        const element = event.currentTarget
-
-        const typeKey = element.dataset.create
-        const typeLabel = game.i18n.localize(`AFMBE.ItemType.${typeKey}`)
+    static #onCreateItem(event, target) {
+        event.preventDefault();
+        const typeKey = target.dataset.create;
+        const typeLabel = game.i18n.localize(`AFMBE.ItemType.${typeKey}`);
         let itemData = {
             name: game.i18n.format("AFMBE.Items.New", { type: typeLabel }),
             type: typeKey,
             cost: 0,
             level: 0
-        }
-        return Item.create(itemData, { parent: this.actor })
+        };
+        return Item.create(itemData, { parent: this.actor });
     }
 
     _createCharacterPointDivs() {
         let actorData = this.actor.system
-        let attributesHeader = this.form.querySelector('#attributes-header')
+        let attributesHeader = this.element.querySelector('#attributes-header')
         let qualityDiv = document.createElement('div')
         let drawbackDiv = document.createElement('div')
         let skillDiv = document.createElement('div')
@@ -237,26 +233,25 @@ export class afmbeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
             attributesHeader.innerHTML += ` - [${actorData.characterTypeValues[characterTypePath].attributePoints.value} / ${actorData.characterTypeValues[characterTypePath].attributePoints.max}]`
 
             qualityDiv.innerHTML = `- [${actorData.characterTypeValues[characterTypePath].qualityPoints.value} / ${actorData.characterTypeValues[characterTypePath].qualityPoints.max}]`
-            this.form.querySelector('#quality-header').append(qualityDiv)
+            this.element.querySelector('#quality-header').append(qualityDiv)
 
             drawbackDiv.innerHTML = `- [${actorData.characterTypeValues[characterTypePath].drawbackPoints.value} / ${actorData.characterTypeValues[characterTypePath].drawbackPoints.max}]`
-            this.form.querySelector('#drawback-header').append(drawbackDiv)
+            this.element.querySelector('#drawback-header').append(drawbackDiv)
 
             skillDiv.innerHTML = `- [${actorData.characterTypeValues[characterTypePath].skillPoints.value} / ${actorData.characterTypeValues[characterTypePath].skillPoints.max}]`
-            this.form.querySelector('#skill-header').append(skillDiv)
+            this.element.querySelector('#skill-header').append(skillDiv)
 
             powerDiv.innerHTML = `- [${actorData.characterTypeValues[characterTypePath].metaphysicsPoints.value} / ${actorData.characterTypeValues[characterTypePath].metaphysicsPoints.max}]`
-            this.form.querySelector('#power-header').append(powerDiv)
+            this.element.querySelector('#power-header').append(powerDiv)
         }
     }
 
 
-    _onAttributeRoll(event) {
+    static #onAttributeRoll(event, target) {
         event.preventDefault()
-        const element = event.currentTarget
-        const attributeKey = element.dataset.attributeKey || element.dataset.attributeName?.toLowerCase()
+        const attributeKey = target.dataset.attributeKey || target.dataset.attributeName?.toLowerCase()
         if (!attributeKey) { return }
-        const attributeLabel = element.dataset.attributeLabel || attributeKey
+        const attributeLabel = target.dataset.attributeLabel || attributeKey
         const actorData = this.actor.system
 
         const noneLabel = game.i18n.localize("AFMBE.Common.None")
@@ -462,10 +457,9 @@ export class afmbeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
 
 
-    async _onDamageRoll(event) {
+    static #onDamageRoll(event, target) {
         event.preventDefault()
-        let element = event.currentTarget
-        let weapon = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
+        let weapon = this.actor.getEmbeddedDocument("Item", target.closest('.item').dataset.itemId)
 
         const dialogTitle = game.i18n.localize("AFMBE.Dialog.WeaponRoll.Title")
         const rangedInfo = game.i18n.localize("AFMBE.Dialog.WeaponRoll.RangedInfo")
@@ -593,10 +587,9 @@ export class afmbeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     }
 
 
-    async _onArmorRoll(event) {
+    static #onArmorRoll(event, target) {
         event.preventDefault()
-        let element = event.currentTarget
-        let equippedItem = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
+        let equippedItem = this.actor.getEmbeddedDocument("Item", target.closest('.item').dataset.itemId)
 
         let roll = await new Roll(equippedItem.system.armor_value).evaluate()
 
@@ -628,10 +621,9 @@ export class afmbeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         })
     }
 
-    _onToggleEquipped(event) {
+    static #onToggleEquipped(event, target) {
         event.preventDefault()
-        let element = event.currentTarget
-        let equippedItem = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
+        let equippedItem = this.actor.getEmbeddedDocument("Item", target.closest('.item').dataset.itemId)
 
         switch (equippedItem.system.equipped) {
             case true:
@@ -644,17 +636,30 @@ export class afmbeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         }
     }
 
-    _onResetResource(event) {
+    static #onResetResource(event, target) {
         event.preventDefault()
         const actorData = this.actor.system
-        const element = event.currentTarget
-        const dataPath = `system.secondaryAttributes.${element.dataset.resource}.value`
-        const resetResourceValue = actorData.secondaryAttributes[element.dataset.resource].max
+        const dataPath = `system.secondaryAttributes.${target.dataset.resource}.value`
+        const resetResourceValue = actorData.secondaryAttributes[target.dataset.resource].max
         this.actor.update({ [dataPath]: resetResourceValue })
     }
 
+    static #onViewItem(event, target) {
+        const li = target.closest(".item");
+        const item = this.actor.items.get(li.dataset.itemId);
+        if (item.isOwner) {
+            item.sheet.render(true);
+        }
+        item.update({ "system.value": item.system.value });
+    }
+
+    static #onDeleteItem(event, target) {
+        const li = target.closest(".item");
+        this.actor.deleteEmbeddedDocuments("Item", [li.dataset.itemId]);
+    }
+
     _createStatusTags() {
-        let tagContainer = this.form.querySelector('.tags-flex-container')
+        let tagContainer = this.element.querySelector('.tags-flex-container')
         let encTag = document.createElement('div')
         let enduranceTag = document.createElement('div')
         let essenceTag = document.createElement('div')

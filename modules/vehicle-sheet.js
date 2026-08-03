@@ -11,6 +11,14 @@ export class afmbevehicleSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
         tag: "form",
         window: { rezisable: true },
         form: { submitOnChange: true, closeOnSubmit: false },
+        actions: {
+            damageRoll: afmbevehicleSheet.#onDamageRoll,
+            toggleEquipped: afmbevehicleSheet.#onToggleEquipped,
+            armorRoll: afmbevehicleSheet.#onArmorRoll,
+            createItem: afmbevehicleSheet.#onCreateItem,
+            viewItem: afmbevehicleSheet.#onViewItem,
+            deleteItem: afmbevehicleSheet.#onDeleteItem
+        }
     };
 
     /** @override */
@@ -133,53 +141,51 @@ export class afmbevehicleSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
     // }
 
     /** @override */
-    async activateListeners(html) {
-        super.activateListeners(html);
+    // async activateListeners(html) {
+    //     super.activateListeners(html);
 
-        // Buttons and Event Listeners
-        if (this.actor.isOwner) html.find('.damage-roll').click(this._onDamageRoll.bind(this))
-        html.find('.toggleEquipped').click(this._onToggleEquipped.bind(this))
-        html.find('.armor-button-cell button').click(this._onArmorRoll.bind(this))
+    //     // Buttons and Event Listeners
+    //     if (this.actor.isOwner) html.find('.damage-roll').click(this._onDamageRoll.bind(this))
+    //     html.find('.toggleEquipped').click(this._onToggleEquipped.bind(this))
+    //     html.find('.armor-button-cell button').click(this._onArmorRoll.bind(this))
 
-        // Update/Open Inventory Item
-        html.find('.create-item').click(this._createItem.bind(this))
+    //     // Update/Open Inventory Item
+    //     html.find('.create-item').click(this._createItem.bind(this))
 
-        html.find('.item-name').click((ev) => {
-            const li = ev.currentTarget.closest(".item")
-            const item = this.actor.items.get(li.dataset.itemId)
-            item.sheet.render(true)
-            item.update({ "data.value": item.system.value })
-        })
+    //     html.find('.item-name').click((ev) => {
+    //         const li = ev.currentTarget.closest(".item")
+    //         const item = this.actor.items.get(li.dataset.itemId)
+    //         item.sheet.render(true)
+    //         item.update({ "data.value": item.system.value })
+    //     })
 
-        // Delete Inventory Item
-        html.find('.item-delete').click(ev => {
-            const li = ev.currentTarget.closest(".item");
-            this.actor.deleteEmbeddedDocuments("Item", [li.dataset.itemId]);
-        });
-    }
+    //     // Delete Inventory Item
+    //     html.find('.item-delete').click(ev => {
+    //         const li = ev.currentTarget.closest(".item");
+    //         this.actor.deleteEmbeddedDocuments("Item", [li.dataset.itemId]);
+    //     });
+    // }
 
-    /**
-   * Handle clickable rolls.
-   * @param event   The originating click event
-   * @private
-   */
+    /* -------------------------------------------- */
+    /*  Action Handlers                              */
+    /* -------------------------------------------- */
 
-    _createItem(event) {
-        event.preventDefault()
-        const element = event.currentTarget
-
+    static #onCreateItem(event, target) {
+        event.preventDefault();
+        const typeKey = target.dataset.create;
+        const typeLabel = game.i18n.localize(`AFMBE.ItemType.${typeKey}`);
         let itemData = {
-            name: game.i18n.format("AFMBE.Items.New", { type: game.i18n.localize(`AFMBE.ItemType.${element.dataset.create}`) }),
-            type: element.dataset.create,
+            name: game.i18n.format("AFMBE.Items.New", { type: typeLabel }),
+            type: typeKey,
             cost: 0,
             level: 0
-        }
-        return Item.create(itemData, { parent: this.actor })
+        };
+        return Item.create(itemData, { parent: this.actor });
     }
 
-    async _onDamageRoll(event) {
+    static async #onDamageRoll(event, target) {
         event.preventDefault()
-        let element = event.currentTarget
+        let element = target
         let weapon = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
 
         let roll = await new Roll(weapon.system.damage).evaluate()
@@ -214,9 +220,9 @@ export class afmbevehicleSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
         })
     }
 
-    async _onArmorRoll(event) {
+    static async #onArmorRoll(event, target) {
         event.preventDefault()
-        let element = event.currentTarget
+        let element = target
         let equippedItem = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
 
         let roll = await new Roll(equippedItem.system.armor_value).evaluate()
@@ -249,9 +255,9 @@ export class afmbevehicleSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
         })
     }
 
-    _onToggleEquipped(event) {
+    static #onToggleEquipped(event, target) {
         event.preventDefault()
-        let element = event.currentTarget
+        let element = target
         let equippedItem = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
 
         switch (equippedItem.system.equipped) {
@@ -263,6 +269,18 @@ export class afmbevehicleSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
                 equippedItem.update({ 'system.equipped': true })
                 break
         }
+    }
+
+    static #onViewItem(event, target) {
+        const li = target.closest(".item");
+        const item = this.actor.items.get(li.dataset.itemId);
+        item.sheet.render(true);
+        item.update({ "system.value": item.system.value });
+    }
+
+    static #onDeleteItem(event, target) {
+        const li = target.closest(".item");
+        this.actor.deleteEmbeddedDocuments("Item", [li.dataset.itemId]);
     }
 
 }

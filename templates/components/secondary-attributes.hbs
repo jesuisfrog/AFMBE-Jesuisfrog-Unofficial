@@ -2,7 +2,7 @@
     <h2>{{localize 'AFMBE.Attributes.Secondary.Title'}}</h2>
     <div class="resource-container">
         <div class="resource">
-            <button type="button" class="reset-resource" data-resource="hp">{{localize 'AFMBE.Attributes.Secondary.LifePoints'}}</button>
+            <button type="button" class="reset-resource" data-action="resetResource" data-resource="hp">{{localize 'AFMBE.Attributes.Secondary.LifePoints'}}</button>
             <div class="resource-values secondaryAttribute">
                 <input type="number" name="system.secondaryAttributes.hp.value"
                     value="{{actor.system.secondaryAttributes.hp.value}}">
@@ -11,7 +11,7 @@
             </div>
         </div>
         <div class="resource">
-            <button type="button" class="reset-resource" data-resource="endurance_points">{{localize 'AFMBE.Attributes.Secondary.Endurance'}}</button>
+            <button type="button" class="reset-resource" data-action="resetResource" data-resource="endurance_points">{{localize 'AFMBE.Attributes.Secondary.Endurance'}}</button>
             <div class="resource-values secondaryAttribute">
                 <input type="number" name="system.secondaryAttributes.endurance_points.value"
                     value="{{actor.system.secondaryAttributes.endurance_points.value}}">
@@ -20,7 +20,7 @@
             </div>
         </div>
         <div class="resource">
-            <button type="button" class="reset-resource" data-resource="essence">{{localize 'AFMBE.Attributes.Secondary.EssencePool'}}</button>
+            <button type="button" class="reset-resource" data-action="resetResource" data-resource="essence">{{localize 'AFMBE.Attributes.Secondary.EssencePool'}}</button>
             <div class="resource-values secondaryAttribute">
                 <input type="number" name="system.secondaryAttributes.essence.value"
                     value="{{actor.system.secondaryAttributes.essence.value}}">
@@ -29,14 +29,14 @@
             </div>
         </div>
         <div class="resource">
-            <button type="button" class="no-focus">{{localize 'AFMBE.Attributes.Secondary.Speed'}}</button>
+            <button type="button" class="no-focus" data-action="attributeRoll" data-attribute-key="speed" data-attribute-label="{{localize 'AFMBE.Attributes.Secondary.Speed'}}">{{localize 'AFMBE.Attributes.Secondary.Speed'}}</button>
             <div class="resource-values secondaryAttribute">
                 <div>{{actor.system.secondaryAttributes.speed.value}} {{localize 'AFMBE.Units.Mph'}}</div>
                 <div>[{{actor.system.secondaryAttributes.speed.halfValue}} {{localize 'AFMBE.Units.Mps'}}]</div>
             </div>
         </div>
         <div class="resource">
-            <button type="button" class="no-focus">{{localize 'AFMBE.Attributes.Secondary.Initiative'}}</button>
+            <button type="button" class="no-focus" data-action="attributeRoll" data-attribute-key="initiative" data-attribute-label="{{localize 'AFMBE.Attributes.Secondary.Initiative'}}">{{localize 'AFMBE.Attributes.Secondary.Initiative'}}</button>
             <div class="resource-values secondaryAttribute">
                 <div>{{actor.system.secondaryAttributes.initiative.value}}</div>
             </div>

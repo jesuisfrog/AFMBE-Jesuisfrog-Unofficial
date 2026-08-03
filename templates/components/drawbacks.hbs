@@ -1,6 +1,6 @@
 <div class="drawbacks-container">
     <h2 id="drawback-header" class="header-with-button">
-        <button type="button" class="create-item" data-create="drawback">+</button>
+        <button type="button" class="create-item" data-action="createItem" data-create="drawback">+</button>
         <span>{{localize 'AFMBE.Drawbacks.Title'}}</span>
     </h2>
     <table class="item-table">
@@ -14,9 +14,9 @@
         <tbody>
             {{#each actor.drawback as |item id|}}
             <tr class="item" data-item-id="{{item._id}}">
-                <td class="item-name">{{item.name}}</td>
+                <td class="item-name" data-action="viewItem">{{item.name}}</td>
                 <td class="table-center-align">{{item.system.bonus}}</td>
-                <td class="table-center-align"><a class="item-control item-delete" title="{{localize 'AFMBE.Items.Delete'}}"><i
+                <td class="table-center-align"><a class="item-control item-delete" data-action="deleteItem" title="{{localize 'AFMBE.Items.Delete'}}"><i
                             class="fas fa-trash"></i></a></td>
             </tr>
             {{/each}}

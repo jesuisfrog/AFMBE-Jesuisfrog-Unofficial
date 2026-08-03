@@ -1,6 +1,6 @@
 <div class="item-table">
     <h2 class="header-with-button">
-        <button type="button" class="create-item" data-create="item">+</button>
+        <button type="button" class="create-item" data-action="createItem" data-create="item">+</button>
         <span>{{localize 'AFMBE.Items.Equipped'}}</span>
     </h2>
     <table>
@@ -18,13 +18,13 @@
             <tr class="item" data-item-id="{{item._id}}">
                 <td>
                     <div class="item-name-flex-container">
-                        <input type="checkbox" class="toggleEquipped" {{checked item.system.equipped}}>
+                        <input type="checkbox" class="toggleEquipped" data-action="toggleEquipped" {{checked item.system.equipped}}>
                         <div class="item-name">{{item.name}}</div>
                     </div>
                 </td>
                 <td class="table-center-align">{{item.system.qty}}</td>
                 <td class="table-center-align armor-button-cell">
-                    <button type="button">{{item.system.armor_value}}</button>
+                    <button type="button" data-action="armorRoll">{{item.system.armor_value}}</button>
                 </td>
                 <td class="table-center-align">{{item.system.encumbrance}}</td>
                 <td class="table-center-align"><a class="item-control item-delete" title="{{localize 'AFMBE.Items.Delete'}}"><i
@@ -37,7 +37,7 @@
 
 <div class="item-table">
     <h2 class="header-with-button">
-        <button type="button" class="create-item" data-create="item">+</button>
+        <button type="button" class="create-item" data-action="createItem" data-create="item">+</button>
         <span>{{localize 'AFMBE.Items.Title'}}</span>
     </h2>
     <table>
@@ -55,12 +55,12 @@
                 <td>
                     <div class="item-name-flex-container">
                         <input type="checkbox" class="toggleEquipped" {{checked item.system.equipped}}>
-                        <div class="item-name">{{item.name}}</div>
+                        <div class="item-name" data-action="viewItem">{{item.name}}</div>
                     </div>
                 </td>
                 <td class="table-center-align">{{item.system.qty}}</td>
                 <td class="table-center-align">{{item.system.encumbrance}}</td>
-                <td class="table-center-align"><a class="item-control item-delete" title="{{localize 'AFMBE.Items.Delete'}}"><i
+                <td class="table-center-align"><a class="item-control item-delete" data-action="deleteItem" title="{{localize 'AFMBE.Items.Delete'}}"><i
                             class="fas fa-trash"></i></a></td>
             </tr>
             {{/each}}

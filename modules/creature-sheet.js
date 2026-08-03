@@ -11,6 +11,16 @@ export class afmbeCreatureSheet extends HandlebarsApplicationMixin(ActorSheetV2)
         tag: "form",
         window: { rezisable: true },
         form: { submitOnChange: true, closeOnSubmit: false },
+        actions: {
+            attributeRoll: afmbeCreatureSheet.#onAttributeRoll,
+            damageRoll: afmbeCreatureSheet.#onDamageRoll,
+            toggleEquipped: afmbeCreatureSheet.#onToggleEquipped,
+            armorRoll: afmbeCreatureSheet.#onArmorRoll,
+            resetResource: afmbeCreatureSheet.#onResetResource,
+            createItem: afmbeCreatureSheet.#onCreateItem,
+            viewItem: afmbeCreatureSheet.#onViewItem,
+            deleteItem: afmbeCreatureSheet.#onDeleteItem
+        }
     };
 
     /** @override */
@@ -28,6 +38,7 @@ export class afmbeCreatureSheet extends HandlebarsApplicationMixin(ActorSheetV2)
     _onRender(context, options) {
         super._onRender(context, options);
         this.element.classList.toggle("dark-mode", game.settings.get("afmbe-jesuisfrog", "dark-mode"));
+        this._createStatusTags();
     }
     // static get defaultOptions() {
     //     return foundry.utils.mergeObject(super.defaultOptions, {
@@ -142,63 +153,60 @@ export class afmbeCreatureSheet extends HandlebarsApplicationMixin(ActorSheetV2)
     // }
 
     /** @override */
-    async activateListeners(html) {
-        super.activateListeners(html);
+    // async activateListeners(html) {
+    //     super.activateListeners(html);
 
-        // Run non-event functions
-        // this._createCharacterPointDivs()
-        this._createStatusTags()
+    //     // Run non-event functions
+    //     // this._createCharacterPointDivs()
+    //     this._createStatusTags()
 
-        // Buttons and Event Listeners
-        html.find('.attribute-roll').click(this._onAttributeRoll.bind(this))
-        if (this.actor.isOwner) html.find('.damage-roll').click(this._onDamageRoll.bind(this))
-        html.find('.toggleEquipped').click(this._onToggleEquipped.bind(this))
-        html.find('.armor-button-cell button').click(this._onArmorRoll.bind(this))
-        html.find('.reset-resource').click(this._onResetResource.bind(this))
+    //     // Buttons and Event Listeners
+    //     html.find('.attribute-roll').click(this._onAttributeRoll.bind(this))
+    //     if (this.actor.isOwner) html.find('.damage-roll').click(this._onDamageRoll.bind(this))
+    //     html.find('.toggleEquipped').click(this._onToggleEquipped.bind(this))
+    //     html.find('.armor-button-cell button').click(this._onArmorRoll.bind(this))
+    //     html.find('.reset-resource').click(this._onResetResource.bind(this))
 
-        // Update/Open Inventory Item
-        html.find('.create-item').click(this._createItem.bind(this))
+    //     // Update/Open Inventory Item
+    //     html.find('.create-item').click(this._createItem.bind(this))
 
-        html.find('.item-name').click((ev) => {
-            const li = ev.currentTarget.closest(".item")
-            const item = this.actor.items.get(li.dataset.itemId)
-            if (this.actor.permission[game.user._id] >= 2 || game.user.isGM) { item.sheet.render(true) }
-            item.update({ "system.value": item.system.value })
-        })
+    //     html.find('.item-name').click((ev) => {
+    //         const li = ev.currentTarget.closest(".item")
+    //         const item = this.actor.items.get(li.dataset.itemId)
+    //         if (this.actor.permission[game.user._id] >= 2 || game.user.isGM) { item.sheet.render(true) }
+    //         item.update({ "system.value": item.system.value })
+    //     })
 
-        // Delete Inventory Item
-        html.find('.item-delete').click(ev => {
-            const li = ev.currentTarget.closest(".item");
-            this.actor.deleteEmbeddedDocuments("Item", [li.dataset.itemId]);
-        });
-    }
+    //     // Delete Inventory Item
+    //     html.find('.item-delete').click(ev => {
+    //         const li = ev.currentTarget.closest(".item");
+    //         this.actor.deleteEmbeddedDocuments("Item", [li.dataset.itemId]);
+    //     });
+    // }
 
-    /**
-   * Handle clickable rolls.
-   * @param event   The originating click event
-   * @private
-   */
+    /* -------------------------------------------- */
+    /*  Action Handlers                              */
+    /* -------------------------------------------- */
 
-    _createItem(event) {
-        event.preventDefault()
-        const element = event.currentTarget
-
+    static #onCreateItem(event, target) {
+        event.preventDefault();
+        const typeKey = target.dataset.create;
+        const typeLabel = game.i18n.localize(`AFMBE.ItemType.${typeKey}`);
         let itemData = {
-            name: game.i18n.format("AFMBE.Items.New", { type: game.i18n.localize(`AFMBE.ItemType.${element.dataset.create}`) }),
-            type: element.dataset.create,
+            name: game.i18n.format("AFMBE.Items.New", { type: typeLabel }),
+            type: typeKey,
             cost: 0,
             level: 0
-        }
-        return Item.create(itemData, { parent: this.actor })
+        };
+        return Item.create(itemData, { parent: this.actor });
     }
 
 
-    _onAttributeRoll(event) {
+    static #onAttributeRoll(event, target) {
         event.preventDefault()
-        const element = event.currentTarget
-        const attributeKey = element.dataset.attributeKey || element.dataset.attributeName?.toLowerCase()
+        const attributeKey = target.dataset.attributeKey || target.dataset.attributeName?.toLowerCase()
         if (!attributeKey) { return }
-        const attributeLabel = element.dataset.attributeLabel || attributeKey
+        const attributeLabel = target.dataset.attributeLabel || attributeKey
 
         const dialogTitle = game.i18n.localize("AFMBE.Dialog.AttributeRoll.Title")
         const dialogHeader = game.i18n.format("AFMBE.Dialog.AttributeRoll.Header", { attribute: attributeLabel })
@@ -356,10 +364,9 @@ export class afmbeCreatureSheet extends HandlebarsApplicationMixin(ActorSheetV2)
 
 
 
-    async _onDamageRoll(event) {
+    static async #onDamageRoll(event, target) {
         event.preventDefault()
-        let element = event.currentTarget
-        let weapon = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
+        let weapon = this.actor.getEmbeddedDocument("Item", target.closest('.item').dataset.itemId)
 
         const dialogTitle = game.i18n.localize("AFMBE.Dialog.WeaponRoll.Title")
         const rangedInfo = game.i18n.localize("AFMBE.Dialog.WeaponRoll.RangedInfo")
@@ -487,10 +494,9 @@ export class afmbeCreatureSheet extends HandlebarsApplicationMixin(ActorSheetV2)
     }
 
 
-    async _onArmorRoll(event) {
+    static async #onArmorRoll(event, target) {
         event.preventDefault()
-        let element = event.currentTarget
-        let equippedItem = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
+        let equippedItem = this.actor.getEmbeddedDocument("Item", target.closest('.item').dataset.itemId)
 
         let roll = await new Roll(equippedItem.system.armor_value).evaluate()
 
@@ -522,10 +528,9 @@ export class afmbeCreatureSheet extends HandlebarsApplicationMixin(ActorSheetV2)
         })
     }
 
-    _onToggleEquipped(event) {
+    static #onToggleEquipped(event, target) {
         event.preventDefault()
-        let element = event.currentTarget
-        let equippedItem = this.actor.getEmbeddedDocument("Item", element.closest('.item').dataset.itemId)
+        let equippedItem = this.actor.getEmbeddedDocument("Item", target.closest('.item').dataset.itemId)
 
         switch (equippedItem.system.equipped) {
             case true:
@@ -538,16 +543,27 @@ export class afmbeCreatureSheet extends HandlebarsApplicationMixin(ActorSheetV2)
         }
     }
 
-    _onResetResource(event) {
+    static #onResetResource(event, target) {
         event.preventDefault()
-        const element = event.currentTarget
-        const dataPath = `system.secondaryAttributes.${element.dataset.resource}.value`
+        const dataPath = `system.secondaryAttributes.${target.dataset.resource}.value`
 
-        this.actor.update({ [dataPath]: this.actor.system.secondaryAttributes[element.dataset.resource].max })
+        this.actor.update({ [dataPath]: this.actor.system.secondaryAttributes[target.dataset.resource].max })
+    }
+
+    static #onViewItem(event, target) {
+        const li = target.closest(".item");
+        const item = this.actor.items.get(li.dataset.itemId);
+        if (this.actor.permission[game.user._id] >= 2 || game.user.isGM) { item.sheet.render(true); }
+        item.update({ "system.value": item.system.value });
+    }
+
+    static #onDeleteItem(event, target) {
+        const li = target.closest(".item");
+        this.actor.deleteEmbeddedDocuments("Item", [li.dataset.itemId]);
     }
 
     _createStatusTags() {
-        let tagContainer = this.form.querySelector('.tags-flex-container')
+        let tagContainer = this.element.querySelector('.tags-flex-container')
         let encTag = document.createElement('div')
 
         // Create Encumbrance Tags & Append

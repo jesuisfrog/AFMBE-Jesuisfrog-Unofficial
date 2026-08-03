@@ -72,9 +72,10 @@ export class afmbeItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     /** @override */
     setPosition(options = {}) {
         const position = super.setPosition(options);
-        const sheetBody = this.element.find(".sheet-body");
-        const bodyHeight = position.height - 192;
-        sheetBody.css("height", bodyHeight);
+        const sheetBody = this.element.querySelector(".sheet-body");
+        if(sheetBody) {
+            sheetBody.style.height = `${position.height - 192}px`;
+        }
         return position;
     }
 

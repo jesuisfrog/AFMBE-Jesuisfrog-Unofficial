@@ -1,6 +1,6 @@
 <div class="powers-container">
     <h2 id="power-header" class="header-with-button">
-        <button type="button" class="create-item" data-create="power">+</button>
+        <button type="button" class="create-item" data-action="createItem" data-create="power">+</button>
         <span>{{localize 'AFMBE.Powers.Title'}}</span>
     </h2>
     <table class="item-table">
@@ -14,9 +14,9 @@
         <tbody>
             {{#each actor.power as |item id|}}
             <tr class="item" data-item-id="{{item._id}}">
-                <td class="item-name">{{item.name}}</td>
+                <td class="item-name" data-action="viewItem">{{item.name}}</td>
                 <td class="table-center-align">{{item.system.level}}</td>
-                <td class="table-center-align"><a class="item-control item-delete" title="{{localize 'AFMBE.Items.Delete'}}"><i
+                <td class="table-center-align"><a class="item-control item-delete" data-action="deleteItem" title="{{localize 'AFMBE.Items.Delete'}}"><i
                             class="fas fa-trash"></i></a></td>
             </tr>
             {{/each}}
