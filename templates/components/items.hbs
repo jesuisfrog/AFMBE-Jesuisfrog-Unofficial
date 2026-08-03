@@ -27,7 +27,7 @@
                     <button type="button" data-action="armorRoll">{{item.system.armor_value}}</button>
                 </td>
                 <td class="table-center-align">{{item.system.encumbrance}}</td>
-                <td class="table-center-align"><a class="item-control item-delete" title="{{localize 'AFMBE.Items.Delete'}}"><i
+                <td class="table-center-align"><a class="item-control item-delete" data-action="deleteItem" title="{{localize 'AFMBE.Items.Delete'}}"><i
                             class="fas fa-trash"></i></a></td>
             </tr>
             {{/each}}
