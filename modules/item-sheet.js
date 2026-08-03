@@ -21,15 +21,6 @@ export class afmbeItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
         this.element.classList.toggle("theme-light", !darkMode);
     }
 
-    // static get defaultOptions() {
-    //     return foundry.utils.mergeObject(super.defaultOptions, {
-    //         classes: ["afmbe-jesuisfrog", "sheet", "item", `${game.settings.get("afmbe-jesuisfrog", "dark-mode") ? "dark-mode" : ""}`],
-    //         width: 600,
-    //         height: 450,
-    //         tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body-items", initial: "description" }]
-    //     })
-    // }
-
     /* -------------------------------------------- */
 
 
@@ -45,11 +36,6 @@ export class afmbeItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
         return parts;
     }
 
-    // get template() {
-    //     const path = "systems/afmbe-jesuisfrog/templates";
-    //     return `${path}/${this.item.type}-sheet.hbs`;
-    // }
-
     /** @override */
     async _prepareContext(options) {
         const context = await super._prepareContext(options);
@@ -64,16 +50,6 @@ export class afmbeItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
         );
         return context;
     }
-
-    // getData() {
-    //     const data = super.getData();
-    //     data.dtypes = ["String", "Number", "Boolean"];
-    //     data.isGM = game.user.isGM;
-    //     data.editable = data.options.editable;
-    //     const itemData = data.system;
-    //     data.data = itemData;
-    //     return data;
-    // }
 
     /* -------------------------------------------- */
 

@@ -43,20 +43,6 @@ export class afmbeCreatureSheet extends HandlebarsApplicationMixin(ActorSheetV2)
         this.element.classList.toggle("theme-light", !darkMode);
         this._createStatusTags();
     }
-    // static get defaultOptions() {
-    //     return foundry.utils.mergeObject(super.defaultOptions, {
-    //         classes: ["afmbe-jesuisfrog", "sheet", "actor", `${game.settings.get("afmbe-jesuisfrog", "dark-mode") ? "dark-mode" : ""}`],
-    //         width: 700,
-    //         height: 820,
-    //         tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "core" }],
-    //         dragDrop: [{
-    //             dragSelector: [
-    //                 ".item"
-    //             ],
-    //             dropSelector: null
-    //         }]
-    //     });
-    // }
 
     /* -------------------------------------------- */
     /** @override */
@@ -73,19 +59,6 @@ export class afmbeCreatureSheet extends HandlebarsApplicationMixin(ActorSheetV2)
         this._prepareCharacterItems(context);
         return context;
     }
-
-    // getData() {
-    //     const data = super.getData();
-    //     data.isGM = game.user.isGM;
-    //     data.editable = data.options.editable;
-    //     const actorData = data.system;
-    //     let options = 0;
-    //     let user = this.user;
-
-    //     this._prepareCharacterItems(data)
-
-    //     return data
-    // }
 
     _prepareCharacterItems(sheetData) {
         const actorData = sheetData.actor
@@ -153,44 +126,6 @@ export class afmbeCreatureSheet extends HandlebarsApplicationMixin(ActorSheetV2)
         }
         return parts;
     }
-
-    // get template() {
-    //     const path = "systems/afmbe-jesuisfrog/templates";
-    //     if (!game.user.isGM && this.actor.limited) return "systems/afmbe-jesuisfrog/templates/limited-creature-sheet.hbs";
-    //     return `${path}/${this.actor.type}-sheet.hbs`;
-    // }
-
-    /** @override */
-    // async activateListeners(html) {
-    //     super.activateListeners(html);
-
-    //     // Run non-event functions
-    //     // this._createCharacterPointDivs()
-    //     this._createStatusTags()
-
-    //     // Buttons and Event Listeners
-    //     html.find('.attribute-roll').click(this._onAttributeRoll.bind(this))
-    //     if (this.actor.isOwner) html.find('.damage-roll').click(this._onDamageRoll.bind(this))
-    //     html.find('.toggleEquipped').click(this._onToggleEquipped.bind(this))
-    //     html.find('.armor-button-cell button').click(this._onArmorRoll.bind(this))
-    //     html.find('.reset-resource').click(this._onResetResource.bind(this))
-
-    //     // Update/Open Inventory Item
-    //     html.find('.create-item').click(this._createItem.bind(this))
-
-    //     html.find('.item-name').click((ev) => {
-    //         const li = ev.currentTarget.closest(".item")
-    //         const item = this.actor.items.get(li.dataset.itemId)
-    //         if (this.actor.permission[game.user._id] >= 2 || game.user.isGM) { item.sheet.render(true) }
-    //         item.update({ "system.value": item.system.value })
-    //     })
-
-    //     // Delete Inventory Item
-    //     html.find('.item-delete').click(ev => {
-    //         const li = ev.currentTarget.closest(".item");
-    //         this.actor.deleteEmbeddedDocuments("Item", [li.dataset.itemId]);
-    //     });
-    // }
 
     /* -------------------------------------------- */
     /*  Action Handlers                              */

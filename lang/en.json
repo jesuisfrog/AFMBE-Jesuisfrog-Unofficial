@@ -155,7 +155,7 @@
     "AFMBE.Status.SeverelyInjured": "Severely Injured",
     "AFMBE.Status.SeverelyInjuredHint": "Most actions suffer -1 through -5 penalty",
     "AFMBE.Units.Mph": "mph",
-    "AFMBE.Units.Mps": "m/sec",
+    "AFMBE.Units.Mps": "m/s",
     "AFMBE.Units.Pounds": "lbs",
     "AFMBE.Vehicle.Attributes.Acceleration": "Acceleration",
     "AFMBE.Vehicle.Attributes.Accuracy": "Accuracy",

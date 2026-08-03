@@ -34,28 +34,11 @@ export class afmbevehicleSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
     /** @override */
     _onRender(context, options) {
         super._onRender(context, options);
-        // this.element.classList.toggle("dark-mode", game.settings.get("afmbe-jesuisfrog", "dark-mode"));
         const darkMode = game.settings.get("afmbe-jesuisfrog", "dark-mode");
         this.element.classList.toggle("dark-mode", darkMode);
         this.element.classList.toggle("theme-dark", darkMode);
         this.element.classList.toggle("theme-light", !darkMode);
     }
-
-    // static get defaultOptions() {
-    //     return foundry.utils.mergeObject(super.defaultOptions, {
-    //         classes: ["afmbe-jesuisfrog", "sheet", "actor", `${game.settings.get("afmbe-jesuisfrog", "dark-mode") ? "dark-mode" : ""}`],
-    //         // template: "systems/afmbe-jesuisfrog/templates/vehicle-sheet.hbs",
-    //         width: 700,
-    //         height: 780,
-    //         tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "core" }],
-    //         dragDrop: [{
-    //             dragSelector: [
-    //                 ".item"
-    //             ],
-    //             dropSelector: null
-    //         }]
-    //     });
-    // }
 
     /* -------------------------------------------- */
     /** @override */
@@ -74,19 +57,6 @@ export class afmbevehicleSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
         this._prepareCharacterItems(context);
         return context;
     }
-
-    // getData() {
-    //     const data = super.getData();
-    //     data.isGM = game.user.isGM;
-    //     data.editable = data.options.editable;
-    //     const actorData = data.system;
-    //     let options = 0;
-    //     let user = this.user;
-
-    //     this._prepareCharacterItems(data)
-
-    //     return data
-    // }
 
     _prepareCharacterItems(sheetData) {
         const actorData = sheetData.actor
@@ -142,38 +112,6 @@ export class afmbevehicleSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
         }
         return parts;
     }
-
-    // get template() {
-    //     const path = "systems/afmbe-jesuisfrog/templates";
-    //     if (!game.user.isGM && this.actor.limited) return "systems/afmbe-jesuisfrog/templates/limited-vehicle-sheet.hbs";
-    //     return `${path}/${this.actor.type}-sheet.hbs`;
-    // }
-
-    /** @override */
-    // async activateListeners(html) {
-    //     super.activateListeners(html);
-
-    //     // Buttons and Event Listeners
-    //     if (this.actor.isOwner) html.find('.damage-roll').click(this._onDamageRoll.bind(this))
-    //     html.find('.toggleEquipped').click(this._onToggleEquipped.bind(this))
-    //     html.find('.armor-button-cell button').click(this._onArmorRoll.bind(this))
-
-    //     // Update/Open Inventory Item
-    //     html.find('.create-item').click(this._createItem.bind(this))
-
-    //     html.find('.item-name').click((ev) => {
-    //         const li = ev.currentTarget.closest(".item")
-    //         const item = this.actor.items.get(li.dataset.itemId)
-    //         item.sheet.render(true)
-    //         item.update({ "data.value": item.system.value })
-    //     })
-
-    //     // Delete Inventory Item
-    //     html.find('.item-delete').click(ev => {
-    //         const li = ev.currentTarget.closest(".item");
-    //         this.actor.deleteEmbeddedDocuments("Item", [li.dataset.itemId]);
-    //     });
-    // }
 
     /* -------------------------------------------- */
     /*  Action Handlers                              */

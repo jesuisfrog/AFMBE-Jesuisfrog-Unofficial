@@ -27,6 +27,18 @@
     color: black;
 }
 
+.afmbe-jesuisfrog .sheet-body,
+.afmbe-jesuisfrog .sheet-flex-container,
+.afmbe-jesuisfrog .sheet-sidebar {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+
+
+.afmbe-jesuisfrog .sheet-content {
+    height: 100%;
+}
+
 .afmbe-jesuisfrog.sheet.actor {
     min-width: 750px;
     min-height: 800px;
@@ -39,12 +51,12 @@
     color: black;
 }
 
-.afmbe-jesuisfrog.sheet.actor button,
+/* .afmbe-jesuisfrog.sheet.actor button,
 .afmbe-jesuisfrog.sheet.item button {
     color: black;
     background: none;
     border: 1px solid black;
-}
+} */
 
 .afmbe-jesuisfrog.sheet.actor input,
 .afmbe-jesuisfrog.sheet.actor select,
@@ -89,11 +101,11 @@
     color: black;
 }
 
-.afmbe-jesuisfrog h1{
+.afmbe-jesuisfrog h1 {
     border-bottom: none;
 }
 
-.afmbe-jesuisfrog h2.header-with-button{
+.afmbe-jesuisfrog h2.header-with-button {
     border-bottom: none;
     background: var(--light-mode-colorbar);
 }
@@ -106,14 +118,15 @@
     width: 100%;
 }
 
-.chat-message .bonusColorClass{
+.chat-message .bonusColorClass {
     color: green;
 }
-.chat-message .penaltyColorClass{
+
+.chat-message .penaltyColorClass {
     color: red;
 }
 
-.afmbe-jesuisfrog .description-container .tox-tinymce{
+.afmbe-jesuisfrog .description-container .tox-tinymce {
     min-height: 200px;
 }
 
@@ -259,7 +272,7 @@
 }
 
 .afmbe-jesuisfrog .table-center-align,
-.afmbe-chat-roll-table .table-center-align{
+.afmbe-chat-roll-table .table-center-align {
     text-align: center;
 }
 
@@ -368,6 +381,7 @@
     justify-content: stretch;
     flex-wrap: nowrap;
     height: 100%;
+    min-height: 0;
     background: none;
 }
 
@@ -378,6 +392,7 @@
     height: 100%;
     border-right: 1px solid;
     padding: 0 5px;
+    overflow-y: auto;
     background: none;
 }
 
@@ -392,6 +407,8 @@
     height: 100%;
     padding: 0 5px;
     gap: 10px;
+    overflow-y: auto;
+    min-height: 0;
 }
 
 .afmbe-jesuisfrog .header-container {
@@ -450,6 +467,8 @@
     flex-direction: column;
     align-items: center;
     border: none !important;
+    gap: 0;
+    line-height: 1.5;
 }
 
 .afmbe-jesuisfrog .sheet-nav a {
@@ -505,6 +524,14 @@
     width: 100%;
 }
 
+.afmbe-jesuisfrog .info-container h1 {
+    margin-bottom: auto;
+}
+
+.afmbe-jesuisfrog .info-container .charname {
+    font-size: smaller;
+}
+
 .afmbe-jesuisfrog .attribute-container {
     margin: 0 0 10px 0;
 }
@@ -533,6 +560,10 @@
     flex-wrap: nowrap;
     gap: 5px;
     width: 50%;
+}
+
+.afmbe-jesuisfrog .resource-values.speed-values {
+    flex-wrap: wrap;
 }
 
 .afmbe-jesuisfrog .resource .attribute input {
@@ -585,7 +616,7 @@
 }
 
 .afmbe-jesuisfrog .core-item-container table td:first-child,
-.afmbe-jesuisfrog .weapon-table table td:first-child{
+.afmbe-jesuisfrog .weapon-table table td:first-child {
     padding-left: 10px;
 }
 
@@ -645,7 +676,7 @@
 
 .afmbe-jesuisfrog .item-table,
 .afmbe-jesuisfrog .item-table table,
-.afmbe-jesuisfrog .weapon-table table{
+.afmbe-jesuisfrog .weapon-table table {
     margin: 0;
 }
 
@@ -722,7 +753,7 @@
     padding: 0 5px;
 }
 
-.afmbe-jesuisfrog .item-attribute-sidebar table{
+.afmbe-jesuisfrog .item-attribute-sidebar table {
     border: none;
 }
 
@@ -760,6 +791,7 @@
 .afmbe-jesuisfrog.dark-mode .window-content {
     background: rgb(22, 22, 22);
     color: rgb(220, 220, 220);
+    padding: 0;
 }
 
 .afmbe-jesuisfrog.sheet.actor.dark-mode .entity-link,
