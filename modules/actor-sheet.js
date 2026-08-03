@@ -36,7 +36,6 @@ export class afmbeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
     _onRender(context, options) {
         super._onRender(context, options);
-        // this.element.classList.toggle("dark-mode", game.settings.get("afmbe-jesuisfrog", "dark-mode"));
         const darkMode = game.settings.get("afmbe-jesuisfrog", "dark-mode");
         this.element.classList.toggle("dark-mode", darkMode);
         this.element.classList.toggle("theme-dark", darkMode);
@@ -74,6 +73,13 @@ export class afmbeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         context.isGM = game.user.isGM;
         context.tabs = this._prepareTabs("primary");
         context.editable = this.isEditable;
+        context.biographyHTML = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
+            this.actor.system.biography, { secrets: this.actor.isOwner, relativeTo: this.actor }
+        );
+        context.contactsHTML = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
+            this.actor.system.bio.contacts, { secrets: this.actor.isOwner, relativeTo: this.actor }
+        );
+
         this._prepareCharacterItems(context);
         return context;
     }

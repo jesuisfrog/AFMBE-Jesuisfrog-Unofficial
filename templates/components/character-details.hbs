@@ -1,7 +1,12 @@
 <div class="contacts-container">
     <h2>{{localize 'AFMBE.Contacts.Title'}}</h2>
-    {{editor actor.system.bio.contacts target="system.bio.contacts" button=true owner=owner
-    editable=editable}}
+    {{#if editable}}
+<prose-mirror name="system.bio.contacts" button="true" editable="{{editable}}" toggled="false" value="{{actor.system.bio.contacts}}">
+    {{{contactsHTML}}}
+</prose-mirror>
+{{else}}
+{{{contactsHTML}}}
+{{/if}}
 </div>
 
 <div class="character-details-container">

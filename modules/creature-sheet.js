@@ -37,7 +37,6 @@ export class afmbeCreatureSheet extends HandlebarsApplicationMixin(ActorSheetV2)
     /** @override */
     _onRender(context, options) {
         super._onRender(context, options);
-        // this.element.classList.toggle("dark-mode", game.settings.get("afmbe-jesuisfrog", "dark-mode"));
         const darkMode = game.settings.get("afmbe-jesuisfrog", "dark-mode");
         this.element.classList.toggle("dark-mode", darkMode);
         this.element.classList.toggle("theme-dark", darkMode);

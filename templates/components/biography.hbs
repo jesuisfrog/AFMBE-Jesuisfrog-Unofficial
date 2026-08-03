@@ -1,5 +1,11 @@
 <div class="bio-container" limited="{{limited}}">
     <h2>{{localize 'AFMBE.Biography.Title'}}</h2>
-    {{editor actor.system.biography target="system.biography" button=true owner=owner
-    editable=editable}}
+    {{#if editable}}
+    <prose-mirror name="system.biography" button="true" editable="{{editable}}" toggled="false"
+        value="{{actor.system.biography}}">
+        {{{biographyHTML}}}
+    </prose-mirror>
+    {{else}}
+    {{{biographyHTML}}}
+    {{/if}}
 </div>

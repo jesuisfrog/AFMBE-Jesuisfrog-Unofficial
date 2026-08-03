@@ -1,4 +1,11 @@
 <div class="item-description-sidebar">
     <h2 class="item-desc">{{localize 'AFMBE.Common.Description'}}</h2>
-    {{editor item.system.description target="system.description" button=true owner=owner editable=editable}}
+    {{#if editable}}
+    <prose-mirror name="system.description" button="true" editable="{{editable}}" toggled="false"
+        value="{{item.system.description}}">
+        {{{descriptionHTML}}}
+    </prose-mirror>
+    {{else}}
+    {{{descriptionHTML}}}
+    {{/if}}
 </div>
