@@ -294,9 +294,9 @@ export class afmbeCreatureSheet extends HandlebarsApplicationMixin(ActorSheetV2)
                 two: {
                     label: rollLabel,
                     callback: async html => {
-                        const attributeTestSelect = html.querySelector('#attributeTestSelect').value
-                        const userInputModifier = Number(html.querySelector('#inputModifier').value)
-                        const selectedSkill = this.actor.getEmbeddedDocument("Item", html.querySelector('#skillSelect').value)
+                        const attributeTestSelect = html[0].querySelector('#attributeTestSelect').value
+                        const userInputModifier = Number(html[0].querySelector('#inputModifier').value)
+                        const selectedSkill = this.actor.getEmbeddedDocument("Item", html[0].querySelector('#skillSelect').value)
 
                         const attributeValue = attributeTestSelect === 'simple' ? attributeValueBase * 2 : attributeValueBase
                         const skillValue = selectedSkill ? selectedSkill.system.level : 0
