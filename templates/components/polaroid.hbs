@@ -6,7 +6,7 @@
             <a class="item {{tabs.core.cssClass}}" data-action="tab" data-group="primary" data-tab="core">{{localize 'AFMBE.Sheet.Tab.Core'}}</a>
             <a class="item {{tabs.equipment.cssClass}}" data-action="tab" data-group="primary" data-tab="equipment">{{localize 'AFMBE.Sheet.Tab.Equipment'}}</a>
         </nav>
-        <select id="characterTypeSelect" name="system.characterType" data-type="String">
+        <select id="characterTypeSelect" name="system.characterType" data-type="Number">
             {{#each actor.system.characterTypes as |type idx|}}
                 <option value="{{idx}}" {{#if (eq ../actor.system.characterType idx)}}selected{{/if}}>{{localizeCharacterType type}}</option>
             {{/each}}

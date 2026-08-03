@@ -5,7 +5,7 @@ export function registerHandlebarsHelpers(){
     });
 
     Handlebars.registerHelper("eq", function (a, b) {
-        return a === b;
+        return a == b;
     });
 
     Handlebars.registerHelper("localizeCharacterType", function (type) {
