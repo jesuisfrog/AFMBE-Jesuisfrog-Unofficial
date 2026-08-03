@@ -1,4 +1,4 @@
-<form class="{{cssClass}}" autocomplete="off">
+<div class="sheet-content">
 
     {{!-- Sheet Header --}}
     <div class="sheet-flex-container">
@@ -6,7 +6,7 @@
             <div class="header-container">
                 <div class="polaroid-container">
                     <img class="polaroid" src="systems/afmbe-jesuisfrog/images/polaroid.png">
-                    <img class="profile-img" data-edit="img" src="{{actor.img}}">
+                    <img class="profile-img" data-action="editImage" data-field="img" src="{{actor.img}}">
                     <div class="profile-tags-container">
                         <div class="tags-flex-container"></div>
                     </div>
@@ -24,4 +24,4 @@
             {{> "systems/afmbe-jesuisfrog/templates/components/biography.hbs"}}
         </section>
     </div>
-</form>
+</div>

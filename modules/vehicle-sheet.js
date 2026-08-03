@@ -5,7 +5,7 @@ export class afmbevehicleSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
 
     /** @override */
     static DEFAULT_OPTIONS = {
-        classes: ["afmbe-jesuisfrog", "sheet", "actor"],
+        classes: ["afmbe-jesuisfrog", "sheet", "actor", "themed"],
         position: { width: 700, height: 780 },
         dragDrop: [{ dragSelector: ".item", dropSelector: null }],
         tag: "form",
@@ -34,7 +34,11 @@ export class afmbevehicleSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
     /** @override */
     _onRender(context, options) {
         super._onRender(context, options);
-        this.element.classList.toggle("dark-mode", game.settings.get("afmbe-jesuisfrog", "dark-mode"));
+        // this.element.classList.toggle("dark-mode", game.settings.get("afmbe-jesuisfrog", "dark-mode"));
+        const darkMode = game.settings.get("afmbe-jesuisfrog", "dark-mode");
+        this.element.classList.toggle("dark-mode", darkMode);
+        this.element.classList.toggle("theme-dark", darkMode);
+        this.element.classList.toggle("theme-light", !darkMode);
     }
 
     // static get defaultOptions() {
@@ -63,6 +67,7 @@ export class afmbevehicleSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
         context.actor = actorData;
         context.system = actorData.system;
         context.items = actorData.items;
+        context.owner = this.actor.isOwner;
         context.isGM = game.user.isGM;
         context.tabs = this._prepareTabs("primary");
         context.editable = this.isEditable;

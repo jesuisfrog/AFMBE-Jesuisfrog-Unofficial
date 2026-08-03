@@ -1,4 +1,4 @@
-<form class="{{cssClass}}" autocomplete="off">
+<div class="sheet-content">
 
     {{!-- Sheet Header --}}
     <div class="sheet-flex-container">
@@ -6,11 +6,11 @@
             <div class="header-container">
                 <div class="polaroid-container">
                     <img class="polaroid" src="systems/afmbe-jesuisfrog/images/polaroid.png">
-                    <img class="profile-img" data-edit="img" src="{{actor.img}}">
+                    <img class="profile-img" data-action="editImage" data-field="img" src="{{actor.img}}">
                     <div class="sheet-nav-container">
                         <nav class="sheet-nav sheet-tabs tabs" data-group="primary">
-                            <a class="item" data-action="tab" data-group="primary" data-tab="core">{{localize 'AFMBE.Sheet.Tab.Core'}}</a>
-                            <a class="item" data-action="tab" data-group="primary" data-tab="equipment">{{localize 'AFMBE.Sheet.Tab.Equipment'}}</a>
+                            <a class="item {{tabs.core.cssClass}}" data-action="tab" data-group="primary" data-tab="core">{{localize 'AFMBE.Sheet.Tab.Core'}}</a>
+                            <a class="item {{tabs.equipment.cssClass}}" data-action="tab" data-group="primary" data-tab="equipment">{{localize 'AFMBE.Sheet.Tab.Equipment'}}</a>
                         </nav>
                     </div>
                     <div class="profile-tags-container">
@@ -31,7 +31,7 @@
         <section class="sheet-body">
 
             {{!-- Core Tab --}}
-            <div class="tab core" data-group="primary" data-tab="core">
+            <div class="tab core {{tabs.core.cssClass}}" data-group="primary" data-tab="core">
                 
                 <div class="core-item-container">
                     {{> "systems/afmbe-jesuisfrog/templates/components/skills.hbs"}}
@@ -41,7 +41,7 @@
             </div>
 
             {{!-- Equipment Tab --}}
-            <div class="tab equipment" data-group="primary" data-tab="equipment">
+            <div class="tab equipment {{tabs.equipment.cssClass}}" data-group="primary" data-tab="equipment">
                 {{> "systems/afmbe-jesuisfrog/templates/components/equipment-header.hbs"}}
 
                 {{> "systems/afmbe-jesuisfrog/templates/components/weapons.hbs"}}
@@ -51,4 +51,4 @@
 
         </section>
     </div>
-</form>
+</div>

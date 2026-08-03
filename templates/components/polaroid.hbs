@@ -1,10 +1,10 @@
 <div class="polaroid-container">
     <img class="polaroid" src="systems/afmbe-jesuisfrog/images/polaroid.png">
-    <img class="profile-img" data-edit="img" src="{{actor.img}}">
+    <img class="profile-img" data-action="editImage" data-field="img" src="{{actor.img}}">
     <div class="sheet-nav-container">
         <nav class="sheet-nav sheet-tabs tabs" data-group="primary">
-            <a class="item" data-action="tab" data-group="primary" data-tab="core">{{localize 'AFMBE.Sheet.Tab.Core'}}</a>
-            <a class="item" data-action="tab" data-group="primary" data-tab="equipment">{{localize 'AFMBE.Sheet.Tab.Equipment'}}</a>
+            <a class="item {{tabs.core.cssClass}}" data-action="tab" data-group="primary" data-tab="core">{{localize 'AFMBE.Sheet.Tab.Core'}}</a>
+            <a class="item {{tabs.equipment.cssClass}}" data-action="tab" data-group="primary" data-tab="equipment">{{localize 'AFMBE.Sheet.Tab.Equipment'}}</a>
         </nav>
         <select id="characterTypeSelect" name="system.characterType" data-type="String">
             {{#each actor.system.characterTypes as |type idx|}}
