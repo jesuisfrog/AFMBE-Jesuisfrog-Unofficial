@@ -9,7 +9,7 @@ export class afmbeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         position: { width: 700, height: 820 },
         dragDrop: [{ dragSelector: ".item", dropSelector: null }],
         tag: "form",
-        window: { rezisable: true },
+        window: { resizable: true },
         form: { submitOnChange: true, closeOnSubmit: false },
         actions: {
             attributeRoll: afmbeActorSheet.#onAttributeRoll,

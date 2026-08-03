@@ -9,7 +9,7 @@ export class afmbevehicleSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
         position: { width: 700, height: 780 },
         dragDrop: [{ dragSelector: ".item", dropSelector: null }],
         tag: "form",
-        window: { rezisable: true },
+        window: { resizable: true },
         form: { submitOnChange: true, closeOnSubmit: false },
         actions: {
             damageRoll: afmbevehicleSheet.#onDamageRoll,
