@@ -1,36 +1,74 @@
-export class afmbeActorSheet extends foundry.appv1.sheets.ActorSheet {
+const {HandlebarsApplicationMixin} = foundry.applications.api;
+const {ActorSheetV2} = foundry.applications.sheets;
+
+export class afmbeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
     /** @override */
-    static get defaultOptions() {
-        return foundry.utils.mergeObject(super.defaultOptions, {
-            classes: ["afmbe-jesuisfrog", "sheet", "actor", `${game.settings.get("afmbe-jesuisfrog", "dark-mode") ? "dark-mode" : ""}`],
-            width: 700,
-            height: 820,
-            tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "core" }],
-            dragDrop: [{
-                dragSelector: [
-                    ".item"
-                ],
-                dropSelector: null
-            }]
-        });
+    static DEFAULT_OPTIONS = {
+        classes: ["afmbe-jesuisfrog", "sheet", "actor"],
+        position: { width: 700, height: 820 },
+        dragDrop: [{ dragSelector: ".item", dropSelector: null}],
+        tag: "form",
+        window: {rezisable : true},
+        form: { submitOnChange: true, closeOnSubmit: false },
+    };
+
+    /** @override */
+    static TABS = {
+        primary: {
+            tabs: [
+                { id: "core", group: primary, label: "AFMBE.Sheet.Tab.Core" },
+                { id: "equipment", group: primary, label: "AFMBE.Sheet.Tab.Equipment" },
+            ],
+            initial: "core"
+        }
     }
+
+    _onRender(context, options) {
+        super._onRender(context, options);
+        this.element.classList.toggle("dark-mode", game.settings.get("afmbe-jesuisfrog", "dark-mode"));
+    }
+
+
+
+    // static get defaultOptions() {
+    //     return foundry.utils.mergeObject(super.defaultOptions, {
+    //         classes: ["afmbe-jesuisfrog", "sheet", "actor", `${game.settings.get("afmbe-jesuisfrog", "dark-mode") ? "dark-mode" : ""}`],
+    //         width: 700,
+    //         height: 820,
+    //         tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "core" }],
+    //         dragDrop: [{
+    //             dragSelector: [
+    //                 ".item"
+    //             ],
+    //             dropSelector: null
+    //         }]
+    //     });
+    // }
 
     /* -------------------------------------------- */
     /** @override */
-
-    getData() {
-        const data = super.getData();
-        data.isGM = game.user.isGM;
-        data.editable = data.options.editable;
-        const actorData = data.system;
-        let options = 0;
-        let user = this.user;
-
-        this._prepareCharacterItems(data)
-
-        return data
+    async _prepareContext(options) {
+        const context = await super._prepareContext(options);
+        context.isGM = game.user.isGM;
+        context.tabs = this._prepareTabs("primary");
+        context.editable = this.isEditable;
+        this._prepareCharacterItems(context);
+        return context;
     }
+
+    // getData() {
+    //     const data = super.getData();
+    //     data.isGM = game.user.isGM;
+    //     data.editable = data.options.editable;
+    //     const actorData = data.system;
+    //     let options = 0;
+    //     let user = this.user;
+
+    //     this._prepareCharacterItems(data)
+
+    //     return data
+    // }
 
     _prepareCharacterItems(sheetData) {
         const actorData = sheetData.actor
@@ -97,11 +135,25 @@ export class afmbeActorSheet extends foundry.appv1.sheets.ActorSheet {
         actorData.drawback = drawback
     }
 
-    get template() {
-        const path = "systems/afmbe-jesuisfrog/templates";
-        if (!game.user.isGM && this.actor.limited) return "systems/afmbe-jesuisfrog/templates/limited-character-sheet.hbs";
-        return `${path}/${this.actor.type}-sheet.hbs`;
+    /** @override */
+    static PARTS = {
+        form: { template: "systems/afmbe-jesuisfrog/templates/character-sheet.hbs" },
+    };
+
+    /** @override */
+    _configureRenderParts(options) {
+        const parts = super._configureRenderParts(options);
+        if (!game.user.isGM && this.actor.limited) {
+            parts.form = { template: "systems/afmbe-jesuisfrog/templates/limited-character-sheet.hbs" };
+        }
+        return parts;
     }
+
+    // get template() {
+    //     const path = "systems/afmbe-jesuisfrog/templates";
+    //     if (!game.user.isGM && this.actor.limited) return "systems/afmbe-jesuisfrog/templates/limited-character-sheet.hbs";
+    //     return `${path}/${this.actor.type}-sheet.hbs`;
+    // }
 
     /** @override */
     async activateListeners(html) {
