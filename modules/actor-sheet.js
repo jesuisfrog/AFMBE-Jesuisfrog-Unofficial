@@ -27,8 +27,8 @@ export class afmbeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     static TABS = {
         primary: {
             tabs: [
-                { id: "core", group: primary, label: "AFMBE.Sheet.Tab.Core" },
-                { id: "equipment", group: primary, label: "AFMBE.Sheet.Tab.Equipment" },
+                { id: "core", group: "primary", label: "AFMBE.Sheet.Tab.Core" },
+                { id: "equipment", group: "primary", label: "AFMBE.Sheet.Tab.Equipment" },
             ],
             initial: "core"
         }
@@ -63,6 +63,10 @@ export class afmbeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     /** @override */
     async _prepareContext(options) {
         const context = await super._prepareContext(options);
+        const actorData = this.actor.toObject(false);
+        context.actor = actorData;
+        context.system = actorData.system;
+        context.items = actorData.items;
         context.isGM = game.user.isGM;
         context.tabs = this._prepareTabs("primary");
         context.editable = this.isEditable;
@@ -457,7 +461,7 @@ export class afmbeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
 
 
-    static #onDamageRoll(event, target) {
+    static async #onDamageRoll(event, target) {
         event.preventDefault()
         let weapon = this.actor.getEmbeddedDocument("Item", target.closest('.item').dataset.itemId)
 
@@ -587,7 +591,7 @@ export class afmbeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     }
 
 
-    static #onArmorRoll(event, target) {
+    static async #onArmorRoll(event, target) {
         event.preventDefault()
         let equippedItem = this.actor.getEmbeddedDocument("Item", target.closest('.item').dataset.itemId)
 

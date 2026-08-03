@@ -25,7 +25,7 @@ export class afmbevehicleSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
     static TABS = {
         primary: {
             tabs: [
-                { id: "core", group: primary, label: "AFMBE.Sheet.Tab.Core" }
+                { id: "core", group: "primary", label: "AFMBE.Sheet.Tab.Core" }
                 ],
             initial: "core"
         }
@@ -59,8 +59,12 @@ export class afmbevehicleSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
     /** @override */
     async _prepareContext(options) {
         const context = await super._prepareContext(options);
-        context.tabs = this._prepareTabs("primary");
+        const actorData = this.actor.toObject(false);
+        context.actor = actorData;
+        context.system = actorData.system;
+        context.items = actorData.items;
         context.isGM = game.user.isGM;
+        context.tabs = this._prepareTabs("primary");
         context.editable = this.isEditable;
         this._prepareCharacterItems(context);
         return context;
