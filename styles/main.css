@@ -71,6 +71,7 @@
 
 .afmbe-jesuisfrog option {
     background: rgb(228, 228, 228);
+    color: black;
 }
 
 .app.window-app.dialog .window-content {
@@ -819,6 +820,7 @@ prose-mirror:hover button.toggle:enabled{
 
 .afmbe-jesuisfrog.dark-mode option {
     background: rgb(22, 22, 22);
+    color: white;
 }
 
 .app.window-app.dialog.dark-mode .window-content {
