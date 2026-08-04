@@ -229,11 +229,6 @@
     font-size: 22px;
 }
 
-.afmbe-jesuisfrog .table-left-align {
-    text-align: left;
-    padding: 0 0 0 10px;
-}
-
 .afmbe-jesuisfrog .header-with-button {
     display: flex;
     flex-direction: row;
@@ -287,14 +282,8 @@
     width: 30px;
 }
 
-.afmbe-jesuisfrog .table-equipped {
-    text-align: center;
-    width: 50px;
-}
-
-.afmbe-jesuisfrog .item input {
-    height: 15px;
-    width: 15px;
+.afmbe-jesuisfrog h1.item-header-container input{
+    font-size: smaller;
 }
 
 /* ------------------------------------------- 
@@ -316,7 +305,6 @@
     cursor: pointer;
 }
 
-
 /* ------------------------------------------- 
         TinyMCE Editor
  ---------------------------------------------*/
@@ -331,6 +319,11 @@
     height: 200px;
     width: 100%;
     margin-bottom: 5px;
+}
+
+.afmbe-jesuisfrog .prosemirror:hover button.toggle:enabled,
+prose-mirror:hover button.toggle:enabled{
+    display: flex;
 }
 
 .afmbe-jesuisfrog .bio-container h2,
@@ -550,6 +543,10 @@
     flex-wrap: nowrap;
     border-bottom: 1px solid rgb(145, 145, 145);
     padding: 5px 0;
+}
+
+.afmbe-jesuisfrog .resource.last-resource {
+    border-bottom: none;
 }
 
 .afmbe-jesuisfrog .resource-values {
@@ -899,4 +896,21 @@
 
 .afmbe-jesuisfrog.dark-mode .item-name:hover {
     font-weight: bold;
+}
+
+.afmbe-jesuisfrog .table-left-align {
+    text-align: left !important;
+    padding: 0 0 0 10px;
+}
+
+.afmbe-jesuisfrog .table-center-align {
+    text-align: center !important;
+}
+
+.afmbe-jesuisfrog .table-right-align {
+    text-align: right !important;
+}
+
+.afmbe-jesuisfrog td.armor-button-cell button {
+    display: inline-table;
 }

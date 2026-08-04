@@ -7,23 +7,23 @@
         <thead>
             <tr>
                 <th class="table-left-align">{{localize 'AFMBE.Common.Name'}}</th>
-                <th>{{localize 'AFMBE.Common.Damage'}}</th>
-                <th>{{localize 'AFMBE.Common.Capacity'}}</th>
-                <th>{{localize 'AFMBE.Common.EV'}}</th>
-                <th></th>
+                <th class="table-center-align">{{localize 'AFMBE.Common.Damage'}}</th>
+                <th class="table-center-align">{{localize 'AFMBE.Common.Capacity'}}</th>
+                <th class="table-center-align">{{localize 'AFMBE.Common.EV'}}</th>
+                <th class="table-right-align"></th>
             </tr>
         </thead>
         <tbody>
             {{#each actor.weapon as |item id|}}
             <tr class="item" data-item-id="{{item._id}}">
-                <td>
+                <td class="table-left-align">
                     <div class="item-name-flex-container">
                         <i class="fas fa-dice-d20" data-action="damageRoll"></i>
                         <div class="item-name" data-action="viewItem">{{item.name}}</div>
                     </div>
                 </td>
                 <td class="table-center-align">{{item.system.damage_string}}</td>
-                <td>
+                <td class="table-center-align">
                     <div class="table-flex-cell">
                         <div>{{item.system.capacity.value}}</div>
                         /
@@ -31,7 +31,7 @@
                     </div>
                 </td>
                 <td class="table-center-align">{{item.system.encumbrance}}</td>
-                <td class="table-center-align"><a class="item-control item-delete" data-action="deleteItem" title="{{localize 'AFMBE.Items.Delete'}}"><i
+                <td class="table-right-align"><a class="item-control item-delete" data-action="deleteItem" title="{{localize 'AFMBE.Items.Delete'}}"><i
                             class="fas fa-trash"></i></a></td>
             </tr>
             {{/each}}
