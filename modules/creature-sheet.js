@@ -222,20 +222,24 @@ export class afmbeCreatureSheet extends HandlebarsApplicationMixin(ActorSheetV2)
                             </table>
                     </div>`
 
-        let d = new Dialog({
-            title: dialogTitle,
+        let d = new foundry.applications.api.DialogV2({
+            window: { title: dialogTitle },
+            classes: dialogOptions.classes,
             content,
-            buttons: {
-                one: {
+            position: { width: 400, height: "auto" },
+            buttons: [
+                {
+                    action: "cancel",
                     label: cancelLabel,
-                    callback: html => console.log('Cancelled')
+                    callback: () => console.log('Cancelled')
                 },
-                two: {
+                {
+                    action: "roll",
                     label: rollLabel,
-                    callback: async html => {
-                        const attributeTestSelect = html[0].querySelector('#attributeTestSelect').value
-                        const userInputModifier = Number(html[0].querySelector('#inputModifier').value)
-                        const selectedSkill = this.actor.getEmbeddedDocument("Item", html[0].querySelector('#skillSelect').value)
+                    callback: async (event, button, dialog) => {
+                        const attributeTestSelect = dialog.element.querySelector('#attributeTestSelect').value
+                        const userInputModifier = Number(dialog.element.querySelector('#inputModifier').value)
+                        const selectedSkill = this.actor.getEmbeddedDocument("Item", dialog.element.querySelector('#skillSelect').value)
 
                         const attributeValue = attributeTestSelect === 'simple' ? attributeValueBase * 2 : attributeValueBase
                         const skillValue = selectedSkill ? selectedSkill.system.level : 0
@@ -297,10 +301,10 @@ export class afmbeCreatureSheet extends HandlebarsApplicationMixin(ActorSheetV2)
                         })
                     }
                 }
-            },
-            default: "two",
-            close: html => console.log()
-        }, dialogOptions)
+            ],
+            rejectClose: false,
+            close: () => console.log()
+        })
 
         d.render(true)
     }
@@ -361,19 +365,23 @@ export class afmbeCreatureSheet extends HandlebarsApplicationMixin(ActorSheetV2)
                             </div>
                     <div>`
 
-        let d = new Dialog({
-            title: dialogTitle,
+        let d = new foundry.applications.api.DialogV2({
+            window: { title: dialogTitle },
+            classes: dialogOptions.classes,
             content,
-            buttons: {
-                one: {
+            position: { width: 400, height: "auto" },
+            buttons: [
+                {
+                    action: "cancel",
                     label: cancelLabel,
                     callback: html => console.log('Cancelled')
                 },
-                two: {
+                {
+                    action: "roll",
                     label: rollLabel,
-                    callback: async html => {
-                        const shotNumber = Number(html.querySelector('#shotNumber').value) || 0
-                        const firingMode = html.querySelector('#firingMode').value
+                    callback: async (event, button, dialog) => {
+                        const shotNumber = Number(dialog.element.querySelector('#shotNumber').value) || 0
+                        const firingMode = dialog.element.querySelector('#firingMode').value
 
                         const roll = await new Roll(weapon.system.damage_string).evaluate()
 
@@ -427,12 +435,10 @@ export class afmbeCreatureSheet extends HandlebarsApplicationMixin(ActorSheetV2)
                             rolls: [roll]
                         })
                     }
-                }
-            },
-            default: "two",
+                }],
+            rejectClose: false,
             close: html => console.log()
-        }, dialogOptions)
-
+        })
         d.render(true)
     }
 

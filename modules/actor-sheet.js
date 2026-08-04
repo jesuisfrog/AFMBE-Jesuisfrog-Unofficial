@@ -303,60 +303,63 @@ export class afmbeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
                             </table>
                     </div>`
 
-        let d = new Dialog({
-            title: dialogTitle,
+        let d = new foundry.applications.api.DialogV2({
+            window: { title: dialogTitle },
+            classes: dialogOptions.classes,
             content,
-            buttons: {
-                one: {
-                    label: cancelLabel,
-                    callback: html => console.log('Cancelled')
-                },
-                two: {
-                    label: rollLabel,
-                    callback: async html => {
-                        const attributeTestSelect = html[0].querySelector('#attributeTestSelect').value
-                        const userInputModifier = Number(html[0].querySelector('#inputModifier').value)
-                        const selectedSkill = this.actor.getEmbeddedDocument("Item", html[0].querySelector('#skillSelect').value)
-                        const selectedQuality = this.actor.getEmbeddedDocument("Item", html[0].querySelector('#qualitySelect').value)
-                        const selectedDrawback = this.actor.getEmbeddedDocument("Item", html[0].querySelector('#drawbackSelect').value)
+            buttons: [{
+                action: "cancel",
+                label: cancelLabel,
+                callback: html => console.log('Cancelled')
+            },
+            {
+                action: "roll",
+                label: rollLabel,
+                default: true,
+                callback: async (event, button, dialog) => {
+                    const attributeTestSelect = dialog.element.querySelector('#attributeTestSelect').value
+                    const userInputModifier = Number(dialog.element.querySelector('#inputModifier').value)
+                    const selectedSkill = this.actor.getEmbeddedDocument("Item", dialog.element.querySelector('#skillSelect').value)
+                    const selectedQuality = this.actor.getEmbeddedDocument("Item", dialog.element.querySelector('#qualitySelect').value)
+                    const selectedDrawback = this.actor.getEmbeddedDocument("Item", dialog.element.querySelector('#drawbackSelect').value)
 
-                        const attributeValue = attributeTestSelect === 'simple' ? attributeValueBase * 2 : attributeValueBase
-                        const skillValue = selectedSkill ? selectedSkill.system.level : 0
-                        const qualityValue = selectedQuality ? selectedQuality.system.bonus : 0
-                        const drawbackValue = selectedDrawback ? selectedDrawback.system.bonus : 0
+                    const attributeValue = attributeTestSelect === 'simple' ? attributeValueBase * 2 : attributeValueBase
+                    const skillValue = selectedSkill ? selectedSkill.system.level : 0
+                    const qualityValue = selectedQuality ? selectedQuality.system.bonus : 0
+                    const drawbackValue = selectedDrawback ? selectedDrawback.system.bonus : 0
 
-                        let tags = []
-                        if (userInputModifier !== 0) { tags.push(`<span class="${userInputModifier >= 0 ? "bonusColorClass" : 'penaltyColorClass'}">${userModifierLabel} ${userInputModifier >= 0 ? "+" : ''}${userInputModifier}</span>`) }
-                        if (selectedSkill) {
-                            const skillLevel = selectedSkill.system.level;
-                            tags.push(`<span class="${skillLevel >= 0 ? 'bonusColorClass' : 'penaltyColorClass'}">${selectedSkill.name} ${skillLevel >= 0 ? '+' : ''}${skillLevel}</span>`)
-                        }
-                        if (selectedQuality) {
-                            const qualityBonus = selectedQuality.system.bonus;
-                            tags.push(`<span class="${qualityBonus >= 0 ? 'bonusColorClass' : 'penaltyColorClass'}">${selectedQuality.name} ${qualityBonus >= 0 ? '+' : ''}${qualityBonus}</span>`)
-                        }
-                        if (selectedDrawback) {
-                            const drawbackPenalty = selectedDrawback.system.bonus;
-                            tags.push(`<span class="penaltyColorClass">${selectedDrawback.name} ${drawbackPenalty >= 0 ? '-' : ''}${drawbackPenalty}</span>`)
-                        }
+                    let tags = []
+                    if (userInputModifier !== 0) { tags.push(`<span class="${userInputModifier >= 0 ? "bonusColorClass" : 'penaltyColorClass'}">${userModifierLabel} ${userInputModifier >= 0 ? "+" : ''}${userInputModifier}</span>`) }
+                    if (selectedSkill) {
+                        const skillLevel = selectedSkill.system.level;
+                        tags.push(`<span class="${skillLevel >= 0 ? 'bonusColorClass' : 'penaltyColorClass'}">${selectedSkill.name} ${skillLevel >= 0 ? '+' : ''}${skillLevel}</span>`)
+                    }
+                    if (selectedQuality) {
+                        const qualityBonus = selectedQuality.system.bonus;
+                        tags.push(`<span class="${qualityBonus >= 0 ? 'bonusColorClass' : 'penaltyColorClass'}">${selectedQuality.name} ${qualityBonus >= 0 ? '+' : ''}${qualityBonus}</span>`)
+                    }
+                    if (selectedDrawback) {
+                        const drawbackPenalty = selectedDrawback.system.bonus;
+                        tags.push(`<span class="penaltyColorClass">${selectedDrawback.name} ${drawbackPenalty >= 0 ? '-' : ''}${drawbackPenalty}</span>`)
+                    }
 
-                        const rollMod = (attributeValue + skillValue + qualityValue - drawbackValue + userInputModifier)
-                        let roll = await new Roll('1d10').evaluate()
-                        let totalResult = Number(roll.result) + rollMod
+                    const rollMod = (attributeValue + skillValue + qualityValue - drawbackValue + userInputModifier)
+                    let roll = await new Roll('1d10').evaluate()
+                    let totalResult = Number(roll.result) + rollMod
 
-                        let ruleOfDiv = ``
-                        if (roll.result == 10) {
-                            ruleOfDiv = `<h2 class="rule-of-chat-text">${ruleOfTenLabel}</h2>
+                    let ruleOfDiv = ``
+                    if (roll.result == 10) {
+                        ruleOfDiv = `<h2 class="rule-of-chat-text">${ruleOfTenLabel}</h2>
                                         <button type="button" data-roll="roll-again" class="rule-of-ten">${rollAgainLabel}</button>`
-                        }
-                        if (roll.result == 1) {
-                            ruleOfDiv = `<h2 class="rule-of-chat-text">${ruleOfOneLabel}</h2>
+                    }
+                    if (roll.result == 1) {
+                        ruleOfDiv = `<h2 class="rule-of-chat-text">${ruleOfOneLabel}</h2>
                                         <button type="button" data-roll="roll-again" class="rule-of-one">${rollAgainLabel}</button>`
-                        }
+                    }
 
-                        const modifiersHtml = [...tags, ...penaltyTags].length ? [...tags, ...penaltyTags].join(' | ') : noneLabel
-                        const attributeSummary = game.i18n.format("AFMBE.Chat.AttributeRollSummary", { attribute: attributeLabel, value: attributeValueBase, test: attributeTestNames[attributeTestSelect] || attributeTestSelect })
-                        const chatContent = `<form>
+                    const modifiersHtml = [...tags, ...penaltyTags].length ? [...tags, ...penaltyTags].join(' | ') : noneLabel
+                    const attributeSummary = game.i18n.format("AFMBE.Chat.AttributeRollSummary", { attribute: attributeLabel, value: attributeValueBase, test: attributeTestNames[attributeTestSelect] || attributeTestSelect })
+                    const chatContent = `<form>
                                                 <h2>${attributeSummary}</h2>
 
                                                 <div class="afmbe-tags-flex-container"><b>${modifiersLabel}</b>: ${modifiersHtml}</div>
@@ -382,20 +385,18 @@ export class afmbeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
                                                 </div>
                                             </form>`
 
-                        ChatMessage.create({
-                            user: game.user.id,
-                            speaker: ChatMessage.getSpeaker(),
-                            content: chatContent,
-                            rolls: [roll]
-                        })
+                    ChatMessage.create({
+                        user: game.user.id,
+                        speaker: ChatMessage.getSpeaker(),
+                        content: chatContent,
+                        rolls: [roll]
+                    })
 
-                    }
                 }
-            },
-            default: 'two',
-            close: html => console.log()
-        }, dialogOptions)
-
+            }],
+            rejectClose: false,
+            close: () => console.log()
+        })
         d.render(true)
     }
 
@@ -455,19 +456,24 @@ export class afmbeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
                             </div>
                     <div>`
 
-        let d = new Dialog({
-            title: dialogTitle,
+        let d = new foundry.applications.api.DialogV2({
+            window: { title: dialogTitle },
+            classes: dialogOptions.classes,
             content,
-            buttons: {
-                one: {
+            position: { width: 400, height: "auto" },
+            buttons: [
+                {
+                    action: "cancel",
                     label: cancelLabel,
-                    callback: html => console.log('Cancelled')
+                    callback: () => console.log('Cancelled')
                 },
-                two: {
+                {
+                    action: "roll",
+                    default: true,
                     label: rollLabel,
-                    callback: async html => {
-                        const shotNumber = Number(html[0].querySelector('#shotNumber').value) || 0
-                        const firingMode = html[0].querySelector('#firingMode').value
+                    callback: async (event, button, dialog) => {
+                        const shotNumber = Number(dialog.element.querySelector('#shotNumber').value) || 0
+                        const firingMode = dialog.element.querySelector('#firingMode').value
 
                         const roll = await new Roll(weapon.system.damage_string).evaluate()
 
@@ -521,11 +527,10 @@ export class afmbeActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
                             rolls: [roll]
                         })
                     }
-                }
-            },
-            default: "two",
-            close: html => console.log()
-        }, dialogOptions)
+                }],
+            rejectClose: false,
+            close: () => console.log()
+        })
 
         d.render(true)
     }
