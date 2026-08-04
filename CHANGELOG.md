@@ -1,3 +1,7 @@
+### 1.3.0
+Updated system to v14.
+Includes major refactoring to migrate everything to Appv2, handling all deprecations brought on by Foundry v13 and v14.
+
 ### 1.2.1
 Removed object syntax in system file to ensure backward compatibility with v12
 
