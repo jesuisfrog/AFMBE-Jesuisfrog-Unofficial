@@ -27,6 +27,13 @@
     color: black;
 }
 
+.afmbe-jesuisfrog.sheet.item {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+}
+
 .afmbe-jesuisfrog .sheet-body,
 .afmbe-jesuisfrog .sheet-flex-container,
 .afmbe-jesuisfrog .sheet-sidebar {
@@ -36,7 +43,17 @@
 
 
 .afmbe-jesuisfrog .sheet-content {
+    display: flex;
+    flex-direction: column;
     height: 100%;
+    min-height: 0;
+}
+
+.afmbe-jesuisfrog.sheet.item .sheet-content>section {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
 }
 
 .afmbe-jesuisfrog.sheet.actor {
@@ -347,7 +364,18 @@ prose-mirror:hover button.toggle:enabled{
 }
 
 .afmbe-jesuisfrog .description-container .editor {
+    display: flex;
+    flex-direction: column;
     width: 100%;
+    flex: 1;
+    min-height: 0;
+}
+
+.afmbe-jesuisfrog .description-container .editor-content {
+    flex: 1;
+    min-height: 100px;
+    max-height: none;
+    overflow-y: auto;
 }
 
 .afmbe-jesuisfrog .editor-content {
@@ -737,18 +765,30 @@ prose-mirror:hover button.toggle:enabled{
     display: flex;
     flex-direction: row;
     height: 100%;
+    flex: 1;
+    min-height: 0;
 }
 
 .afmbe-jesuisfrog .item-description-sidebar {
+    display: flex;
+    flex-direction: column;
     width: 100%;
+    min-height: 0;
     padding: 0 5px;
     border-left: 1px solid rgb(231, 231, 231);
+}
+
+.afmbe-jesuisfrog .item-description-sidebar prose-mirror {
+    flex: 1;
+    min-height: 0;
 }
 
 .afmbe-jesuisfrog .item-attribute-sidebar {
     min-width: 40%;
     height: 100%;
     padding: 0 5px;
+    min-height: 0;
+    overflow-y: auto;
 }
 
 .afmbe-jesuisfrog .item-attribute-sidebar table {
