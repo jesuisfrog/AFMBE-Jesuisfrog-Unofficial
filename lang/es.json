@@ -15,7 +15,7 @@
             "weapon": "Arma"
         }
     },
-    "AFMBE.Aspects.Title": "Aspectos - [{{power}}]",
+    "AFMBE.Aspects.Title": "Aspectos - [{power}]",
     "AFMBE.AttributeTest.Difficult": "Difícil",
     "AFMBE.AttributeTest.Simple": "Simple",
     "AFMBE.Attributes.Primary.Title": "Atributos primarios",
