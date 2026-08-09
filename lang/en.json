@@ -15,7 +15,7 @@
             "weapon": "Weapon"
         }
     },
-    "AFMBE.Aspects.Title": "Aspects - [{{power}}]",
+    "AFMBE.Aspects.Title": "Aspects - [{power}]",
     "AFMBE.AttributeTest.Difficult": "Difficult",
     "AFMBE.AttributeTest.Simple": "Simple",
     "AFMBE.Attributes.Primary.Title": "Primary Attributes",
