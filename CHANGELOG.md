@@ -1,3 +1,10 @@
+### 1.3.1
+- Fixed deprecated way to reference player ownership.
+- Fixed typo on Aspect total for creatures that resulted in an undefined value.
+- Added missing delete action for aspects on creatures.
+- Added missing biography context for creatures and vehicles.
+- Added CSS to allow item descriptions to fit their current window and for the attribute sidebar to be scrolled when the window is too small.
+
 ### 1.3.0
 Updated system to v14.
 Includes major refactoring to migrate everything to Appv2, handling all deprecations brought on by Foundry v13 and v14.
