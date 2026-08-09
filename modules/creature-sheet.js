@@ -502,7 +502,7 @@ export class afmbeCreatureSheet extends HandlebarsApplicationMixin(ActorSheetV2)
     static #onViewItem(event, target) {
         const li = target.closest(".item");
         const item = this.actor.items.get(li.dataset.itemId);
-        if (this.actor.permission[game.user._id] >= 2 || game.user.isGM) { item.sheet.render(true); }
+        if (item.isOwner || game.user.isGM) { item.sheet.render(true); }
         item.update({ "system.value": item.system.value });
     }
 
