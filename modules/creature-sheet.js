@@ -56,6 +56,9 @@ export class afmbeCreatureSheet extends HandlebarsApplicationMixin(ActorSheetV2)
         context.isGM = game.user.isGM;
         context.tabs = this._prepareTabs("primary");
         context.editable = this.isEditable;
+        context.biographyHTML = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
+            this.actor.system.biography, { secrets: this.actor.isOwner, relativeTo: this.actor }
+        );
         this._prepareCharacterItems(context);
         return context;
     }
